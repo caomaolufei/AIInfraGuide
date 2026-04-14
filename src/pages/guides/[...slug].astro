@@ -1,0 +1,131 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import GuideSidebar from '../../components/GuideSidebar.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import { GUIDE_CATEGORIES } from '../../utils/categories';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides', ({ data }) => !data.draft);
+  return guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: guide,
+  }));
+}
+
+type Props = CollectionEntry<'guides'>;
+
+const guide = Astro.props;
+const { Content, headings } = await guide.render();
+
+const categoryMeta = GUIDE_CATEGORIES[guide.data.category];
+
+// Get prev/next guides in the same category
+const allGuides = await getCollection('guides', ({ data }) => !data.draft);
+const sameCategory = allGuides
+  .filter((g) => g.data.category === guide.data.category)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const currentIndex = sameCategory.findIndex((g) => g.slug === guide.slug);
+const prevGuide = currentIndex > 0 ? sameCategory[currentIndex - 1] : null;
+const nextGuide = currentIndex < sameCategory.length - 1 ? sameCategory[currentIndex + 1] : null;
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
+---
+
+<Layout title={`${guide.data.title} - AIInfraGuide`} description={guide.data.description}>
+  <div class="max-w-[1400px] mx-auto px-6 py-12 flex gap-8">
+    <!-- Left Sidebar -->
+    <aside class="hidden lg:block">
+      <GuideSidebar />
+    </aside>
+
+    <!-- Main Content -->
+    <article class="flex-1 min-w-0">
+      <div class="mb-8">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-[#007aff] dark:text-[#0a84ff] text-xs font-medium rounded-full">
+            {categoryMeta.icon} {categoryMeta.label}
+          </span>
+        </div>
+
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+          {guide.data.title}
+        </h1>
+
+        <p class="text-gray-500 dark:text-gray-400 mb-4">
+          {guide.data.description}
+        </p>
+
+        <div class="flex items-center gap-4 text-sm text-gray-400">
+          <time datetime={guide.data.pubDate.toISOString()}>
+            {guide.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          {guide.data.updatedDate && (
+            <span>
+              更新于 {guide.data.updatedDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </span>
+          )}
+        </div>
+
+        {guide.data.tags.length > 0 && (
+          <div class="flex gap-2 mt-4 flex-wrap">
+            {guide.data.tags.map((tag) => (
+              <span class="px-2 py-0.5 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-600 dark:text-gray-400 rounded-full">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div
+        class="prose prose-gray dark:prose-invert prose-lg max-w-none
+          prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
+          prose-h2:text-2xl prose-h2:mt-12 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-white/10 prose-h2:pb-2
+          prose-h3:text-xl
+          prose-a:text-[#007aff] dark:prose-a:text-[#0a84ff] prose-a:no-underline hover:prose-a:underline
+          prose-hr:border-gray-200 dark:prose-hr:border-white/10
+          prose-code:text-[#007aff] dark:prose-code:text-[#0a84ff] prose-code:bg-blue-50 dark:prose-code:bg-blue-900/20 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
+          prose-img:rounded-xl prose-img:border prose-img:border-gray-200 dark:prose-img:border-white/10 prose-img:shadow-sm
+          prose-pre:bg-[#1e1e1e] prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-white/10 prose-pre:shadow-sm prose-pre:rounded-lg"
+      >
+        <Content />
+      </div>
+
+      <!-- Prev/Next Navigation -->
+      <nav class="mt-16 pt-8 border-t border-gray-200 dark:border-white/10 flex justify-between gap-4">
+        {prevGuide ? (
+          <a
+            href={getPath(`/guides/${prevGuide.slug}`)}
+            class="group flex-1 p-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl hover:border-[#007aff]/30 transition-all"
+          >
+            <span class="text-xs text-gray-400 mb-1 block">上一篇</span>
+            <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors">
+              {prevGuide.data.title}
+            </span>
+          </a>
+        ) : <div />}
+        {nextGuide ? (
+          <a
+            href={getPath(`/guides/${nextGuide.slug}`)}
+            class="group flex-1 p-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl hover:border-[#007aff]/30 transition-all text-right"
+          >
+            <span class="text-xs text-gray-400 mb-1 block">下一篇</span>
+            <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors">
+              {nextGuide.data.title}
+            </span>
+          </a>
+        ) : <div />}
+      </nav>
+    </article>
+
+    <!-- Right Sidebar: TOC -->
+    <aside class="hidden xl:block">
+      <TableOfContents headings={headings} />
+    </aside>
+  </div>
+</Layout>

@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
+---
+
+<Layout title="博客 - AIInfraGuide" description="AIInfraGuide 博客文章列表">
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-12">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">博客</h1>
+        <p class="text-gray-500 dark:text-gray-400">关于 AI 基础设施的思考与实践</p>
+      </div>
+
+      {posts.length === 0 ? (
+        <p class="text-gray-500 dark:text-gray-400 text-center py-20">暂无文章</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <a
+              href={getPath(`/blog/${post.slug}`)}
+              class="group block bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            >
+              {post.data.heroImage && (
+                <img
+                  src={post.data.heroImage}
+                  alt=""
+                  class="w-full h-48 object-cover"
+                />
+              )}
+              <div class="p-6">
+                <div class="flex gap-2 mb-3 flex-wrap">
+                  {post.data.tags.map((tag) => (
+                    <span class="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-[#007aff] dark:text-[#0a84ff] text-xs rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors mb-2">
+                  {post.data.title}
+                </h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">
+                  {post.data.description}
+                </p>
+                <time class="text-xs text-gray-400" datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

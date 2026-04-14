@@ -1,0 +1,56 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{filtered.length > 0 && (
+  <nav class="sticky top-24 w-56">
+    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+      目录
+    </h3>
+    <ul class="space-y-1.5 text-sm border-l border-gray-200 dark:border-white/10">
+      {filtered.map((heading) => (
+        <li>
+          <a
+            href={`#${heading.slug}`}
+            class:list={[
+              'toc-link block py-0.5 text-gray-500 dark:text-gray-400 hover:text-[#007aff] dark:hover:text-[#0a84ff] transition-colors duration-200 border-l-2 border-transparent hover:border-[#007aff]',
+              heading.depth === 3 ? 'pl-6' : 'pl-4',
+            ]}
+            data-slug={heading.slug}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.toc-link').forEach((link) => {
+            link.classList.remove('text-[#007aff]', 'dark:text-[#0a84ff]', 'border-[#007aff]', 'font-medium');
+            link.classList.add('border-transparent');
+          });
+
+          const active = document.querySelector(`.toc-link[data-slug="${entry.target.id}"]`);
+          if (active) {
+            active.classList.add('text-[#007aff]', 'dark:text-[#0a84ff]', 'border-[#007aff]', 'font-medium');
+            active.classList.remove('border-transparent');
+          }
+        }
+      });
+    },
+    { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
+  );
+
+  document.querySelectorAll('article h2[id], article h3[id]').forEach((el) => observer.observe(el));
+</script>

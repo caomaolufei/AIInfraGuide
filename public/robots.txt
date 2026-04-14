@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://caomaolufei.github.io/AIInfraGuide/sitemap-index.xml

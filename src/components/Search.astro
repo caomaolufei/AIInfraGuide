@@ -1,0 +1,129 @@
+---
+import '@pagefind/default-ui/css/ui.css';
+---
+
+<div id="search-modal" class="fixed inset-0 z-[100] hidden items-start justify-center pt-20 pb-10 px-4 bg-gray-900/50 backdrop-blur-sm">
+  <div class="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl ring-1 ring-black/5 overflow-hidden flex flex-col max-h-full">
+    <div class="p-4 border-b border-gray-100 dark:border-white/10 flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">搜索</h2>
+      <button id="close-search" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+    <div class="p-6 overflow-y-auto">
+      <div id="search" class="w-full"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let initialized = false;
+
+  const initPagefind = async () => {
+    if (initialized || !('PagefindUI' in window)) return;
+
+    // @ts-ignore
+    new window.PagefindUI({
+      element: '#search',
+      showSubResults: true,
+      showImages: false,
+      resetStyles: false,
+      baseUrl: import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL + '/',
+      translations: {
+        placeholder: '搜索文档...',
+        clear_search: '清除',
+        load_more: '加载更多结果',
+        search_label: '搜索此站点',
+        filters_label: '过滤',
+        zero_results: '没有找到关于 [SEARCH_TERM] 的结果',
+        many_results: '[COUNT] 个关于 [SEARCH_TERM] 的结果',
+        one_result: '1 个关于 [SEARCH_TERM] 的结果',
+        searching: '正在搜索 [SEARCH_TERM]...',
+      },
+    });
+    initialized = true;
+
+    setTimeout(() => {
+      const input = document.querySelector('.pagefind-ui__search-input') as HTMLInputElement;
+      if (input) input.focus();
+    }, 100);
+  };
+
+  const openSearch = () => {
+    document.getElementById('search-modal')?.classList.remove('hidden');
+    document.getElementById('search-modal')?.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    if (!initialized) {
+      const script = document.createElement('script');
+      const basePath = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+      script.src = `${basePath}/pagefind/pagefind-ui.js`;
+      script.onload = initPagefind;
+      document.head.appendChild(script);
+    } else {
+      setTimeout(() => {
+        const input = document.querySelector('.pagefind-ui__search-input') as HTMLInputElement;
+        if (input) input.focus();
+      }, 100);
+    }
+  };
+
+  const closeSearch = () => {
+    document.getElementById('search-modal')?.classList.add('hidden');
+    document.getElementById('search-modal')?.classList.remove('flex');
+    document.body.style.overflow = '';
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape') closeSearch();
+  });
+
+  document.getElementById('close-search')?.addEventListener('click', closeSearch);
+  document.getElementById('search-modal')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('search-modal')) closeSearch();
+  });
+
+  document.addEventListener('open-search', openSearch);
+</script>
+
+<style is:global>
+  :root {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: #007aff;
+    --pagefind-ui-text: #1f2937;
+    --pagefind-ui-background: transparent;
+    --pagefind-ui-border: #e5e7eb;
+    --pagefind-ui-tag: #f3f4f6;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 0.5rem;
+    --pagefind-ui-font: inherit;
+  }
+
+  html.dark {
+    --pagefind-ui-primary: #0a84ff;
+    --pagefind-ui-text: #f3f4f6;
+    --pagefind-ui-border: #374151;
+    --pagefind-ui-tag: #1f2937;
+  }
+
+  .pagefind-ui__search-input {
+    outline: none !important;
+    font-weight: normal !important;
+    background-color: transparent !important;
+  }
+
+  .pagefind-ui__result-link {
+    color: var(--pagefind-ui-primary) !important;
+  }
+
+  .pagefind-ui__result-excerpt mark {
+    background-color: rgba(0, 122, 255, 0.2);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+</style>

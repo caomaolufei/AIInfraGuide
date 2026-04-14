@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import { getCollection } from 'astro:content';
+import { GUIDE_CATEGORIES, type CategorySlug } from '../utils/categories';
+
+const guides = await getCollection('guides', ({ data }) => !data.draft);
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const categoryCounts = Object.entries(GUIDE_CATEGORIES).map(([slug, meta]) => ({
+  slug: slug as CategorySlug,
+  ...meta,
+  count: guides.filter((g) => g.data.category === slug).length,
+  firstGuide: guides
+    .filter((g) => g.data.category === slug)
+    .sort((a, b) => a.data.order - b.data.order)[0],
+}));
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
+---
+
+<Layout>
+  <!-- Hero Section -->
+  <section class="relative pt-32 pb-20 overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent dark:from-blue-900/20 pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+        <span class="bg-gradient-to-r from-[#007aff] to-[#5ac8fa] bg-clip-text text-transparent">
+          AIInfraGuide
+        </span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-4">
+        深入理解 AI 基础设施的核心技术
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-500 mb-10 max-w-2xl mx-auto">
+        从 GPU 硬件到训练框架，从推理服务到分布式系统，构建完整的 AI Infra 知识体系
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        {categoryCounts.find((c) => c.firstGuide) && (
+          <a
+            href={getPath(`/guides/${categoryCounts.find((c) => c.firstGuide)!.firstGuide!.slug}`)}
+            class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#007aff] text-white rounded-xl font-semibold hover:bg-[#0062cc] transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+          >
+            开始学习
+          </a>
+        )}
+        <a
+          href={getPath('/blog')}
+          class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white dark:bg-white/5 text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-xl font-semibold hover:border-[#007aff] dark:hover:border-[#0a84ff] transition-all duration-300"
+        >
+          浏览博客
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guide Categories -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">知识库</h2>
+      <p class="text-gray-500 dark:text-gray-400 mb-8">按主题分类的 AI 基础设施技术文档</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categoryCounts.map((cat) => (
+          <CategoryCard
+            icon={cat.icon}
+            title={cat.label}
+            description={`${cat.label}相关的技术文档和最佳实践`}
+            href={cat.firstGuide ? getPath(`/guides/${cat.firstGuide.slug}`) : '#'}
+            count={cat.count}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Blog Posts -->
+  {posts.length > 0 && (
+    <section class="py-16 bg-gray-50 dark:bg-white/[0.02]">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">最新文章</h2>
+            <p class="text-gray-500 dark:text-gray-400">最近发布的博客文章</p>
+          </div>
+          <a
+            href={getPath('/blog')}
+            class="text-sm font-medium text-[#007aff] dark:text-[#0a84ff] hover:underline"
+          >
+            查看全部 &rarr;
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <a
+              href={getPath(`/blog/${post.slug}`)}
+              class="group block p-6 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            >
+              <div class="flex gap-2 mb-3 flex-wrap">
+                {post.data.tags.map((tag) => (
+                  <span class="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-[#007aff] dark:text-[#0a84ff] text-xs rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors mb-2">
+                {post.data.title}
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
+                {post.data.description}
+              </p>
+              <time class="text-xs text-gray-400" datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

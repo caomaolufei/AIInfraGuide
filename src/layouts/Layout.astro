@@ -1,0 +1,256 @@
+---
+import '@fontsource/inter';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/jetbrains-mono';
+import '../styles/global.css';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import Search from '../components/Search.astro';
+import CopyButton from '../components/CopyButton.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'AIInfraGuide - AI 基础设施知识库',
+  description = '深入理解 AI 基础设施的核心技术：GPU、训练框架、推理服务、分布式系统',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
+---
+
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href={getPath('/favicon.svg')} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="AIInfraGuide" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+
+    <meta name="theme-color" content="#007aff" />
+
+    <script is:inline>
+      if (
+        localStorage.getItem('color-theme') === 'dark' ||
+        (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+  </head>
+
+  <body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 min-h-screen flex flex-col font-sans transition-colors duration-300">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 bg-white/80 dark:bg-black/80 backdrop-blur-[20px] border-b border-gray-200/60 dark:border-white/10 z-50 transition-colors duration-300">
+      <nav class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+        <a href={getPath('/')} class="text-xl font-bold">
+          <span class="bg-gradient-to-r from-[#007aff] to-[#5ac8fa] bg-clip-text text-transparent">
+            AIInfraGuide
+          </span>
+        </a>
+
+        <div class="flex items-center gap-4">
+          <!-- Desktop Navigation -->
+          <ul class="hidden lg:flex gap-8 items-center">
+            <li>
+              <a
+                href={getPath('/guides/gpu-basics')}
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+              >
+                知识库
+              </a>
+            </li>
+            <li>
+              <a
+                href={getPath('/blog')}
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+              >
+                博客
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/caomaolufei/AIInfraGuide"
+                target="_blank"
+                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 flex items-center gap-1"
+              >
+                GitHub
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+
+          <div class="flex items-center gap-1">
+            <!-- Search Button -->
+            <button
+              onclick="document.dispatchEvent(new Event('open-search'))"
+              class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:text-[#007aff]"
+              aria-label="搜索"
+              title="搜索 (Cmd/Ctrl + K)"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+
+            <ThemeToggle />
+
+            <!-- Mobile Menu Button -->
+            <button
+              id="mobile-menu-btn"
+              class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors duration-200"
+              aria-label="菜单"
+            >
+              <svg id="menu-icon" class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path class="menu-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <path class="menu-close hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Overlay -->
+      <div
+        id="mobile-menu-overlay"
+        class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"
+      ></div>
+
+      <!-- Mobile Menu Drawer -->
+      <div
+        id="mobile-menu"
+        class="lg:hidden fixed top-0 right-0 h-full w-72 max-w-[80vw] bg-white dark:bg-black shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out"
+      >
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-8">
+            <span class="text-lg font-bold bg-gradient-to-r from-[#007aff] to-[#5ac8fa] bg-clip-text text-transparent">菜单</span>
+            <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors" aria-label="关闭菜单">
+              <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <nav class="flex flex-col gap-3">
+            <a href={getPath('/guides/gpu-basics')} class="mobile-nav-link py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:text-[#007aff] hover:bg-gray-50 dark:hover:bg-white/5 transition-all font-medium">知识库</a>
+            <a href={getPath('/blog')} class="mobile-nav-link py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:text-[#007aff] hover:bg-gray-50 dark:hover:bg-white/5 transition-all font-medium">博客</a>
+            <a href="https://github.com/caomaolufei/AIInfraGuide" target="_blank" class="mobile-nav-link py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:text-[#007aff] hover:bg-gray-50 dark:hover:bg-white/5 transition-all font-medium">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Reading Progress Bar -->
+    <div id="reading-progress" class="fixed top-16 left-0 h-0.5 bg-gradient-to-r from-[#007aff] to-violet-500 z-50 transition-all duration-150 pointer-events-none" style="width: 0%"></div>
+
+    <main class="flex-1 pt-16">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 dark:bg-[#111] border-t border-gray-200 dark:border-white/10 py-8 mt-auto transition-colors duration-300">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-gray-500 text-sm">&copy; {new Date().getFullYear()} AIInfraGuide. Built with Astro</p>
+        <a href="https://github.com/caomaolufei/AIInfraGuide" target="_blank" class="text-gray-500 hover:text-[#007aff] transition-colors text-sm">
+          GitHub
+        </a>
+      </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button
+      id="back-to-top"
+      class="fixed bottom-8 right-8 w-11 h-11 bg-[#007aff] hover:bg-[#0062cc] text-white rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center justify-center"
+      aria-label="回到顶部"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+
+    <script>
+      const progressBar = document.getElementById('reading-progress');
+      const backToTopBtn = document.getElementById('back-to-top');
+
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+        if (progressBar) progressBar.style.width = scrolled + '%';
+
+        if (winScroll > 500) {
+          backToTopBtn?.classList.remove('opacity-0', 'pointer-events-none');
+          backToTopBtn?.classList.add('opacity-100', 'pointer-events-auto');
+        } else {
+          backToTopBtn?.classList.remove('opacity-100', 'pointer-events-auto');
+          backToTopBtn?.classList.add('opacity-0', 'pointer-events-none');
+        }
+      });
+
+      backToTopBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Mobile menu
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenuClose = document.getElementById('mobile-menu-close');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+      const menuIcon = document.getElementById('menu-icon');
+
+      function openMenu() {
+        mobileMenu?.classList.remove('translate-x-full');
+        mobileMenuOverlay?.classList.remove('opacity-0', 'pointer-events-none');
+        mobileMenuOverlay?.classList.add('opacity-100', 'pointer-events-auto');
+        document.body.style.overflow = 'hidden';
+        menuIcon?.querySelector('.menu-open')?.classList.add('hidden');
+        menuIcon?.querySelector('.menu-close')?.classList.remove('hidden');
+      }
+
+      function closeMenu() {
+        mobileMenu?.classList.add('translate-x-full');
+        mobileMenuOverlay?.classList.remove('opacity-100', 'pointer-events-auto');
+        mobileMenuOverlay?.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+        menuIcon?.querySelector('.menu-open')?.classList.remove('hidden');
+        menuIcon?.querySelector('.menu-close')?.classList.add('hidden');
+      }
+
+      mobileMenuBtn?.addEventListener('click', openMenu);
+      mobileMenuClose?.addEventListener('click', closeMenu);
+      mobileMenuOverlay?.addEventListener('click', closeMenu);
+      document.querySelectorAll('.mobile-nav-link').forEach((link) => link.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    </script>
+
+    <Search />
+    <CopyButton />
+  </body>
+</html>

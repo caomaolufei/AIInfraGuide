@@ -1,0 +1,27 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+  href: string;
+  count: number;
+}
+
+const { icon, title, description, href, count } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group block p-6 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+>
+  <div class="text-3xl mb-3">{icon}</div>
+  <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors mb-2">
+    {title}
+  </h3>
+  <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">
+    {description}
+  </p>
+  <span class="inline-flex items-center text-xs text-gray-400 dark:text-gray-500">
+    {count} 篇文章
+  </span>
+</a>

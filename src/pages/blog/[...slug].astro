@@ -1,0 +1,74 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+type Props = CollectionEntry<'posts'>;
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={`${post.data.title} - AIInfraGuide`} description={post.data.description}>
+  <article class="py-24 max-w-3xl mx-auto px-6">
+    <div class="mb-12 text-center">
+      <div class="mb-6 flex gap-2 justify-center flex-wrap">
+        {post.data.tags.map((tag) => (
+          <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 rounded-full text-xs text-[#007aff] dark:text-[#0a84ff]">
+            #{tag}
+          </span>
+        ))}
+      </div>
+
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight text-gray-900 dark:text-white">
+        {post.data.title}
+      </h1>
+
+      <div class="text-gray-500 dark:text-gray-400 text-sm mb-8 flex items-center justify-center gap-4">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        {post.data.updatedDate && (
+          <span class="italic">
+            (更新于 <time datetime={post.data.updatedDate.toISOString()}>
+              {post.data.updatedDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>)
+          </span>
+        )}
+      </div>
+
+      {post.data.heroImage && (
+        <img
+          src={post.data.heroImage}
+          alt=""
+          class="w-full rounded-2xl border border-gray-200 dark:border-white/10 shadow-xl mb-12"
+        />
+      )}
+
+      <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto border-l-4 border-[#007aff] pl-6 italic text-left">
+        {post.data.description}
+      </p>
+    </div>
+
+    <div
+      class="prose prose-gray dark:prose-invert prose-lg max-w-none
+        prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
+        prose-h2:text-2xl prose-h2:mt-12 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-white/10 prose-h2:pb-2
+        prose-h3:text-xl
+        prose-a:text-[#007aff] dark:prose-a:text-[#0a84ff] prose-a:no-underline hover:prose-a:underline
+        prose-hr:border-gray-200 dark:prose-hr:border-white/10
+        prose-code:text-[#007aff] dark:prose-code:text-[#0a84ff] prose-code:bg-blue-50 dark:prose-code:bg-blue-900/20 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
+        prose-img:rounded-xl prose-img:border prose-img:border-gray-200 dark:prose-img:border-white/10 prose-img:shadow-sm
+        prose-pre:bg-[#1e1e1e] prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-white/10 prose-pre:shadow-sm prose-pre:rounded-lg"
+    >
+      <Content />
+    </div>
+  </article>
+</Layout>
