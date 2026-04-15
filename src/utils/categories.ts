@@ -1,12 +1,10 @@
 export const GUIDE_CATEGORIES = {
-  'gpu-hardware': { label: 'GPU 与硬件', icon: '🖥️', order: 1 },
-  'training-frameworks': { label: '训练框架', icon: '🏋️', order: 2 },
-  'inference-serving': { label: '推理与服务', icon: '⚡', order: 3 },
-  'distributed-systems': { label: '分布式系统', icon: '🌐', order: 4 },
-  'mlops': { label: 'ML Ops', icon: '🔧', order: 5 },
-  'networking': { label: '网络通信', icon: '📡', order: 6 },
-  'storage-data': { label: '存储与数据', icon: '💾', order: 7 },
-  'scheduling': { label: '调度与编排', icon: '📋', order: 8 },
+  'learning-path': { label: 'AIInfra学习路线', icon: '🗺️', order: 1 },
+  'prerequisites': { label: 'AIInfra前置基础', icon: '📚', order: 2 },
+  'cuda-optimization': { label: 'CUDA编程与算子优化', icon: '⚡', order: 3 },
+  'distributed-training': { label: '分布式训练', icon: '🌐', order: 4 },
+  'inference-optimization': { label: '推理优化', icon: '🚀', order: 5 },
+  'performance-analysis': { label: '性能分析', icon: '📊', order: 6 },
 } as const;
 
 export type CategorySlug = keyof typeof GUIDE_CATEGORIES;

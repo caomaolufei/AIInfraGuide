@@ -25,6 +25,25 @@ const getPath = (path: string) => {
   const base = import.meta.env.BASE_URL;
   return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
 };
+
+// 导航栏高亮：根据当前路径判断激活项
+const currentPath = Astro.url.pathname;
+const isActive = (prefix: string) => {
+  if (prefix === '/guides') return currentPath.startsWith('/guides') || currentPath.startsWith(getPath('/guides'));
+  if (prefix === '/blog') return currentPath.startsWith('/blog') || currentPath.startsWith(getPath('/blog'));
+  if (prefix === '/interview') return currentPath.startsWith('/interview') || currentPath.startsWith(getPath('/interview'));
+  return false;
+};
+
+const navLinkClass = (prefix: string) =>
+  isActive(prefix)
+    ? 'text-sm font-medium text-[#007aff] dark:text-[#5ac8fa] transition-colors duration-200'
+    : 'text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200';
+
+const mobileNavLinkClass = (prefix: string) =>
+  isActive(prefix)
+    ? 'mobile-nav-link py-3 px-4 rounded-lg text-[#007aff] dark:text-[#5ac8fa] bg-blue-50 dark:bg-[#007aff]/10 transition-all font-medium'
+    : 'mobile-nav-link py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:text-[#007aff] hover:bg-gray-50 dark:hover:bg-white/5 transition-all font-medium';
 ---
 
 <!doctype html>
@@ -37,6 +56,9 @@ const getPath = (path: string) => {
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <!-- KaTeX math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css" crossorigin="anonymous" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -80,8 +102,8 @@ const getPath = (path: string) => {
           <ul class="hidden lg:flex gap-8 items-center">
             <li>
               <a
-                href={getPath('/guides/gpu-basics')}
-                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                href={getPath('/guides/ai-infra学习路线')}
+                class={navLinkClass('/guides')}
               >
                 知识库
               </a>
@@ -89,9 +111,17 @@ const getPath = (path: string) => {
             <li>
               <a
                 href={getPath('/blog')}
-                class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                class={navLinkClass('/blog')}
               >
                 博客
+              </a>
+            </li>
+            <li>
+              <a
+                href={getPath('/interview')}
+                class={navLinkClass('/interview')}
+              >
+                面试宝典
               </a>
             </li>
             <li>
@@ -159,8 +189,9 @@ const getPath = (path: string) => {
             </button>
           </div>
           <nav class="flex flex-col gap-3">
-            <a href={getPath('/guides/gpu-basics')} class="mobile-nav-link py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:text-[#007aff] hover:bg-gray-50 dark:hover:bg-white/5 transition-all font-medium">知识库</a>
-            <a href={getPath('/blog')} class="mobile-nav-link py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:text-[#007aff] hover:bg-gray-50 dark:hover:bg-white/5 transition-all font-medium">博客</a>
+            <a href={getPath('/guides/gpu-basics')} class={mobileNavLinkClass('/guides')}>知识库</a>
+            <a href={getPath('/blog')} class={mobileNavLinkClass('/blog')}>博客</a>
+            <a href={getPath('/interview')} class={mobileNavLinkClass('/interview')}>面试宝典</a>
             <a href="https://github.com/caomaolufei/AIInfraGuide" target="_blank" class="mobile-nav-link py-3 px-4 rounded-lg text-gray-700 dark:text-gray-300 hover:text-[#007aff] hover:bg-gray-50 dark:hover:bg-white/5 transition-all font-medium">GitHub</a>
           </nav>
         </div>
@@ -177,7 +208,12 @@ const getPath = (path: string) => {
     <!-- Footer -->
     <footer class="bg-gray-50 dark:bg-[#111] border-t border-gray-200 dark:border-white/10 py-8 mt-auto transition-colors duration-300">
       <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-gray-500 text-sm">&copy; {new Date().getFullYear()} AIInfraGuide. Built with Astro</p>
+        <p class="text-gray-500 text-sm">&copy; 2025-{new Date().getFullYear()} AIInfraGuide. 开源项目，欢迎贡献！</p>
+        <p class="text-gray-500 text-sm">&copy;Built with 
+          <a href="https://github.com/caomaolufei" target="_blank" class="text-gray-500 hover:text-[#007aff] transition-colors text-sm">
+          草帽路飞
+          </a>
+        </p>
         <a href="https://github.com/caomaolufei/AIInfraGuide" target="_blank" class="text-gray-500 hover:text-[#007aff] transition-colors text-sm">
           GitHub
         </a>

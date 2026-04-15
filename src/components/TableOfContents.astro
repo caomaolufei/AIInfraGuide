@@ -9,19 +9,29 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 {filtered.length > 0 && (
   <nav class="sticky top-24 w-56">
-    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-      目录
-    </h3>
-    <ul class="space-y-1.5 text-sm border-l border-gray-200 dark:border-white/10">
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-1 h-4 rounded-full bg-gradient-to-b from-[#007aff] to-[#5856D6]" />
+      <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 tracking-wide">
+        ON THIS PAGE
+      </span>
+    </div>
+
+    <ul class="relative space-y-px">
+      <!-- Track line -->
+      <div class="toc-track absolute left-0 top-0 bottom-0 w-px bg-gray-200 dark:bg-white/[0.06]" />
+      <!-- Active indicator (animated via JS) -->
+      <div class="toc-indicator absolute left-0 w-[2px] rounded-full bg-[#007aff] transition-all duration-300 ease-out" style="top:0; height:0; opacity:0;" />
+
       {filtered.map((heading) => (
-        <li>
+        <li class="relative">
           <a
             href={`#${heading.slug}`}
             class:list={[
-              'toc-link block py-0.5 text-gray-500 dark:text-gray-400 hover:text-[#007aff] dark:hover:text-[#0a84ff] transition-colors duration-200 border-l-2 border-transparent hover:border-[#007aff]',
-              heading.depth === 3 ? 'pl-6' : 'pl-4',
+              'toc-link block py-1.5 text-[13px] leading-snug text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-gray-200 transition-colors duration-200 cursor-pointer',
+              heading.depth === 3 ? 'pl-7' : 'pl-4',
             ]}
             data-slug={heading.slug}
+            data-depth={heading.depth}
           >
             {heading.text}
           </a>
@@ -32,25 +42,43 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 )}
 
 <script>
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          document.querySelectorAll('.toc-link').forEach((link) => {
-            link.classList.remove('text-[#007aff]', 'dark:text-[#0a84ff]', 'border-[#007aff]', 'font-medium');
-            link.classList.add('border-transparent');
-          });
+  function initToc() {
+    const indicator = document.querySelector('.toc-indicator') as HTMLElement | null;
+    const links = document.querySelectorAll('.toc-link');
 
-          const active = document.querySelector(`.toc-link[data-slug="${entry.target.id}"]`);
-          if (active) {
-            active.classList.add('text-[#007aff]', 'dark:text-[#0a84ff]', 'border-[#007aff]', 'font-medium');
-            active.classList.remove('border-transparent');
-          }
-        }
+    function setActive(slug: string) {
+      links.forEach((link) => {
+        link.classList.remove('!text-gray-900', 'dark:!text-white', 'font-medium');
       });
-    },
-    { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
-  );
 
-  document.querySelectorAll('article h2[id], article h3[id]').forEach((el) => observer.observe(el));
+      const active = document.querySelector(`.toc-link[data-slug="${slug}"]`) as HTMLElement | null;
+      if (active) {
+        active.classList.add('!text-gray-900', 'dark:!text-white', 'font-medium');
+
+        // Animate indicator
+        if (indicator) {
+          const top = active.offsetTop;
+          const height = active.offsetHeight;
+          indicator.style.top = `${top + 4}px`;
+          indicator.style.height = `${height - 8}px`;
+          indicator.style.opacity = '1';
+        }
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
+    );
+
+    document.querySelectorAll('article h2[id], article h3[id]').forEach((el) => observer.observe(el));
+  }
+
+  initToc();
 </script>

@@ -2,28 +2,33 @@
 ---
 
 <script>
+  const COPY_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+  const CHECK_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('pre').forEach((pre) => {
-      pre.classList.add('group', 'relative');
+    document.querySelectorAll('pre.astro-code').forEach((pre) => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', '复制代码');
+      btn.innerHTML = `${COPY_ICON}<span>Copy</span>`;
 
-      const button = document.createElement('button');
-      button.className =
-        'absolute top-2 right-2 p-1.5 rounded-md bg-white/10 hover:bg-white/20 text-gray-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-200 z-10';
-      button.setAttribute('aria-label', '复制代码');
-      button.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
-
-      button.addEventListener('click', async () => {
+      btn.addEventListener('click', async () => {
         const code = pre.querySelector('code');
-        if (code) {
+        if (!code) return;
+        try {
           await navigator.clipboard.writeText(code.innerText);
-          button.innerHTML = `<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+          btn.innerHTML = `${CHECK_ICON}<span>Copied!</span>`;
+          btn.classList.add('copied');
           setTimeout(() => {
-            button.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
+            btn.innerHTML = `${COPY_ICON}<span>Copy</span>`;
+            btn.classList.remove('copied');
           }, 2000);
+        } catch {
+          /* clipboard API may fail in insecure contexts */
         }
       });
 
-      pre.appendChild(button);
+      pre.appendChild(btn);
     });
   });
 </script>

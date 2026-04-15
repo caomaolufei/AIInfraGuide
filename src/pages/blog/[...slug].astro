@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, getEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -13,7 +13,37 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'posts'>;
 
 const post = Astro.props;
-const { Content } = await post.render();
+
+// 如果 post 有 ref 字段，从 guides 集合获取内容渲染
+let Content: any;
+let headings: any[] = [];
+if (post.data.ref) {
+  const guide = await getEntry('guides', post.data.ref);
+  if (guide) {
+    const rendered = await guide.render();
+    Content = rendered.Content;
+    headings = rendered.headings;
+  } else {
+    // ref 指向的 guide 不存在，回退到自身内容
+    const rendered = await post.render();
+    Content = rendered.Content;
+  }
+} else {
+  const rendered = await post.render();
+  Content = rendered.Content;
+}
+
+// Get prev/next posts by pubDate
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sorted = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const currentIndex = sorted.findIndex((p) => p.slug === post.slug);
+const prevPost = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? sorted[currentIndex - 1] : null;
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
 ---
 
 <Layout title={`${post.data.title} - AIInfraGuide`} description={post.data.description}>
@@ -70,5 +100,41 @@ const { Content } = await post.render();
     >
       <Content />
     </div>
+
+    <!-- Prev/Next Navigation -->
+    <nav class="mt-16 pt-8 border-t border-gray-200 dark:border-white/[0.06] grid grid-cols-2 gap-4">
+      {prevPost ? (
+        <a
+          href={getPath(`/blog/${prevPost.slug}`)}
+          class="group p-5 rounded-xl border border-gray-200 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.12] hover:shadow-lg transition-all duration-300 cursor-pointer"
+        >
+          <span class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-2">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            上一篇
+          </span>
+          <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors duration-200">
+            {prevPost.data.title}
+          </span>
+        </a>
+      ) : <div />}
+      {nextPost ? (
+        <a
+          href={getPath(`/blog/${nextPost.slug}`)}
+          class="group p-5 rounded-xl border border-gray-200 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.12] hover:shadow-lg transition-all duration-300 text-right cursor-pointer"
+        >
+          <span class="flex items-center justify-end gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-2">
+            下一篇
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+          <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors duration-200">
+            {nextPost.data.title}
+          </span>
+        </a>
+      ) : <div />}
+    </nav>
   </article>
 </Layout>

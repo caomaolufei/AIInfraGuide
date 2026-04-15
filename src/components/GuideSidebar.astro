@@ -5,10 +5,20 @@ import { GUIDE_CATEGORIES, type CategorySlug } from '../utils/categories';
 const guides = await getCollection('guides', ({ data }) => !data.draft);
 const currentPath = Astro.url.pathname;
 
+const gradientMap: Record<string, string> = {
+  'learning-path': '#3B82F6',
+  'prerequisites': '#06B6D4',
+  'cuda-optimization': '#F59E0B',
+  'distributed-training': '#10B981',
+  'inference-optimization': '#8B5CF6',
+  'performance-analysis': '#F97316',
+};
+
 const grouped = Object.entries(GUIDE_CATEGORIES)
   .map(([slug, meta]) => ({
     slug: slug as CategorySlug,
     ...meta,
+    color: gradientMap[slug] || '#3B82F6',
     items: guides
       .filter((g) => g.data.category === slug)
       .sort((a, b) => a.data.order - b.data.order),
@@ -22,39 +32,50 @@ const getGuidePath = (guideSlug: string) => {
 };
 ---
 
-<nav class="w-64 shrink-0 sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto sidebar-scroll pr-4">
-  <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
-    知识库导航
-  </h3>
+<nav class="w-64 shrink-0 sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto sidebar-scroll pr-2">
   <div class="space-y-6">
-    {grouped.map((group) => (
-      <div>
-        <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-          <span>{group.icon}</span>
-          <span>{group.label}</span>
+    {grouped.map((group) => {
+      const hasActive = group.items.some((item) => currentPath.includes(item.slug));
+      return (
+        <div>
+          <!-- Category header -->
+          <div class="flex items-center gap-2.5 px-3 mb-2">
+            <div class="w-1.5 h-1.5 rounded-full shrink-0" style={`background: ${group.color};`} />
+            <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 tracking-wide truncate">
+              {group.label}
+            </span>
+            <span class="text-[10px] text-gray-400 dark:text-gray-500 font-medium ml-auto tabular-nums">
+              {group.items.length}
+            </span>
+          </div>
+
+          <!-- Links -->
+          <ul class="relative ml-[11px] border-l border-gray-200 dark:border-white/[0.06] space-y-px">
+            {group.items.map((item) => {
+              const href = getGuidePath(item.slug);
+              const isActive = currentPath.includes(item.slug);
+              return (
+                <li class="relative">
+                  {isActive && (
+                    <div class="absolute left-0 top-1.5 bottom-1.5 w-[2px] -translate-x-[1px] rounded-full" style={`background: ${group.color};`} />
+                  )}
+                  <a
+                    href={href}
+                    class:list={[
+                      'block ml-4 px-3 py-1.5 rounded-lg text-[13px] leading-snug transition-all duration-200 cursor-pointer',
+                      isActive
+                        ? 'text-gray-900 dark:text-white font-medium bg-gray-100 dark:bg-white/[0.06]'
+                        : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/[0.04]',
+                    ]}
+                  >
+                    {item.data.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-        <ul class="space-y-1">
-          {group.items.map((item) => {
-            const href = getGuidePath(item.slug);
-            const isActive = currentPath.includes(item.slug);
-            return (
-              <li>
-                <a
-                  href={href}
-                  class:list={[
-                    'block px-3 py-1.5 rounded-lg text-sm transition-all duration-200',
-                    isActive
-                      ? 'text-[#007aff] dark:text-[#0a84ff] bg-blue-50 dark:bg-blue-900/20 font-medium'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5',
-                  ]}
-                >
-                  {item.data.title}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    ))}
+      );
+    })}
   </div>
 </nav>
