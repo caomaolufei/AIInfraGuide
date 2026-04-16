@@ -17,7 +17,7 @@ interface Props {
 const { guide, sameCategory, sidebarCategories, urlPrefix } = Astro.props;
 const { Content, headings } = await render(guide);
 
-const categoryMeta = GUIDE_CATEGORIES[guide.data.category];
+const categoryMeta = (GUIDE_CATEGORIES as Record<string, { label: string; icon: string; order: number }>)[guide.data.category] ?? { label: guide.data.category, icon: '📄', order: 99 };
 
 const currentIndex = sameCategory.findIndex((g) => g.id === guide.id);
 const prevGuide = currentIndex > 0 ? sameCategory[currentIndex - 1] : null;
