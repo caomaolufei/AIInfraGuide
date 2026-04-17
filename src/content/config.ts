@@ -38,4 +38,20 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { guides, posts };
+const interview = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './docs/interview' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    company: z.string(),
+    tier: z.enum(['T0', 'T1', 'T2', 'T3', 'T4', 'T5', '综合']),
+    interviewType: z.enum(['实习', '校招', '社招', '未知']).default('未知'),
+    round: z.string().optional(),
+    order: z.number().default(0),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { guides, posts, interview };

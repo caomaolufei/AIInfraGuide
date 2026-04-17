@@ -1,0 +1,151 @@
+---
+import { getCollection } from 'astro:content';
+import { groupByCompany, TIER_META } from '../utils/companyGrouping';
+
+interface Props {
+  urlPrefix?: string;
+}
+
+const { urlPrefix = '/interview' } = Astro.props;
+
+const interviews = await getCollection('interview', ({ data }) => !data.draft);
+const currentPath = decodeURIComponent(Astro.url.pathname);
+const tierGroups = groupByCompany(interviews);
+
+const getInterviewPath = (id: string) => {
+  const base = import.meta.env.BASE_URL;
+  const path = `${urlPrefix}/${id}`;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
+
+const isActivePath = (id: string) => {
+  const itemPath = getInterviewPath(id);
+  const normalizedCurrent = currentPath.replace(/\/$/, '');
+  const normalizedItem = itemPath.replace(/\/$/, '');
+  return normalizedCurrent === normalizedItem;
+};
+
+// Find current article's company for auto-expand
+const currentCompany = interviews.find((i) => isActivePath(i.id))?.data.company;
+---
+
+<nav class="w-72 shrink-0 sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto sidebar-scroll pr-2">
+  <div class="space-y-6">
+    {tierGroups.map((group) => (
+      <div>
+        {/* Tier header */}
+        <div class="flex items-center gap-2.5 px-3 mb-2">
+          <div class="w-1.5 h-1.5 rounded-full shrink-0" style={`background: ${group.color};`} />
+          <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 tracking-wide truncate">
+            {group.label}
+          </span>
+          <span class="text-[10px] text-gray-400 dark:text-gray-500 font-medium ml-auto tabular-nums">
+            {group.companies.reduce((sum, c) => sum + c.articles.length, 0)}
+          </span>
+        </div>
+
+        {/* Company groups */}
+        <ul class="relative ml-[11px] border-l border-gray-200 dark:border-white/[0.06] space-y-px">
+          {group.companies.map((comp) => {
+            const isChildActive = comp.articles.some((a) => isActivePath(a.id));
+            const isExpanded = comp.company === currentCompany || isChildActive;
+
+            return (
+              <li class="relative company-group" data-expanded={isExpanded ? 'true' : 'false'}>
+                {/* Company header row */}
+                <div class="flex items-center ml-4">
+                  <span
+                    class:list={[
+                      'flex-1 px-3 py-1.5 rounded-lg text-[13px] leading-snug transition-all duration-200 cursor-pointer font-medium',
+                      isChildActive
+                        ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-white/[0.06]'
+                        : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/[0.04]',
+                    ]}
+                  >
+                    {comp.company}
+                    <span class="text-[10px] text-gray-400 dark:text-gray-500 font-normal ml-1.5 tabular-nums">
+                      {comp.articles.length}
+                    </span>
+                  </span>
+                  <button
+                    class="company-toggle w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0"
+                    aria-label="展开/折叠"
+                  >
+                    <svg class:list={['w-3.5 h-3.5 transition-transform duration-200', isExpanded && 'rotate-90']} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Article list */}
+                <ul class:list={['company-children ml-4 pl-3 border-l border-gray-100 dark:border-white/[0.04] space-y-px mt-px', !isExpanded && 'hidden']}>
+                  {comp.articles.map((article) => {
+                    const href = getInterviewPath(article.id);
+                    const isActive = isActivePath(article.id);
+                    return (
+                      <li class="relative">
+                        {isActive && (
+                          <div class="absolute left-0 top-1.5 bottom-1.5 w-[2px] -translate-x-[1px] rounded-full" style={`background: ${group.color};`} />
+                        )}
+                        <a
+                          href={href}
+                          data-active={isActive ? 'true' : undefined}
+                          class:list={[
+                            'block ml-3 px-3 py-1.5 rounded-lg text-[12px] leading-snug transition-all duration-200 cursor-pointer',
+                            isActive
+                              ? 'text-gray-900 dark:text-white font-medium bg-gray-100 dark:bg-white/[0.06]'
+                              : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/[0.04]',
+                          ]}
+                        >
+                          {article.data.title}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Scroll active link into view
+    const sidebar = document.querySelector('.sidebar-scroll') as HTMLElement | null;
+    const activeLink = sidebar?.querySelector('a[data-active="true"]') as HTMLElement | null;
+    if (sidebar && activeLink) {
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+      const offset = linkRect.top - sidebarRect.top - sidebarRect.height / 2 + linkRect.height / 2;
+      sidebar.scrollTop += offset;
+    }
+
+    // Company toggle buttons
+    document.querySelectorAll('.company-toggle').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const group = btn.closest('.company-group') as HTMLElement | null;
+        if (!group) return;
+        const children = group.querySelector('.company-children') as HTMLElement | null;
+        const svg = btn.querySelector('svg');
+        if (!children) return;
+
+        const isHidden = children.classList.contains('hidden');
+        if (isHidden) {
+          children.classList.remove('hidden');
+          svg?.classList.add('rotate-90');
+          group.dataset.expanded = 'true';
+        } else {
+          children.classList.add('hidden');
+          svg?.classList.remove('rotate-90');
+          group.dataset.expanded = 'false';
+        }
+      });
+    });
+  });
+</script>

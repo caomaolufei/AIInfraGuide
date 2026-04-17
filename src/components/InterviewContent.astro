@@ -1,0 +1,147 @@
+---
+import { type CollectionEntry, render } from 'astro:content';
+import InterviewSidebar from './InterviewSidebar.astro';
+import TableOfContents from './TableOfContents.astro';
+import { TIER_META } from '../utils/companyGrouping';
+
+interface Props {
+  entry: CollectionEntry<'interview'>;
+  allInterviews: CollectionEntry<'interview'>[];
+  urlPrefix: string;
+}
+
+const { entry, allInterviews, urlPrefix } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const tierMeta = TIER_META[entry.data.tier] ?? { label: entry.data.tier, color: '#6B7280' };
+
+const currentIndex = allInterviews.findIndex((i) => i.id === entry.id);
+const prevEntry = currentIndex > 0 ? allInterviews[currentIndex - 1] : null;
+const nextEntry = currentIndex < allInterviews.length - 1 ? allInterviews[currentIndex + 1] : null;
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
+---
+
+<div class="max-w-[1500px] mx-auto px-6 py-12 flex gap-10">
+  <!-- Left Sidebar -->
+  <aside class="hidden lg:block">
+    <InterviewSidebar urlPrefix={urlPrefix} />
+  </aside>
+
+  <!-- Main Content -->
+  <article class="flex-1 min-w-0">
+    <!-- Article Header -->
+    <header class="mb-10 pb-8 border-b border-gray-200 dark:border-white/[0.06]">
+      <div class="flex items-center gap-3 mb-5 flex-wrap">
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md"
+          style={`background: ${tierMeta.color}15; color: ${tierMeta.color};`}
+        >
+          {tierMeta.label}
+        </span>
+        {entry.data.company !== '综合' && (
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400 text-xs font-medium rounded-md">
+            {entry.data.company}
+          </span>
+        )}
+        {entry.data.interviewType !== '未知' && (
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400 text-xs font-medium rounded-md">
+            {entry.data.interviewType}
+          </span>
+        )}
+        {entry.data.round && (
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 dark:bg-white/[0.06] text-gray-600 dark:text-gray-400 text-xs font-medium rounded-md">
+            {entry.data.round}
+          </span>
+        )}
+        <span class="text-xs text-gray-400 dark:text-gray-500 ml-auto">
+          <time datetime={entry.data.pubDate.toISOString()}>
+            {entry.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+        </span>
+      </div>
+
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+        {entry.data.title}
+      </h1>
+
+      <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
+        {entry.data.description}
+      </p>
+
+      {entry.data.tags.length > 0 && (
+        <div class="flex gap-2 mt-5 flex-wrap">
+          {entry.data.tags.map((tag) => (
+            <span class="px-2.5 py-0.5 bg-gray-50 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] text-xs text-gray-500 dark:text-gray-400 rounded-md font-medium">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <!-- Article Body -->
+    <div
+      class="prose prose-gray dark:prose-invert max-w-none
+        prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
+        prose-h2:text-2xl prose-h2:mt-14 prose-h2:mb-4 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-100 dark:prose-h2:border-white/[0.06]
+        prose-h3:text-xl prose-h3:mt-10
+        prose-p:leading-[1.8] prose-p:text-gray-600 dark:prose-p:text-gray-300
+        prose-li:text-gray-600 dark:prose-li:text-gray-300
+        prose-a:text-[#007aff] dark:prose-a:text-[#0a84ff] prose-a:no-underline prose-a:font-medium hover:prose-a:underline
+        prose-strong:text-gray-900 dark:prose-strong:text-white
+        prose-hr:border-gray-100 dark:prose-hr:border-white/[0.06]
+        prose-blockquote:border-l-[#007aff] prose-blockquote:bg-blue-50/50 dark:prose-blockquote:bg-blue-900/10 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-blockquote:not-italic
+        prose-code:text-[#007aff] dark:prose-code:text-[#0a84ff] prose-code:bg-blue-50 dark:prose-code:bg-blue-900/20 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-[0.875em] prose-code:font-normal prose-code:before:content-none prose-code:after:content-none
+        prose-img:rounded-xl prose-img:border prose-img:border-gray-200 dark:prose-img:border-white/[0.08] prose-img:shadow-sm
+        prose-pre:!p-0 prose-pre:!rounded-none prose-pre:!m-0
+        prose-table:text-sm prose-th:bg-gray-50 dark:prose-th:bg-white/[0.04] prose-th:px-4 prose-th:py-2.5 prose-td:px-4 prose-td:py-2.5"
+    >
+      <Content />
+    </div>
+
+    <!-- Prev/Next Navigation -->
+    <nav class="mt-16 pt-8 border-t border-gray-200 dark:border-white/[0.06] grid grid-cols-2 gap-4">
+      {prevEntry ? (
+        <a
+          href={getPath(`${urlPrefix}/${prevEntry.id}`)}
+          class="group p-5 rounded-xl border border-gray-200 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.12] hover:shadow-lg transition-all duration-300 cursor-pointer"
+        >
+          <span class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-2">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            上一篇
+          </span>
+          <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors duration-200">
+            {prevEntry.data.title}
+          </span>
+        </a>
+      ) : <div />}
+      {nextEntry ? (
+        <a
+          href={getPath(`${urlPrefix}/${nextEntry.id}`)}
+          class="group p-5 rounded-xl border border-gray-200 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.12] hover:shadow-lg transition-all duration-300 text-right cursor-pointer"
+        >
+          <span class="flex items-center justify-end gap-1.5 text-xs text-gray-400 dark:text-gray-500 mb-2">
+            下一篇
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+          <span class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors duration-200">
+            {nextEntry.data.title}
+          </span>
+        </a>
+      ) : <div />}
+    </nav>
+  </article>
+
+  <!-- Right Sidebar: TOC -->
+  <aside class="hidden xl:block">
+    <TableOfContents headings={headings} />
+  </aside>
+</div>

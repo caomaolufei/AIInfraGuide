@@ -1,0 +1,24 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import InterviewContent from '../../components/InterviewContent.astro';
+import { flattenCompanyOrder } from '../../utils/companyGrouping';
+
+export async function getStaticPaths() {
+  const interviews = await getCollection('interview', ({ data }) => !data.draft);
+  return interviews.map((entry) => ({
+    params: { slug: entry.id },
+    props: entry,
+  }));
+}
+
+type Props = CollectionEntry<'interview'>;
+
+const entry = Astro.props;
+const allInterviews = await getCollection('interview', ({ data }) => !data.draft);
+const sorted = flattenCompanyOrder(allInterviews);
+---
+
+<Layout title={`${entry.data.title} - 面试宝典`} description={entry.data.description}>
+  <InterviewContent entry={entry} allInterviews={sorted} urlPrefix="/interview" />
+</Layout>

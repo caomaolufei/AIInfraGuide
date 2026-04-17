@@ -1,29 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-
-const getPath = (path: string) => {
-  const base = import.meta.env.BASE_URL;
-  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
-};
+import InterviewLanding from '../../components/InterviewLanding.astro';
 ---
 
-<Layout title="面试宝典 - AIInfraGuide" description="AI Infra 面试高频问题与解析，助你拿下心仪 Offer">
-  <section class="py-20">
-    <div class="max-w-4xl mx-auto px-6">
-      <div class="mb-12">
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">面试宝典</h1>
-        <p class="text-gray-500 dark:text-gray-400">AI Infra 面试高频问题与深度解析，持续更新中</p>
-      </div>
-
-      <div class="text-center py-20">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-100 dark:bg-white/5 mb-6">
-          <svg class="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-          </svg>
-        </div>
-        <p class="text-gray-500 dark:text-gray-400 mb-2">内容筹备中，敬请期待</p>
-        <p class="text-sm text-gray-400 dark:text-gray-500">欢迎到 <a href="https://github.com/caomaolufei/AIInfraGuide/issues" target="_blank" rel="noopener noreferrer" class="text-[#007aff] dark:text-[#0a84ff] hover:underline">GitHub Issues</a> 提交你想看到的面试题目</p>
-      </div>
-    </div>
-  </section>
+<Layout title="面试宝典 - AIInfraGuide" description="AI Infra 面试真题集锦，覆盖 40+ 家公司的 180+ 场面试">
+  <InterviewLanding urlPrefix="/interview" />
 </Layout>

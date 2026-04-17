@@ -1,0 +1,178 @@
+---
+import { getCollection } from 'astro:content';
+import InterviewSidebar from './InterviewSidebar.astro';
+import { groupByCompany, TIER_META } from '../utils/companyGrouping';
+
+interface Props {
+  urlPrefix: string;
+}
+
+const { urlPrefix } = Astro.props;
+
+const interviews = await getCollection('interview', ({ data }) => !data.draft);
+const tierGroups = groupByCompany(interviews);
+const totalArticles = interviews.length;
+const totalCompanies = new Set(interviews.map((i) => i.data.company)).size;
+const totalTiers = new Set(interviews.map((i) => i.data.tier)).size;
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return base === '/' ? path : `${base.replace(/\/$/, '')}${path}`;
+};
+
+// First article for "开始浏览" button
+const sorted = [...interviews].sort((a, b) => a.data.order - b.data.order);
+const firstArticle = sorted[0];
+const startHref = firstArticle ? getPath(`${urlPrefix}/${firstArticle.id}`) : '#';
+
+const tierTips: Record<string, string> = {
+  T0: '侧重系统设计、性能优化深度、大规模分布式训练/推理经验',
+  T1: '侧重工程能力、框架使用经验、项目实战',
+  T2: '侧重前沿技术理解、模型优化、创新方案',
+  T3: '侧重底层硬件理解、CUDA/算子开发、编译器优化',
+  T4: '侧重边缘部署、模型压缩、端侧推理优化',
+  T5: '侧重基础知识扎实、项目匹配度、学习能力',
+  综合: '综合面经题库，涵盖多个方向的通用面试题',
+};
+---
+
+<div class="max-w-[1500px] mx-auto px-6 py-12 flex gap-10">
+  <!-- Left Sidebar -->
+  <aside class="hidden lg:block">
+    <InterviewSidebar urlPrefix={urlPrefix} />
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 min-w-0">
+    {/* Hero Section */}
+    <div class="mb-12 pb-8 border-b border-gray-200 dark:border-white/[0.06]">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-medium rounded-md">
+          面试宝典
+        </span>
+        <span class="text-xs text-gray-400 dark:text-gray-500 font-medium tabular-nums">
+          {totalArticles} 篇面经 · {totalCompanies} 家公司 · {totalTiers} 个梯队
+        </span>
+      </div>
+
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+        面试宝典
+      </h1>
+
+      <p class="text-lg text-gray-500 dark:text-gray-400 leading-relaxed mb-8">
+        AI Infra 面试真题集锦，覆盖 {totalCompanies}+ 家公司的 {totalArticles}+ 场面试经验，按梯队分类组织，助你高效备战拿下心仪 Offer。
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-medium rounded-md">
+          【欢迎大家贡献自己的面试真题，互帮互助！】
+        </span>
+      </p>
+      
+
+      {firstArticle && (
+        <a
+          href={startHref}
+          class="group inline-flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-300 shadow-lg shadow-gray-900/10 dark:shadow-white/10 cursor-pointer text-sm"
+        >
+          开始浏览
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      )}
+    </div>
+
+    {/* Tier Cards */}
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">梯队分类</h2>
+
+      <div class="space-y-5">
+        {tierGroups.map((group) => {
+          const totalInTier = group.companies.reduce((sum, c) => sum + c.articles.length, 0);
+          const color = group.color;
+          return (
+            <div class="rounded-xl border border-gray-200 dark:border-white/[0.06] overflow-hidden">
+              {/* Tier header */}
+              <div class="px-6 py-4 flex items-center gap-3" style={`background: ${color}10;`}>
+                <span
+                  class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
+                  style={`background: ${color}20; color: ${color};`}
+                >
+                  {group.tier === '综合' ? '综' : group.tier.slice(1)}
+                </span>
+                <span class="font-semibold text-gray-900 dark:text-white text-[15px]">
+                  {group.label}
+                </span>
+                <span class="ml-auto text-xs text-gray-400 dark:text-gray-500 font-medium tabular-nums">
+                  {totalInTier} 篇 · {group.companies.length} 家公司
+                </span>
+              </div>
+
+              {/* Tier tip */}
+              {tierTips[group.tier] && (
+                <div class="px-6 py-3 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-white/[0.04]">
+                  {tierTips[group.tier]}
+                </div>
+              )}
+
+              {/* Company list */}
+              <div class="px-6 py-4">
+                <div class="flex flex-wrap gap-2">
+                  {group.companies.map((comp) => {
+                    const firstArticleInComp = comp.articles[0];
+                    const href = firstArticleInComp ? getPath(`${urlPrefix}/${firstArticleInComp.id}`) : '#';
+                    return (
+                      <a
+                        href={href}
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:border-gray-300 dark:hover:border-white/[0.16] hover:bg-gray-100 dark:hover:bg-white/[0.08] transition-all cursor-pointer"
+                      >
+                        {comp.company}
+                        <span class="text-[10px] text-gray-400 dark:text-gray-500 tabular-nums">
+                          {comp.articles.length}
+                        </span>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    {/* Tips Section */}
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">备考建议</h2>
+      <div class="rounded-xl border border-gray-200 dark:border-white/[0.06] p-6 bg-white dark:bg-white/[0.02]">
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
+            <svg class="w-5 h-5 shrink-0 mt-0.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            T0 大厂面试深度较高，建议先系统学习分布式训练、推理优化等核心模块
+          </li>
+          <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
+            <svg class="w-5 h-5 shrink-0 mt-0.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            芯片/硬件公司侧重 CUDA 编程和算子优化，建议配合 CUDA 优化模块学习
+          </li>
+          <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
+            <svg class="w-5 h-5 shrink-0 mt-0.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            AI 独角兽公司更看重前沿技术理解力和快速学习能力
+          </li>
+          <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400">
+            <svg class="w-5 h-5 shrink-0 mt-0.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            面经仅供参考，面试真题会随时间变化，重点理解背后的知识体系
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Sidebar (empty, matches article page layout) -->
+  <aside class="hidden xl:block w-64 shrink-0" />
+</div>
