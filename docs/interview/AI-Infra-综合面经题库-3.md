@@ -1,7 +1,7 @@
 ---
 title: "AI Infra 综合面经题库 (3)"
 description: "AI Infra 面试真题，涵盖推理优化、训练优化、算子优化、高性能计算等方向"
-pubDate: 2026-04-16
+pubDate: 2026-04-17
 company: "综合"
 tier: "综合"
 interviewType: "未知"
@@ -9,18 +9,19 @@ order: 5
 tags: ["推理优化", "训练优化", "算子优化", "高性能计算"]
 ---
 
-ai infra八股：
-1- 给定训练所需的Tokens，怎么估计模型训练所需的完整时间？
-2- Prefill和Decode阶段各有什么优化技术？
-3- 什么是Two-batch overlap，什么场景Two-batch overlap是负优化？
-4- megatron-lm中通信优化怎么做？
-5- 多机PD分离会有KV cache transfer开销，为什么还要做PD分离？
-6- muon和AdamW的pretrain和posttrain为什么不能混用？
-7- 如何看待跨SM的PD分离和AF分离？
-8- cuda的global memory和shared memory访存分别需要注意什么？
-9- deepseek-V3的优化点
-10- deepseek-DSA和NSA，MoBA的区别
-11- nccl中的通信源语有哪些？all-reduce参数更新一次参数需要几次通信？
-12- 在小数据量场景使用NVSHMEM，每个GPU直接读取其他GPU的数据，在本地reduce，相比ring all-reduce的好处
-13- 训练时如何设计超长序列下的并行
-14- 将Ampere架构的算子适配到Hopper架构的卡上，你会对哪些地方进行升级改造？
+## 基础知识
+
+1. CUDA Global Memory 与 Shared Memory 在访存时分别需要关注哪些问题？
+2. 已知训练所需的 Token 总量，如何估算模型完成训练的总耗时？
+3. Prefill 阶段与 Decode 阶段各有哪些主流优化技术？
+4. Two-batch overlap 的含义是什么？在哪些场景下 Two-batch overlap 反而会成为负优化？
+5. Megatron-LM 中的通信优化是如何实现的？
+6. 多机 PD 分离会引入 KV Cache 传输开销，为何仍有必要进行 PD 分离？
+7. Muon 优化器与 AdamW 在 Pretrain 和 Post-train 阶段为何不能混合使用？
+8. 如何看待跨 SM 的 PD 分离与 AF 分离方案？
+9. DeepSeek-V3 有哪些关键优化点？
+10. DeepSeek-DSA、NSA 与 MoBA 之间的区别是什么？
+11. NCCL 中包含哪些通信原语？执行一次 All-Reduce 参数更新需要几次通信？
+12. 在小数据量场景下使用 NVSHMEM，让每个 GPU 直接读取其他 GPU 的数据并在本地进行 Reduce，相比 Ring All-Reduce 有何优势？
+13. 训练超长序列时应如何设计并行策略？
+14. 将 Ampere 架构上的算子迁移适配到 Hopper 架构时，哪些方面需要进行升级改造？

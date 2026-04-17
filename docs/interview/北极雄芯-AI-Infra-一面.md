@@ -1,7 +1,7 @@
 ---
 title: "北极雄芯 AI Infra 一面"
 description: "北极雄芯 AI Infra 一面面试真题，涵盖算子优化等方向"
-pubDate: 2026-04-15
+pubDate: 2026-04-17
 company: "北极雄芯"
 tier: "T3"
 interviewType: "未知"
@@ -10,21 +10,21 @@ order: 4001
 tags: ["算子优化"]
 ---
 
-面试时长：30min
-两个面试官轮流问
+## 基础知识
 
-面试内容：
-* 自我介绍
-* 对AI编译了解吗
-* 线程同步方法
-* 单例模式
-* 双检查锁的隐患
-* 还知道哪些设计模式
-* malloc详细原理
-* nvidia profiler
-* pytorch知道哪些原理
-* 如何优化cuda算子
-* linux操作熟悉吗
+1. 对 AI 编译器（如 TVM、XLA 等）的了解程度
+2. 线程同步的常见方法有哪些？
+3. 单例模式的实现方式
+4. 双重检查锁（Double-Checked Locking）存在哪些隐患？
+5. 除单例模式外，还了解哪些设计模式？
+6. malloc 的底层实现原理
 
-反问：
-* 至少2技术面
+## CUDA 与框架
+
+7. NVIDIA Profiler 工具的使用方法
+8. PyTorch 的底层原理了解多少？
+9. CUDA 算子优化的常见手段
+
+## 其他
+
+10. Linux 常用命令与操作是否熟悉？

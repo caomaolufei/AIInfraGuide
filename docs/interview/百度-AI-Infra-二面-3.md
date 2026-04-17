@@ -1,7 +1,7 @@
 ---
 title: "百度 AI Infra (1)"
 description: "百度 AI Infra 面试真题，涵盖AI Infra等方向"
-pubDate: 2026-04-16
+pubDate: 2026-04-17
 company: "百度"
 tier: "T0"
 interviewType: "未知"
@@ -9,15 +9,23 @@ order: 1025
 tags: []
 ---
 
-1.Go 的 tag 映射如何实现的
-2.反射
-3.Slice 和 array 扩容机制
-4.Map 实现机制，遍历无序，如何实现一个有序的 map
-5.介绍 gmp  能说多少说多少
-6.Tcp udp http https
-7.输入一个网址的访问流程
-8.Send write mmap sendfile 内核缓冲区和用户缓冲区磁盘读缓冲区？
-9.进程协程线程
-10.Informer 的原理
-11.Docker 实现原理
-12.容器如何做到 pid 隔离的如何关闭
+## 基础知识 - Go 语言
+
+1. Go 中 Tag 映射的实现机制是什么？
+2. 阐述 Go 语言反射的基本原理与使用场景。
+3. Slice 和 Array 的扩容机制分别是怎样的？有何区别？
+4. Map 的底层实现机制是什么？其遍历为何无序？如何实现一个有序的 Map？
+5. 尽可能详细地介绍 GMP 调度模型。
+
+## 基础知识 - 网络与操作系统
+
+6. 对比 TCP、UDP、HTTP、HTTPS 的特点与适用场景。
+7. 浏览器输入一个 URL 后的完整访问流程是怎样的？
+8. 对比 send、write、mmap、sendfile 在内核缓冲区与用户缓冲区之间的数据传输方式。
+9. 进程、线程、协程三者的区别与联系是什么？
+
+## 基础知识 - 云原生
+
+10. Kubernetes Informer 的工作原理是什么？
+11. Docker 的底层实现原理是什么？
+12. 容器如何实现 PID 隔离？如何关闭该隔离？

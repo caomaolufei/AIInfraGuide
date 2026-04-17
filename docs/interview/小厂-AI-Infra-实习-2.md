@@ -1,7 +1,7 @@
 ---
 title: "小厂 AI Infra 实习 (2)"
 description: "小厂 AI Infra 实习面试真题，涵盖推理优化、训练优化、算子优化等方向"
-pubDate: 2026-04-16
+pubDate: 2026-04-17
 company: "小厂"
 tier: "T5"
 interviewType: "实习"
@@ -9,12 +9,20 @@ order: 6024
 tags: ["推理优化", "训练优化", "算子优化"]
 ---
 
-1.详细说明大模型rl全流程，涉及到哪些模型，ppo/grpo有什么区别；
-2.rl里rollout耗时占比大概百分之多少，policy mfu大概多少，mfu计算公式，6Nd公式是什么；
-3.rl里rollout有哪些优化点（rollout量化 异步rollout等）；
-4.介绍rl中如何把预训练权重同步到推理引擎；
-5.Megatron，tp是怎么切分的，mlp中第一个矩阵和第二个矩阵分别是行切还是列切，通信分别是什么算子；
-6.预训练和sft loss、数据集有什么区别；
-7.预训练优化，介绍流水线并行，说明一下1f1b，dualpipe；
-8.说一下DeepSeek论文里觉得印象深刻的点（fp8训练）；
-9.介绍一下vllm/sglang里的continuous batching；
+### 基础知识
+
+1. 预训练与 SFT 阶段在损失函数设计和数据集构建方面有何差异？
+2. Transformer 架构中，Megatron 的张量并行（TP）如何对参数矩阵进行切分？MLP 中第一个线性层和第二个线性层分别采用行切分还是列切分？各自对应的通信原语是什么？
+3. 简述 DeepSeek 论文中令你印象深刻的技术要点（如 FP8 训练方案）。
+
+### 训练优化
+
+4. 介绍预训练中的流水线并行方案，说明 1F1B 调度策略与 DualPipe 的设计原理。
+5. 详细阐述大模型强化学习（RL）的完整流程，涉及哪些模型角色？PPO 与 GRPO 的核心区别是什么？
+6. 在 RL 训练中，Rollout 阶段的耗时占比约为多少？Policy 模型的 MFU 大致为多少？请给出 MFU 的计算公式以及 6Nd 公式的含义。
+7. RL 中的 Rollout 阶段有哪些常见优化手段（如 Rollout 量化、异步 Rollout 等）？
+8. 在 RL 训练流程中，如何将预训练权重同步至推理引擎？
+
+### 推理优化
+
+9. 介绍 vLLM 或 SGLang 中 Continuous Batching 的工作机制。

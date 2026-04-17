@@ -1,7 +1,7 @@
 ---
 title: "字节跳动 AI Infra 实习 一面 (1)"
 description: "字节跳动 AI Infra 实习一面面试真题，涵盖算子优化等方向"
-pubDate: 2026-04-15
+pubDate: 2026-04-17
 company: "字节跳动"
 tier: "T0"
 interviewType: "实习"
@@ -10,16 +10,22 @@ order: 1047
 tags: ["算子优化"]
 ---
 
-给我面没招了，发点面经攒攒人品～
-1.项目拷打
-2.实习拷打
-3.像那种rl里面的那个MOE之类的那种的优化有去做过吗
-4.看您的训练经验比较丰富，而且您上线运行的推理内容之前也进行过一些什么样的优化吗？
-5.有没有做过 kernel级别的优化？比如用 CUTE DSL或者手写 CUDA去做 fusion这类算子融合优化，介绍一下
-6像底层，如果你们在做.kernel fusion，倾向于用什么方式来做
-7.有没有哪次你做了 fusion 结果性能反而下降的？原因是什么
-8.平时写 CUDA的时候，有没有关注到底层实现细节？比如你刚提到 FA2，那再往下一层，像 Hopper架构里那个 warp specialization是什么，它底层大概是怎么实现的
-9.试过用 Agent去生成cuda内核么，怎么去做的
-10.如果我把 warp specialization 去掉，只保留 tile 和 shared memory 优化，大概会损失在哪？
-11.怎么么判断一个 MoE 模型是真的学到了分工，而不是只是把 dense模型拆开了
-12.在 RL + MoE 里，有没有遇到过 reward把 routing学坏的情况？就是模型为了拿 reward，全都走某几个 expert，这种情况你当时是怎么处理的
+## 算子优化
+
+1. 是否有 kernel 级别的优化经验？例如使用 CUTE DSL 或手写 CUDA 实现算子融合，请具体介绍。
+2. 进行 kernel fusion 时，通常倾向于采用哪种实现方式？
+3. 是否遇到过 fusion 后性能反而下降的情况？原因是什么？
+4. Hopper 架构中 warp specialization 的机制是什么？底层如何实现？
+5. 如果去掉 warp specialization，仅保留 tiling 和 shared memory 优化，性能损失主要体现在哪些方面？
+
+## 推理优化
+
+6. 在 MoE 模型（如 RL 场景中）的推理优化方面是否有实践经验？
+7. 如何判断 MoE 模型确实学到了专家分工，而非仅仅将 dense 模型拆分？
+8. 在 RL + MoE 训练中，是否遇到过 reward 导致 routing 退化的情况（即所有请求集中到少数 expert）？如何处理？
+
+## 项目经历
+
+9. 请介绍你的项目经历。
+10. 请介绍你的实习经历，包括上线运行的推理服务做过哪些优化。
+11. 是否尝试过使用 Agent 生成 CUDA kernel？具体方案是什么？

@@ -1,7 +1,7 @@
 ---
 title: "蔚来 AI Infra 实习"
 description: "蔚来 AI Infra 实习面试真题，涵盖算子优化等方向"
-pubDate: 2026-04-16
+pubDate: 2026-04-17
 company: "蔚来"
 tier: "T4"
 interviewType: "实习"
@@ -9,11 +9,21 @@ order: 5007
 tags: ["算子优化"]
 ---
 
-发一下问题给大家参考，攒攒人品！有面试过同岗的朋友欢迎评论区交流
-1. 项目交流
-2.  Shared Memory Bank Conflict及解决办法
-3. 同一Warp内不同线程的访问约束
-4. 广播机制（Broadcast）
-6. 四种Cast转换的区别与应用场景（reinterpret_cast等）
-7. 父类转子类的安全性问题与内存布局约束
-手撕：01背包问题 vs 完全背包问题
+### 项目经历
+
+1. 项目经验讨论
+
+### 算子优化
+
+2. 共享内存 Bank Conflict 的产生原因与解决方案
+3. 同一 Warp 内不同线程的访存约束条件
+4. 共享内存中的广播机制 (Broadcast)
+
+### C++ 基础
+
+5. 四种类型转换（reinterpret_cast、static_cast、dynamic_cast、const_cast）的区别与适用场景
+6. 父类指针转子类指针的安全性问题及内存布局约束
+
+### 编程题
+
+7. 01 背包问题与完全背包问题的实现与对比

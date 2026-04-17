@@ -1,7 +1,7 @@
 ---
 title: "字节跳动 AI Infra (2)"
 description: "字节跳动 AI Infra 面试真题，涵盖推理优化、高性能计算等方向"
-pubDate: 2026-04-16
+pubDate: 2026-04-17
 company: "字节跳动"
 tier: "T0"
 interviewType: "未知"
@@ -9,21 +9,13 @@ order: 1043
 tags: ["推理优化", "高性能计算"]
 ---
 
-1️⃣大模型推理优化方面
-KV Cache 、PagedAttention 、FlashAttention 等技术，提升吞吐和显存利用率。
+## 推理优化
 
-2️⃣高频考点
-vLLM 与 PagedAttention
-KV Cache 原理与优化
-推理加速综合策略
+1. vLLM 中 PagedAttention 的实现机制及其设计动机是什么？
+2. KV Cache 的原理是什么？有哪些针对性的优化方法？
+3. FlashAttention 的核心技术点有哪些？
 
-3️⃣公司考察侧重点差异
-💞字节跳动：全面覆盖推理优化、推荐系统、多模态等多个方向，考察系统化思维能力
-👀腾讯：偏重推理框架（ vLLM 、
-FlashAttention ）和长上下文优化
-🍎美团／滴滴：关注实用化推理加速技术选型和实践经验
+## 高性能计算
 
-4️⃣面试准备建议
-➡➡掌握核心原理：深入理解 vLLM 的
-PagedAttention 、 KV Cache 、 FlashAttention 核心技术的实现机制。➡➡积累实战经验：准备具体的优化案例，包括量化效果、延迟提升数据等量化指标。
-➡➡构建系统视角：不仅要懂算法原理，还要了解系统资源调度、并发处理等工程实践。
+4. 大模型推理中，系统资源调度与并发处理需要关注哪些要点？
+5. 如何综合运用多种技术手段实现推理加速？

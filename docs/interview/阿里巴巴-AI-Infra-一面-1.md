@@ -1,7 +1,7 @@
 ---
 title: "阿里巴巴 AI Infra 一面 (1)"
 description: "阿里巴巴 AI Infra 一面面试真题，涵盖AI Infra等方向"
-pubDate: 2026-04-16
+pubDate: 2026-04-17
 company: "阿里巴巴"
 tier: "T0"
 interviewType: "未知"
@@ -10,11 +10,18 @@ order: 1003
 tags: []
 ---
 
-面试很难，还是要多多练习，感觉自己说不明白业务逻辑
-1.Agent的架构设计
-2.RAG的检索如何实现
-3.预训练数据清洗方法
-4.Group Query Attention的作用
-5.手撕：实现LRU Cache
-6.MoE架构的专家路由是对每个token路由还是对每个序列路由
-7.KV Cache的优化方法
+## 基础知识
+
+1. Group Query Attention 的设计动机与作用是什么？
+2. MoE 架构中，专家路由是针对每个 token 进行还是针对每个序列进行？
+3. 针对 KV Cache 有哪些常见的优化策略？
+4. RAG 系统中检索模块的实现方案有哪些？
+5. 预训练阶段常用的数据清洗方法有哪些？
+
+## 项目经历
+
+6. 请阐述你设计的 Agent 系统的整体架构。
+
+## 编程题
+
+7. 实现一个 LRU Cache。

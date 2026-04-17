@@ -1,7 +1,7 @@
 ---
 title: "阿里巴巴 AI Infra 校招 一面"
 description: "阿里巴巴 AI Infra 校招一面面试真题，涵盖推理优化等方向"
-pubDate: 2026-04-16
+pubDate: 2026-04-17
 company: "阿里巴巴"
 tier: "T0"
 interviewType: "校招"
@@ -10,15 +10,22 @@ order: 1008
 tags: ["推理优化"]
 ---
 
-1.实习介绍
-2.transformer为什么比RNN好，有没有scaling law
-3.介绍一下新闻推荐的项目
-4.新闻推荐比赛的正负样本怎么确定
-5.了解生成式推荐吗?
-6.SID如何训练的
-7.Tiger为什么不采用decoder-only的形式呢
-8.否熟悉推理优化中的flash-attention和KV-Cache?
-9.KV-Cache出现在训练中还是推理中?
-10.为什么不出现在训练中使用KV-Cache?
-11.注意力的优化是否了解?
-12.手撕:接雨水
+## 基础知识
+
+1. Transformer 相比 RNN 的核心优势是什么？Transformer 是否也存在 Scaling Law？
+2. KV-Cache 是在训练阶段还是推理阶段使用的？为什么训练阶段不使用 KV-Cache？
+3. Flash Attention 的核心思想是什么？它如何优化注意力计算？
+4. 除 Flash Attention 和 KV-Cache 外，还了解哪些注意力机制的优化方法？
+5. 是否了解生成式推荐？其基本思路是什么？
+6. SID 的训练流程是怎样的？
+7. Tiger 为何没有采用 Decoder-Only 的架构形式？
+
+## 项目经历
+
+8. 介绍你的实习经历及主要工作内容。
+9. 介绍新闻推荐项目的整体方案与技术实现。
+10. 新闻推荐任务中正负样本是如何确定的？
+
+## 编程题
+
+11. 接雨水问题（LeetCode 42）。
