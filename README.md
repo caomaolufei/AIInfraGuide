@@ -238,6 +238,15 @@ AIInfraGuide 是一个开源项目，欢迎通过以下方式参与共建：
 
 让我们一起构建 AI Infra 社区的知识基础设施。
 
+## 联系方式
+
+欢迎通过以下方式与我交流：
+
+- 公众号: [《AI炼金炉》](https://mp.weixin.qq.com/s/oxUBDTd-b1aZnh0jGR5tqw)
+- 知乎: [草帽路飞](https://zhihu.com/people/zi-you-zi-zai-de-zhan-sheng)
+- 社群: （vx： caomaolufei2026）
+<img src="https://caomaolufei.github.io/AIInfraGuide/images/wx_qun.png" alt="wx_qun" style="max-width: 50%; display: block; margin: 0 auto;" />
+
 ## License
 
 MIT
