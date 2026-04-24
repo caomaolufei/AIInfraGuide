@@ -8,6 +8,14 @@ tags: ["公告", "更新日志"]
 本文持续记录 AIInfraGuide 知识库的内容更新，按时间倒序排列，方便大家了解最新动态。
 
 ---
+## 2026-04-24
+
+### 新增内容
+
+- **文章：** [3.10 Tokenization与词嵌入](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/310-Tokenization与词嵌入)
+
+
+---
 ## 2026-04-23
 
 ### 新增内容
