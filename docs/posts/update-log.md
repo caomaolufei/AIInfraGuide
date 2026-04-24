@@ -12,7 +12,7 @@ tags: ["公告", "更新日志"]
 
 ### 新增内容
 
-- **文章：** [3.10 Tokenization与词嵌入](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/310-Tokenization与词嵌入)
+- **文章：** [3.9 Tokenization与词嵌入](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/39-tokenization与词嵌入)
 
 
 ---
@@ -20,7 +20,7 @@ tags: ["公告", "更新日志"]
 
 ### 新增内容
 
-- **文章：** [3.9 从Transformer到LLM自回归生成深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/39-从Transformer到LLM自回归生成深入理解)
+- **文章：** [3.8 从Transformer到LLM自回归生成深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/38-从transformer到llm自回归生成深入理解)
 
 ---
 
@@ -28,8 +28,8 @@ tags: ["公告", "更新日志"]
 
 ### 新增内容
 
-- **文章：** [3.7 LayerNorm与残差连接深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/37-layernorm与残差连接深入理解)
-- **文章：** [3.8 Transformer Decoder Block完整解析](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/38-transformer-decoder-block完整解析)
+- **文章：** [3.6 LayerNorm与残差连接深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/36-layernorm与残差连接深入理解)
+- **文章：** [3.7 Transformer Decoder Block完整解析](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/37-transformer-decoder-block完整解析)
 
 ---
 
@@ -37,8 +37,8 @@ tags: ["公告", "更新日志"]
 
 ### 新增内容
 
-- **文章：** [3.5 Transformer前馈网络ffn深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/35-transformer前馈网络ffn深入理解)
-- **文章：** [3.6 Transformer位置编码深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/36-transformer位置编码深入理解)
+- **文章：** [3.4 Transformer前馈网络ffn深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/34-transformer前馈网络ffn深入理解)
+- **文章：** [3.5 Transformer位置编码深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/35-transformer位置编码深入理解)
 
 ---
 
@@ -46,7 +46,7 @@ tags: ["公告", "更新日志"]
 
 ### 新增内容
 
-- **文章：** [3.4 Self-Attention 机制深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/34-Self-Attention机制深入理解)
+- **文章：** [3.3 Self-Attention 机制深入理解](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/33-Self-Attention机制深入理解)
 
 ---
 
@@ -77,9 +77,9 @@ tags: ["公告", "更新日志"]
 ### 新增内容
 
 - **Transformer 系列文章**：
-  - [3.1 Transformer 架构入门](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/31-Transformer架构快速入门)
-  - [3.2 AI Infra 工程师为什么必须懂 Transformer](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/32-AIInfra工程师为什么必须懂Transformer)
-  - [3.3 Transformer 全貌及代码实现](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/33-Transformer全貌及代码实现)
+  - [Transformer 架构入门](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/Transformer架构快速入门)
+  - [3.1 AI Infra 工程师为什么必须懂 Transformer](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/31-ai-infra工程师为什么必须懂transformer)
+  - [3.2 Transformer 全貌及代码实现](/AIInfraGuide/prerequisites/模块一-前置知识/transformer/32-transformer全貌及代码实现)
 - **课程资料**：150+ 篇详细子文章上线，覆盖四大模块全部章节
 - **博客文章**：新增[「关于作者」](/AIInfraGuide/about/author)介绍页
 

@@ -1,5 +1,5 @@
 ---
-title: "3.1 Transformer架构：快速入门篇"
+title: "🔥 Transformer架构：快速入门篇"
 description: "从 AI Infra 工程师视角理解 Transformer 全貌，掌握 Self-Attention、FFN、位置编码等核心模块的原理与工程意义"
 pubDate: 2026-03-30
 category: "prerequisites"
