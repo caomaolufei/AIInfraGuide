@@ -8,6 +8,20 @@ tags: ["公告", "更新日志"]
 本文持续记录 AIInfraGuide 知识库的内容更新，按时间倒序排列，方便大家了解最新动态。
 
 ---
+## 2026-04-27
+
+### 新增内容
+
+- **文章：** [5.1 NVIDIA GPU架构演进：从Volta到Blackwell](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/gpunvidia-gpu-evolution/)
+
+---
+## 2026-04-26
+
+### 新增内容
+
+- **文章：** [🔥 GPU基础知识：从硬件架构到AI计算](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/gpu/gpu-basics/)
+
+---
 ## 2026-04-25
 
 ### 新增内容
