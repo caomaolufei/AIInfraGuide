@@ -8,6 +8,13 @@ tags: ["公告", "更新日志"]
 本文持续记录 AIInfraGuide 知识库的内容更新，按时间倒序排列，方便大家了解最新动态。
 
 ---
+## 2026-04-28
+
+### 新增内容
+
+- **文章：** [🔥 集群通信网络与NCCL：分布式训练的通信骨架](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/communication/collective-communication-primer/)
+
+---
 ## 2026-04-27
 
 ### 新增内容

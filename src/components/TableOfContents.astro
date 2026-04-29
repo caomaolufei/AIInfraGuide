@@ -16,7 +16,7 @@ const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       </span>
     </div>
 
-    <ul class="relative space-y-px">
+    <ul class="relative space-y-px max-h-[calc(100vh-12rem)] overflow-y-auto scrollbar-hide">
       <!-- Track line -->
       <div class="toc-track absolute left-0 top-0 bottom-0 w-px bg-gray-200 dark:bg-white/[0.06]" />
       <!-- Active indicator (animated via JS) -->
