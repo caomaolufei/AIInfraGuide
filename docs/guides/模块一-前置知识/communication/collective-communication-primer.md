@@ -7,7 +7,26 @@ order: 600
 chapter: 6
 tags: ["集群通信", "AllReduce", "NCCL", "Ring算法", "分布式训练"]
 ---
----
+
+单卡再强也有天花板，大模型训练和推理不可避免地需要多卡甚至多机协作。此时，GPU 之间"怎么说话、说话多快"就成了决定整体效率的关键因素。本文从单机内的 NVLink 讲到跨机的 InfiniBand，再到集合通信原语、Ring/Tree AllReduce 算法、通信计算 Overlap 和 NCCL 通信库，系统梳理 AI 集群通信的完整知识链路。
+
+<!-- more -->
+
+## 📑 目录
+
+- [1. 单机卡间通信：NVLink 与 NVSwitch](#1-单机卡间通信nvlink-与-nvswitch)
+- [2. 多机间通信：InfiniBand 与 RoCE](#2-多机间通信infiniband-与-roce)
+- [3. 点对点通信：最基础的积木](#3-点对点通信最基础的积木)
+- [4. 集合通信原语](#4-集合通信原语)
+- [5. Ring AllReduce：带宽最优实现](#5-ring-allreduce带宽最优实现)
+- [6. Tree AllReduce：低延迟的另一种思路](#6-tree-allreduce低延迟的另一种思路)
+- [7. 通信与计算 Overlap](#7-通信与计算-overlap)
+- [8. NCCL：GPU 集合通信库](#8-ncclgpu-集合通信库)
+- [9. 从通信视角理解分布式并行策略](#9-从通信视角理解分布式并行策略)
+- [总结](#-总结)
+- [自我检验清单](#-自我检验清单)
+- [参考资料](#-参考资料)
+
 
 ## 1. 单机卡间通信：NVLink 与 NVSwitch
 
