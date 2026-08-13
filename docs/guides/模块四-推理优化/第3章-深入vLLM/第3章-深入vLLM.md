@@ -11,28 +11,28 @@ tags: ["vLLM", "V1引擎", "Scheduler", "源码导读", "SGLang", "TensorRT-LLM"
 
 vLLM 是本模块的实例主线。前两章讲的核心技术，本章落到 vLLM v0.27.1（2026-08-12）的官方架构、配置与源码中，看它们如何被组织、调度和调优；最后用统一维度对比 SGLang 与 TensorRT-LLM，帮助你建立可验证的框架选型方法。
 
-**快速入门**从安装、离线批量推理到 OpenAI 兼容服务部署，用最短路径跑通第一个 vLLM 推理服务。
+**快速入门**不止跑通命令，还用离线、在线、连续批处理与 Prefix Cache 四组实验建立可复现基线，并把安装、OOM、流式缓冲和运行时退化按层排障。
 
-**整体架构**拆解 vLLM 的分层设计：`LLMEngine` / `AsyncLLM` 入口、`EngineCore` 执行循环、`Scheduler` 调度器、`KVCacheManager` 显存管理、`Worker` / `ModelRunner` 模型执行，理清一个请求从进入到返回的完整数据流。
+**整体架构**沿真实请求对象穿过 OpenAI API、`AsyncLLM`、ZMQ IPC、`EngineCore`、`Scheduler`、`KVCacheManager`、`Worker` 与 `ModelRunner`，同时追踪 token、block table、persistent batch 和流式输出状态。
 
-**V1 引擎**通过多进程隔离让 Tokenize/Detokenize 等 CPU 任务与核心循环重叠，用统一 Token 预算表达 Prefill、Decode 与推测 token，以统一 KV block 池支撑默认 Prefix Cache，并通过 Persistent Batch 减少重复状态准备。性能提升取决于模型、硬件和负载，本章不使用脱离测试条件的统一倍数。
+**V1 引擎**从 V0 的结构性瓶颈出发，深入多进程 IPC、统一 token 状态、Prefix Cache、Persistent Batch、乐观异步状态、batch queue、`torch.compile` 与 CUDA Graph 的 shape 调度。
 
-**调度器源码导读**深入 Waiting/Running 队列、Token Budget 分配、抢占（Preemption）与重计算（Recompute）机制，看懂 vLLM 每一步 step 到底做了什么。
+**调度器源码导读**逐轮手算 running/waiting 的 budget、KV 分配与抢占回滚，并追踪 structured output、speculative decoding、grammar bitmask 和 accepted token 如何改变下一轮状态。
 
-**关键配置调优**讲清 `gpu-memory-utilization`、`max-num-seqs`、`max-num-batched-tokens`、`block-size` 等参数如何影响吞吐、延迟和显存，给出调参决策思路。
+**关键配置调优**建立显存、调度、执行与 SLO 的参数因果图，通过单变量与二阶交互矩阵寻找 goodput、质量、成本的 Pareto 前沿，而不是寻找一组“万能参数”。
 
-**框架横向对比**从模型支持、缓存、结构化输出、硬件、部署与运维成本对照 vLLM、SGLang、TensorRT-LLM，不预设性能冠军，给出统一压测和选型决策方法。
+**框架横向对比**不做静态功能打勾表，而是给出同模型、同协议、同精度、同负载的公平 benchmark：覆盖 cold/warm/churn、过载恢复、质量门禁、goodput、能耗与回退演练。
 
 > **版本边界**：vLLM 内部模块和默认值迭代很快。本文源码路径、默认配置与命令以 v0.27.1 为准；升级时请同时核对对应 tag、发布说明和 `--help`。
 
 ## 本章小节
 
-- [**3.1 vLLM 快速入门**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/vllm快速入门)：安装、离线批量推理、OpenAI 兼容服务部署
-- [**3.2 vLLM 整体架构**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/32-vllm整体架构)：AsyncLLM、EngineCore、Scheduler、KVCacheManager、Worker/ModelRunner
-- [**3.3 V1 引擎深度解析**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/33-v1引擎深度解析)：多进程架构、统一调度、Prefix Cache、Persistent Batch
-- [**3.4 调度器源码导读**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/34-调度器源码导读)：Token Budget、Waiting/Running 队列、抢占与重计算
-- [**3.5 关键配置调优**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/35-关键配置调优)：显存估算、批大小、Block、并行与可复现压测
-- [**3.6 框架横向对比**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/36-框架横向对比)：vLLM / SGLang / TensorRT-LLM 选型与公平 benchmark
+- [**3.1 vLLM 快速入门**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/vllm快速入门)：离线/在线完整实验、指标观察与分层排障
+- [**3.2 vLLM 整体架构**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/32-vllm整体架构)：请求对象、IPC、Scheduler、KV 与 ModelRunner 全链路
+- [**3.3 V1 引擎深度解析**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/33-v1引擎深度解析)：V0→V1、Persistent Batch、异步流水线、compile/CUDA Graph
+- [**3.4 调度器源码导读**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/34-调度器源码导读)：逐轮 budget、preemption、structured/spec decode 交互
+- [**3.5 关键配置调优**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/35-关键配置调优)：参数因果图、显存手算与调参实验矩阵
+- [**3.6 框架横向对比**](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/36-框架横向对比)：公平 benchmark、goodput、成本与回退
 
 ## 推荐学习顺序
 
