@@ -52,12 +52,12 @@ export const MODULE_METADATA: Partial<Record<CategorySlug, ModuleMeta>> = {
   'inference-optimization': {
     title: '模块四：推理优化',
     description:
-      '覆盖 LLM 推理基础、推理引擎核心技术、主流推理框架、量化、Speculative Decoding、PD 解耦架构，以及性能分析与端到端实战。',
+      '覆盖 LLM 推理基础、vLLM 与 SGLang、量化、Speculative Decoding、分布式推理、P/D 解耦、生产服务特性、性能分析、部署运维与端到端实战。',
     color: '#8B5CF6',
     tips: [
       'LLM 推理基础章节帮助理解推理场景的独特挑战',
       '量化和 Speculative Decoding 是当前最热门的推理优化方向',
-      '建议结合主流推理框架（如 vLLM）进行实际部署练习',
+      '建议用同一 workload 分别部署 vLLM 与 SGLang，以统一指标验证选型',
     ],
     prerequisites: '前置知识模块 + CUDA 编程基础',
   },

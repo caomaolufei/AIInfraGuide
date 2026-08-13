@@ -9,6 +9,20 @@ tags: ["公告", "更新日志"]
 
 ---
 
+## 2026-08-12
+
+### 重大更新
+
+**[模块四 · 推理优化](/AIInfraGuide/inference)** 第 3–12 章完成：
+
+- **深入 vLLM**：补齐整体架构、V1 引擎、调度器源码、配置调优与框架横向对比
+- **核心优化与扩展**：系统讲解量化、Speculative Decoding、分布式推理和 P/D 解耦
+- **生产落地**：新增结构化输出、Tool Calling、Multi-LoRA、VLM、性能分析、Kubernetes 运维、容量规划与端到端实战
+- **[深入 SGLang](/AIInfraGuide/inference/模块四-推理优化/第12章-深入sglang/第12章-深入sglang)**：新增独立第 12 章，覆盖 SRT、RadixAttention、HiCache、CPU/GPU 重叠调度、结构化生成、Router 与生产调优
+- 所有版本敏感的命令、源码路径与能力边界均注明核对版本；性能对比采用统一 workload 方法，不提供脱离测试条件的绝对排名
+
+---
+
 ## 2026-07-09
 
 ### 新增内容
@@ -256,7 +270,7 @@ tags: ["公告", "更新日志"]
   - **[模块一 · 前置知识](/AIInfraGuide/prerequisites)**（6 章）：[编程语言基础](/AIInfraGuide/prerequisites/模块一-前置知识/第1章-编程语言基础)、[数学基础](/AIInfraGuide/prerequisites/模块一-前置知识/第2章-数学基础)、[Transformer 架构详解](/AIInfraGuide/prerequisites/模块一-前置知识/第3章-Transformer架构详解)、[PyTorch 框架](/AIInfraGuide/prerequisites/模块一-前置知识/第4章-PyTorch框架)、[GPU 硬件概论](/AIInfraGuide/prerequisites/模块一-前置知识/第5章-GPU硬件概论)、[集合通信基础](/AIInfraGuide/prerequisites/模块一-前置知识/第6章-集合通信基础)
   - **[模块二 · CUDA 编程与算子优化](/AIInfraGuide/cuda)**（8 章）：[CUDA 入门](/AIInfraGuide/cuda/模块二-CUDA编程与算子优化/第1章-CUDA编程入门)、[性能优化基础](/AIInfraGuide/cuda/模块二-CUDA编程与算子优化/第2章-CUDA性能优化基础)、Reduce 实战、GEMM 实战、Softmax 实战、[Attention 算子](/AIInfraGuide/cuda/模块二-CUDA编程与算子优化/第6章-Attention算子)、[AI 编译器](/AIInfraGuide/cuda/模块二-CUDA编程与算子优化/第7章-AI编译器)、[性能分析工具链](/AIInfraGuide/cuda/模块二-CUDA编程与算子优化/第8章-性能分析工具链)
   - **[模块三 · 分布式训练](/AIInfraGuide/distributed)**（7 章）：[分布式训练总论](/AIInfraGuide/distributed/模块三-分布式训练/第1章-分布式训练总论)、[数据并行](/AIInfraGuide/distributed/模块三-分布式训练/第2章-数据并行)、[ZeRO 系列](/AIInfraGuide/distributed/模块三-分布式训练/第3章-ZeRO系列)、[张量并行与序列并行](/AIInfraGuide/distributed/模块三-分布式训练/第4章-张量并行与序列并行)、[流水线并行](/AIInfraGuide/distributed/模块三-分布式训练/第5章-流水线并行)、[3D 并行与混合训练策略](/AIInfraGuide/distributed/模块三-分布式训练/第6章-其他显存优化技术)、[训练框架实战](/AIInfraGuide/distributed/模块三-分布式训练/第7章-训练框架实战)
-  - **[模块四 · 推理优化](/AIInfraGuide/inference)**（8 章）：推理基础、[推理引擎核心技术](/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术)、推理框架、[量化](/AIInfraGuide/inference/模块四-推理优化/第4章-量化)、[Speculative Decoding](/AIInfraGuide/inference/模块四-推理优化/第5章-Speculative-Decoding)、[PD 解耦架构](/AIInfraGuide/inference/模块四-推理优化/第6章-PD解耦架构)、[性能分析与 Benchmark](/AIInfraGuide/inference/模块四-推理优化/第7章-性能分析与Benchmark)、[选型与端到端实战](/AIInfraGuide/inference/模块四-推理优化/第8章-推理优化选型与端到端实战)
+  - **[模块四 · 推理优化](/AIInfraGuide/inference)**（12 章）：LLM 推理基础、推理引擎核心技术、深入 vLLM、量化、Speculative Decoding、分布式推理、P/D 解耦、生产级服务特性、性能分析与 Benchmark、生产部署与运维、选型与端到端实战、深入 SGLang
 
 ### 新增内容
 

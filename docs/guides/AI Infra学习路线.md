@@ -301,6 +301,20 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 ### 3.2 推理引擎
 
+**对应模块四教程**
+
+- 第 1–2 章先建立推理坐标系与引擎核心技术；
+- [第 3 章：深入 vLLM](/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/第3章-深入vllm)
+- [第 4 章：量化](/AIInfraGuide/inference/模块四-推理优化/第4章-量化/第4章-量化)
+- [第 5 章：Speculative Decoding](/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/第5章-speculative-decoding)
+- [第 6 章：分布式推理](/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/第6章-分布式推理)
+- [第 7 章：P/D 解耦架构](/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/第7章-pd解耦架构)
+- [第 8 章：生产级服务特性](/AIInfraGuide/inference/模块四-推理优化/第8章-生产级服务特性/第8章-生产级服务特性)
+- [第 9 章：性能分析与 Benchmark](/AIInfraGuide/inference/模块四-推理优化/第9章-性能分析与benchmark/第9章-性能分析与benchmark)
+- [第 10 章：生产部署与运维](/AIInfraGuide/inference/模块四-推理优化/第10章-生产部署与运维/第10章-生产部署与运维)
+- [第 11 章：选型与端到端实战](/AIInfraGuide/inference/模块四-推理优化/第11章-推理优化选型与端到端实战/第11章-推理优化选型与端到端实战)
+- [第 12 章：深入 SGLang](/AIInfraGuide/inference/模块四-推理优化/第12章-深入sglang/第12章-深入sglang)
+
 **知识点**
 
 - PagedAttention：vLLM 提出的虚拟内存分页思想管理 KV Cache，解决碎片化问题——就像操作系统把内存切成固定大小的页来管理一样，不再要求一整块连续空间，碎片问题迎刃而解
@@ -313,7 +327,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 | 框架 | 核心特性 | 适用场景 |
 |------|---------|---------|
 | vLLM | PagedAttention、Continuous Batching、Prefix Cache | 通用推理服务，社区活跃 |
-| SGLang | RadixAttention、cFSM 结构化输出加速 | 复杂 Agent、多轮生成、结构化输出 |
+| SGLang | RadixAttention、重叠调度、结构化输出 | 共享前缀密集、Agent、多轮与结构化生成 |
 | TensorRT-LLM | Paged KV、Inflight Batching、深度硬件优化 | 追求极限性能、NVIDIA 生态 |
 
 **推荐资料**
@@ -326,6 +340,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 | 解读 | 猛猿：vLLM 源码解析系列（架构/调度器/BlockManager） | 深入理解 vLLM 内部机制 |
 | 论文 | SGLang Paper | RadixAttention + 前端语言 |
 | 源码 | SGLang GitHub Repo | 工程实现 |
+| 教程 | [第 12 章：深入 SGLang](/AIInfraGuide/inference/模块四-推理优化/第12章-深入sglang/第12章-深入sglang) | 从 SRT、RadixAttention 到生产部署的完整入门路径 |
 | 文档 | TensorRT-LLM 官方文档 | 工程落地导向 |
 | 论文 | Orca Paper | Continuous Batching 的原始论文 |
 | 解读 | 吃果冻不吐果冻皮：Continuous Batching | Continuous Batching 中文解读 |
@@ -338,7 +353,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 - **端到端部署**：拿到一个 7B 模型，分别用 vLLM 和 SGLang 部署成 OpenAI 兼容 API，用相同的压测脚本（固定并发、输入输出长度）跑出 TTFT、TPOT、throughput 三个指标的对比表
 - **Continuous Batching 原理**：能向非技术同事解释清楚——传统 Static Batching 必须等一批请求全部生成完才能接新请求，短请求被长请求拖累；Continuous Batching 允许已完成的请求随时退出、新请求随时插入，GPU 利用率可以从 30% 拉到 80%+
 - **KV Cache 管理全链路**：从 KV Cache 的分配、使用、碎片化，到 PagedAttention 的虚拟页/物理页映射，再到 Prefix Cache 如何通过 hash 匹配复用已有的 KV 块，能画出完整的数据流
-- **选型决策**：老板问"我们该用哪个推理框架"，你能给出结构化的回答——追求吞吐和社区生态选 vLLM；多轮对话 / Agent / 结构化输出选 SGLang（RadixAttention + cFSM）；追求极限延迟且愿意投入适配工作选 TensorRT-LLM
+- **选型决策**：老板问"我们该用哪个推理框架"，你不会背固定答案，而是用同一模型、硬件、请求分布与 SLO 做基准测试；vLLM、SGLang 和 TensorRT-LLM 都先进入候选，再根据模型支持、缓存命中、硬件生态与运维成本取舍
 
 ### 3.3 量化
 

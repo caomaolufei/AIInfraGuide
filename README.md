@@ -46,7 +46,7 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | **模块一：前置知识** | 编程语言基础、数学基础、Transformer 架构、PyTorch 框架、GPU 硬件概论、集合通信基础 |
 | **模块二：CUDA 编程与算子优化** | CUDA 编程入门、性能优化基础、Reduce/GEMM/Softmax/Attention 经典算子实现、AI 编译器、性能分析工具链 |
 | **模块三：分布式训练** | 分布式训练总论、优化器、数据并行(DP/DDP/FSDP)、ZeRO 系列、张量并行与序列并行、流水线并行、3D 并行、训练框架实战 |
-| **模块四：推理优化** | LLM 推理基础、推理引擎核心技术、主流推理框架(vLLM 等)、量化、Speculative Decoding、PD 解耦架构、性能分析与 Benchmark |
+| **模块四：推理优化** | LLM 推理基础、vLLM/SGLang、量化、投机解码、分布式推理、P/D 解耦、生产服务特性、Benchmark、部署运维与端到端选型 |
 | **性能分析** | Nsight Systems/Compute、Roofline 模型、Profiling 实战 |
 | **面试宝典** | 目前共收录 180+ 场面试真题，覆盖 60+ 家公司，按梯队分类组织，助你高效备战拿下心仪 Offer |
 
@@ -182,7 +182,7 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 
 ## 🚀 模块四：推理优化
 
-以 **vLLM** 为贯穿主线，覆盖 LLM 推理基础、推理引擎核心技术、vLLM 架构与源码、量化、Speculative Decoding、分布式推理、PD 解耦架构、生产级服务特性、性能分析、生产部署运维，以及端到端选型实战。
+以 **vLLM** 为贯穿主线，覆盖 LLM 推理基础、推理引擎核心技术、vLLM 架构与源码、量化、Speculative Decoding、分布式推理、PD 解耦架构、生产级服务特性、性能分析、生产部署运维与端到端选型实战，并用独立专章深入讲解 **SGLang**。
 
 | 章节 | 主要内容 |
 |------|----------|
@@ -197,8 +197,11 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 第 9 章 性能分析与 Benchmark | 推理指标体系、vllm bench/GenAI-Perf、Nsight、性能回归门禁 |
 | 第 10 章 生产部署与运维 | 容器化与 K8s 部署、可观测性、自动扩缩容、负载均衡、容量规划 |
 | 第 11 章 推理优化选型与端到端实战 | 选型决策树、优化组合注意事项、端到端部署实战、模块总结 |
+| 第 12 章 深入 SGLang | SRT 架构、RadixAttention、HiCache、零开销调度、结构化生成、生产部署与框架对比 |
 
-**已更新文章：**
+**更新状态：第 1–12 章正文已全部完成。**
+
+**代表文章：**
 
 | 序号 | 文章 | 说明 |
 |:---:|------|------|
@@ -208,7 +211,7 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 2.3 | [Prefix Cache 与 RadixAttention](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/23-prefix-cache-与-radixattention/) | vLLM 基于 Hash 的自动前缀缓存，SGLang 用 Radix Tree 做更高效的前缀共享 |
 | 2.4 | [Chunked Prefill 与统一调度](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/24-chunked-prefill-与统一调度/) | 切块 Prefill 消除对 Decode 的干扰，vLLM V1 用统一 Token 预算调度器抹平 Prefill/Decode 边界 |
 | 2.5 | [Attention 后端与图优化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/25-attention-后端与图优化/) | 可插拔 Attention 后端与 CUDA Graph、torch.compile 消除 Decode 阶段的 CPU 启动开销 |
-| 3.0 | [vLLM 快速入门](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/vllm快速入门/) | 从安装到部署你的第一个 LLM 推理服务，离线批量推理与在线 OpenAI 兼容服务 |
+| 3.1 | [vLLM 快速入门](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/vllm快速入门/) | 从安装到部署你的第一个 LLM 推理服务，离线批量推理与在线 OpenAI 兼容服务 |
 
 <br>
 

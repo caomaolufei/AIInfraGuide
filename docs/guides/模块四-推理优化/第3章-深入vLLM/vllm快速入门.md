@@ -1,9 +1,9 @@
 ---
-title: "vLLM 快速入门：从安装到部署你的第一个 LLM 推理服务"
+title: "3.1 vLLM 快速入门：从安装到部署你的第一个 LLM 推理服务"
 description: "零基础上手 vLLM，掌握离线批量推理与在线 OpenAI 兼容服务部署，理解 PagedAttention 核心原理"
 pubDate: 2026-04-15
 category: "inference-optimization"
-order: 1
+order: 301
 chapter: 3
 tags: ["vLLM", "LLM推理", "PagedAttention", "模型部署", "推理优化"]
 ---
@@ -28,7 +28,7 @@ tags: ["vLLM", "LLM推理", "PagedAttention", "模型部署", "推理优化"]
 
 当你要把一个大语言模型"搬上线"提供服务时，最头疼的问题是什么？——**显存不够用，吞吐上不去**。传统的推理方式就像一个餐厅里每桌客人都被分配了一间独立包房，不管来了几个人，房间全部占满，后面的客人只能干等。vLLM 的出现就是为了解决这个"包房浪费"问题。
 
-vLLM 是由 UC Berkeley Sky Computing Lab 开发的**高吞吐、低延迟 LLM 推理与服务引擎**。截至 v0.19.0（2026 年 4 月），项目在 GitHub 上已获得超过 76,000 星标，拥有 2,000+ 贡献者，是当前最主流的开源 LLM 推理框架之一。
+vLLM 是由 UC Berkeley Sky Computing Lab 发起的**高吞吐、低延迟 LLM 推理与服务引擎**。本文版本敏感内容以 2026 年 8 月 12 日发布的 v0.27.1 和同期官方文档为边界；vLLM 迭代很快，生产升级前请重新核对对应版本的发布说明。
 
 ### 1.1 vLLM 的核心优势
 
@@ -99,7 +99,7 @@ PagedAttention 的核心思想非常直观——把操作系统管理内存的�
 | 操作系统 | Linux（推荐 Ubuntu 20.04+） |
 | Python | 3.10 ~ 3.13 |
 | CUDA | 12.x（NVIDIA GPU） |
-| GPU | Compute Capability 7.0+（Volta 及以上） |
+| GPU | Compute Capability 7.5+（Turing 及以上） |
 
 ### 3.2 使用 uv 安装（推荐）
 
@@ -114,7 +114,7 @@ source .venv/bin/activate
 uv pip install vllm --torch-backend=auto
 ```
 
-`--torch-backend=auto` 会根据系统 CUDA 驱动自动选择合适的 PyTorch 版本。也可以显式指定后端，如 `--torch-backend=cu126`。
+`--torch-backend=auto` 会根据系统 CUDA 驱动自动选择合适的 PyTorch 版本。显式后端必须从当前 vLLM 安装文档给出的 wheel 矩阵中选择；以本文核对的 v0.27.1 为例，可用 `cu129` / `cu130`，不要照搬旧版本的 CUDA 后端名。
 
 ### 3.3 使用 conda + pip 安装
 
@@ -176,7 +176,7 @@ for output in outputs:
     print(f"Generated: {generated}\n")
 ```
 
-📌 **关键点**：`LLM` 构造时会一次性将模型加载到 GPU 显存中。默认情况下 vLLM 会使用 90% 的可用 GPU 显存（模型权重 + KV Cache），可通过 `gpu_memory_utilization` 参数调整。
+📌 **关键点**：`LLM` 构造时会一次性将模型加载到 GPU 显存中。v0.27.1 的 `gpu_memory_utilization` 默认值为 0.92，用于限制当前 vLLM 实例的模型执行器显存预算（模型权重、KV Cache 与相关运行时内存），可按部署环境调整；旧版本默认值可能不同。
 
 ### 4.2 Chat 模式推理
 
@@ -362,7 +362,7 @@ client = OpenAI(api_key="my-secret-key", base_url="http://localhost:8000/v1")
 |---------|---------|--------|
 | `temperature` | 控制随机性，越高越随机 | 1.0 |
 | `top_p` | 核采样，只从累计概率前 p 的 token 中采样 | 1.0 |
-| `top_k` | 只从概率最高的 k 个 token 中采样 | -1（不限制） |
+| `top_k` | 只从概率最高的 k 个 token 中采样 | 0（0 或 -1 均表示不限制） |
 | `max_tokens` | 最大生成 token 数 | 16 |
 | `repetition_penalty` | 重复惩罚系数，>1 减少重复 | 1.0 |
 | `stop` | 遇到指定字符串时停止生成 | None |
@@ -377,7 +377,7 @@ client = OpenAI(api_key="my-secret-key", base_url="http://localhost:8000/v1")
 |---------|---------|--------|
 | `--model` | HuggingFace 模型标识 | - |
 | `--tensor-parallel-size` | 张量并行 GPU 数 | 根据模型大小决定 |
-| `--gpu-memory-utilization` | GPU 显存使用比例 | 0.9（默认） |
+| `--gpu-memory-utilization` | 当前实例的模型执行器显存预算比例 | 0.92（v0.27.1 默认） |
 | `--max-model-len` | 模型最大序列长度 | 按需设置 |
 | `--dtype` | 模型权重精度 | auto |
 | `--quantization` | 量化方式 | None |
