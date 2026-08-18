@@ -469,34 +469,48 @@ import torch.nn as nn
 assert torch.cuda.is_available(), "需要 GPU"
 device = torch.device('cuda')
 criterion = nn.CrossEntropyLoss()
-data = torch.randn(256, 1024, device=device)
-labels = torch.randint(0, 10, (256,), device=device)
+
+# batch 要足够大，让激活值成为显存主项。混合精度不会缩小 FP32 权重和优化器状态，
+# batch 太小时这部分固定开销会完全掩盖激活值的收益，甚至出现"负节省"
+BATCH = 65536
+data = torch.randn(BATCH, 1024, device=device)
+labels = torch.randint(0, 10, (BATCH,), device=device)
 
 def make_model():
     return nn.Sequential(nn.Linear(1024, 2048), nn.ReLU(),
                          nn.Linear(2048, 1024), nn.ReLU(),
                          nn.Linear(1024, 10)).to(device)
 
-# fp32 训练
-model_fp32, opt_fp32 = make_model(), None
-opt_fp32 = torch.optim.AdamW(model_fp32.parameters(), lr=1e-3)
-torch.cuda.reset_peak_memory_stats()
-criterion(model_fp32(data), labels).backward()
-opt_fp32.step(); opt_fp32.zero_grad()
-fp32_peak = torch.cuda.max_memory_allocated() / 1024**2
+def step_peak(amp_dtype=None):
+    model = make_model()
+    opt = torch.optim.AdamW(model.parameters(), lr=1e-3)
+    torch.cuda.synchronize()
+    torch.cuda.reset_peak_memory_stats()
+    if amp_dtype is None:
+        loss = criterion(model(data), labels)
+    else:
+        with torch.autocast(device_type='cuda', dtype=amp_dtype):
+            loss = criterion(model(data), labels)
+    loss.backward()
+    opt.step(); opt.zero_grad(set_to_none=True)
+    torch.cuda.synchronize()
+    peak = torch.cuda.max_memory_allocated() / 1024**2
+    # 关键：必须真正释放本轮的模型和优化器状态，否则会叠加到下一轮的峰值里
+    del model, opt, loss
+    torch.cuda.empty_cache()
+    return peak
 
-# bf16 混合精度训练
-model_bf16, opt_bf16 = make_model(), None
-opt_bf16 = torch.optim.AdamW(model_bf16.parameters(), lr=1e-3)
-torch.cuda.reset_peak_memory_stats()
-with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
-    loss = criterion(model_bf16(data), labels)
-loss.backward()
-opt_bf16.step(); opt_bf16.zero_grad()
-bf16_peak = torch.cuda.max_memory_allocated() / 1024**2
+fp32_peak = step_peak(None)
+bf16_peak = step_peak(torch.bfloat16)
 
 print(f"FP32: {fp32_peak:.1f} MB | BF16: {bf16_peak:.1f} MB | 节省: {(1-bf16_peak/fp32_peak)*100:.1f}%")
+# 参考输出：FP32: 1881.6 MB | BF16: 1246.6 MB | 节省: 33.7%
 ```
+
+⚠️ **两个容易踩的坑**：
+
+1. `torch.cuda.reset_peak_memory_stats()` 只重置峰值计数器，**不释放**已占用的显存。如果测 BF16 时上一轮的 FP32 模型和优化器状态还活着，它们会被算进 BF16 的峰值，结果会出现节省为负。必须 `del` 掉对象再 `empty_cache()`。
+2. 混合精度省的是**激活值**（以及部分中间结果），权重和 AdamW 的一阶/二阶动量仍是 FP32。模型小、batch 小的时候这部分固定开销占绝对主导，测出来会是"节省 0%"——需要把 batch/序列长度放大到激活值占主导，才能看到预期的约 30%~50% 节省。
 
 ---
 

@@ -264,7 +264,7 @@ GPU3: [1,2,3,4]    GPU3: [16]   (第 3 片归约结果)
 | 🔧 原语 | 📤 每 rank 发送量 | 📥 每 rank 接收量 | 典型用途 |
 |--------|----------------|----------------|---------|
 | Broadcast | $M$（root）/ 0 | 0（root）/ $M$ | 参数初始化广播 |
-| Reduce | $M$ | $M$（root）/ 0 | Loss 汇总 |
+| Reduce | 0（root）/ $M$ | $M$（root）/ 0 | Loss 汇总 |
 | AllReduce | $\approx 2M$ | $\approx 2M$ | DDP 梯度同步 |
 | AllGather | $(N-1)M/N$ | $(N-1)M/N$ | ZeRO-3 参数收集 |
 | ReduceScatter | $(N-1)M/N$ | $(N-1)M/N$ | ZeRO 梯度分片 |
@@ -278,7 +278,7 @@ GPU3: [1,2,3,4]    GPU3: [16]   (第 3 片归约结果)
 | 并行策略 | 主要通信原语 | 通信频率 | 通信数据量 |
 |---------|------------|---------|-----------|
 | 数据并行 (DDP) | AllReduce | 每层反向后 | 梯度大小 |
-| ZeRO-1/2 | ReduceScatter + AllReduce | 每层反向后 | 梯度大小 |
+| ZeRO-1/2 | ReduceScatter + AllGather | 反向后 + 参数更新后 | 梯度大小 |
 | ZeRO-3 | AllGather + ReduceScatter | 每层前向 + 反向 | 参数大小 |
 | 张量并行 (TP) | AllReduce / AllGather | 每层前向 + 反向 | 激活大小 |
 | 流水线并行 (PP) | 点对点 Send/Recv | 每个 micro-batch | 激活大小 |
