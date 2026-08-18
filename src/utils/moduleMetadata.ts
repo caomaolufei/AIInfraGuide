@@ -1,5 +1,16 @@
 import type { CategorySlug } from './categories';
 
+export interface ModuleResource {
+  /** 资源类型标签，如「练习平台」 */
+  type: string;
+  /** 资源名称 */
+  title: string;
+  /** 外部链接 */
+  href: string;
+  /** 一句话说明 */
+  description: string;
+}
+
 export interface ModuleMeta {
   /** 模块中文标题 */
   title: string;
@@ -11,6 +22,8 @@ export interface ModuleMeta {
   tips: string[];
   /** 前置要求（简短描述） */
   prerequisites?: string;
+  /** 延伸资源（站外链接） */
+  resources?: ModuleResource[];
 }
 
 export const MODULE_METADATA: Partial<Record<CategorySlug, ModuleMeta>> = {
@@ -36,6 +49,22 @@ export const MODULE_METADATA: Partial<Record<CategorySlug, ModuleMeta>> = {
       '性能分析工具链是贯穿整个模块的重要工具，建议尽早熟悉',
     ],
     prerequisites: '前置知识模块（尤其是第5章 GPU 硬件概论）',
+    resources: [
+      {
+        type: '练习平台',
+        title: 'CUDA 手撕算子 · 面试练习',
+        href: 'https://kkcocoa.github.io/cuda-operator-interview/',
+        description:
+          '覆盖访存、Reduce、Softmax、Attention、GEMM 等算子的分级手写练习，附提示、自检清单与浏览器内代码编辑器',
+      },
+      {
+        type: '练习平台',
+        title: 'LeetGPU',
+        href: 'https://leetgpu.com/',
+        description:
+          'GPU 编程版的 LeetCode，按 easy/medium/hard 分级的算子题库，支持 CUDA、Triton、PyTorch 等多种写法，无需本地 GPU 即可提交运行，可查看 PTX/SASS 与性能排行',
+      },
+    ],
   },
   'distributed-training': {
     title: '模块三：分布式训练',

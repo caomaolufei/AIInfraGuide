@@ -163,6 +163,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 | 入门教程 | 小小将：CUDA编程入门极简教程 | CUDA 零基础入门 |
 | 官方文档 | NVIDIA CUDA Programming Guide | CUDA 编程权威参考 |
 | Reduce | PeakCrosser：CUDA Reduce 算子优化 | Reduce 实现与优化的详尽总结 |
+| 练习平台 | [CUDA 手撕算子 · 面试练习](https://kkcocoa.github.io/cuda-operator-interview/) | 覆盖访存、Reduce、Softmax、Attention、GEMM 等算子的分级手写练习，附提示、自检清单与浏览器内代码编辑器 |
 | GEMM | 猛猿：从啥也不会到CUDA GEMM优化 | 从基础分块到极致优化的 GEMM 教程 |
 | GEMM | MegEngine Bot：CUDA 矩阵乘法终极优化指南 | 系统性的 GEMM 优化参考 |
 | Softmax | Online normalizer calculation for softmax | NVIDIA 员工的 Softmax 实现论文 |

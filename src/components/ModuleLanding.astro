@@ -157,6 +157,45 @@ const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
       </div>
     </div>
 
+    {/* External Resources */}
+    {meta?.resources && meta.resources.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">延伸资源</h2>
+        <div class="space-y-4">
+          {meta.resources.map((res) => (
+            <a
+              href={res.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block rounded-xl border border-gray-200 dark:border-white/[0.06] p-6 bg-white dark:bg-white/[0.02] hover:border-gray-300 dark:hover:border-white/[0.12] hover:shadow-lg hover:shadow-gray-900/5 transition-all duration-300 cursor-pointer"
+            >
+              <div class="flex items-center gap-3 mb-2">
+                <span
+                  class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-md shrink-0"
+                  style={`background: ${meta.color}15; color: ${meta.color};`}
+                >
+                  {res.type}
+                </span>
+                <span class="font-semibold text-gray-900 dark:text-white text-[15px] group-hover:text-[#007aff] dark:group-hover:text-[#0a84ff] transition-colors">
+                  {res.title}
+                </span>
+                <svg
+                  class="w-4 h-4 ml-auto shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+              </div>
+              <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{res.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
     {/* Learning Tips */}
     {meta?.tips && meta.tips.length > 0 && (
       <div class="mb-12">
