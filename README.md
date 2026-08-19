@@ -289,12 +289,12 @@ AIInfraGuide 是一个开源项目，欢迎通过以下方式参与共建：
 <div id="contribute"></div>
 
 <div align='center'>
-<a href="https://www.star-history.com/?type=date&repos=caomaolufei/AIInfraGuide&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=caomaolufei/AIInfraGuide&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=caomaolufei/AIInfraGuide&type=Date" />
-   <img width=400 height=300 alt="Star History Chart" src="https://api.star-history.com/svg?repos=caomaolufei/AIInfraGuide&type=Date" />
- </picture>
+<a href="https://star-history.dera.page/#caomaolufei/AIInfraGuide&type=Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=caomaolufei/AIInfraGuide&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=caomaolufei/AIInfraGuide&type=Date" />
+    <img width=400 height=300 alt="Star History Chart" src="https://star-history.dera.page/svg?repos=caomaolufei/AIInfraGuide&type=Date" />
+  </picture>
 </a>
 </div>
 
