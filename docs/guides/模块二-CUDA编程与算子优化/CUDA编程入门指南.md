@@ -22,7 +22,8 @@ CUDA 是连接 AI 算法与 GPU 硬件的桥梁，负责把高层的数学计算
 - [7. Attention 算子](#7-attention-算子)
 - [8. AI 编译器](#8-AI-编译器)
 - [9. 性能分析工具](#9-性能分析工具)
-- [10. 自我检验清单](#10-自我检验清单)
+- [10. 进阶专题：把这些概念串起来用](#10-进阶专题把这些概念串起来用)
+- [11. 自我检验清单](#11-自我检验清单)
 - [参考资料](#📚-参考资料)
 
 ---
@@ -33,6 +34,8 @@ CUDA 是连接 AI 算法与 GPU 硬件的桥梁，负责把高层的数学计算
 
 - NVIDIA GPU（Compute Capability >= 7.0，即 Volta 架构及以上）
 - 建议至少 8GB 显存用于算子开发和调试
+
+> **什么是 Compute Capability？** 它是 NVIDIA GPU 的“能力版本号”，用于表示硬件支持哪一代 PTX 指令集和硬件特性。例如 `sm_90` 对应 Hopper（H100），`sm_100` 对应 Blackwell（B200）。理解这个编号有助于看懂 `-arch=` 参数，以及为什么同一个二进制在旧卡上不一定能跑。
 
 ### 1.2 软件安装
 
@@ -73,6 +76,8 @@ nvcc -arch=sm_90 hello.cu -o hello    # H100
 nvcc -Xptxas -v hello.cu -o hello
 ```
 
+**编译后发生了什么？** GPU 编译器不是直接生成机器码，而是先得到 **PTX**（一种虚拟指令集 / 中间表示），再在目标 GPU（或装驱动时）即时编译成 **SASS**（流式汇编器，即真正在该代硬件上执行的指令）。这也是为什么你可以写一份 CUDA 代码，将来在一块新物理 GPU 上运行——只要新硬件支持该 PTX 版本，驱动会把它 JIT 成对应的 SASS。理解这一点后，`-arch=sm_90` 等参数的意义就清晰了：它告诉编译器“按 H100 代硬件生成代码”。
+
 ---
 
 ## 2. CUDA 编程模型
@@ -103,6 +108,10 @@ CUDA 有三种函数修饰符：
 | `__host__` | CPU | CPU | 普通 CPU 函数（默认，可省略） |
 
 `__host__` 和 `__device__` 可以同时使用，让编译器为 CPU 和 GPU 各生成一份代码。
+
+> **术语对照：Kernel、Grid 与 CTA。** 在 PTX/SASS 底层，一个线程块（Block）被称为 **协作线程数组（Cooperative Thread Array, CTA）**。多个 Block 组成 **Grid（网格）**，也就是一次 Kernel 启动创建的全部线程集合。Grid 覆盖整个 GPU，所以内核是程序员能控制的、作用域最大的并行单位。
+
+在硬件层，一个 Block 会被调度到**一个**流式多处理器（SM）上；SM 数量决定了你的 GPU 到底能同时跑多少个 Block。同一个 Block 内的线程可以紧密协作（共享内存、屏障同步），不同 Block 之间只能通过全局内存和原子操作间接协作，且执行顺序不确定——所以写 Kernel 时，**不能假设哪个 Block 先跑、哪个 Block 后跑**。
 
 ### 2.2 Grid / Block / Thread 三层线程层级
 
@@ -146,6 +155,10 @@ kernel<<<gridDim, blockDim>>>(data, width, height);
 - **128**：访存密集型任务，需要更多 Block 并发
 - **512-1024**：计算密集型任务，注意寄存器和共享内存压力
 - **始终是 32 的倍数**：与 Warp 大小对齐，避免浪费
+
+**这些限制来自硬件落点**：线程运行在 SM 的 **CUDA 核心**（标量算术单元）或 **Tensor Core**（矩阵乘法单元）上；Block 被调度到 SM 后，占用 SM 上的 **寄存器文件**、**共享内存 / L1 数据缓存** 和 **Warp 槽位**。如果你选了不适合的 Block 大小，哪怕代码逻辑正确，也可能因为资源分配导致 SM 只能容纳很少的 Block，最终并行度不足。
+
+把 SM 想象成一个“小 CPU 盒子”：它里面有若干 CUDA Core、若干 Tensor Core、一个寄存器文件、一段 L1 数据缓存（其中一部分可映射为共享内存），以及几个 **Warp 调度器**。调度器每个周期挑一个可执行的 Warp 发射指令；当一个 Warp 在等内存时，调度器立刻切换去执行别的 Warp。这种“同时维持大量 Warp 来隐藏延迟”的机制，正是 GPU 和 CPU 最大的设计差别之一。
 
 ### 2.3 内存管理
 
@@ -249,6 +262,13 @@ L1 / L2 Cache               ← 自动管理的硬件缓存
 主机内存 (Host/CPU Memory)   ← 需要通过 PCIe 传输
      ~64 GB/s (PCIe 5.0)
 ```
+
+这张图里最值得记住的两点：
+
+1. **层级越靠上越“贵”也越小**：寄存器是线程私有且最快；共享内存在片上、Block 内共享；全局内存在显存（HBM），所有 Block 都能访问但延迟最高。
+2. **可编程 vs 自动**：寄存器、共享内存、全局内存通常由程序员显式管理；L1/L2 缓存主要由硬件自动管理，但最内层的 L1 数据缓存有一部分可以被程序员“借用”为共享内存，这正是优化 GEMM、FlashAttention 等算子的关键。
+
+术语上，SM 的 L1 数据缓存由 SRAM 实现，速度约比寄存器慢一个数量级；全局内存由 DRAM 实现，容量大但延迟长。GPU 快速并不是因为它没有内存延迟，而是因为**有足够多的 Warp 可以随时切换来掩盖延迟**。
 
 ### 3.2 寄存器（Registers）
 
@@ -422,6 +442,10 @@ float sum = __reduce_add_sync(0xFFFFFFFF, myVal);
 // 一条指令完成 Warp 内求和
 ```
 
+> **Warp 是硬件的执行细节，也是性能的关键。** 严格来说，Warp 并不属于 CUDA 编程模型的线程层次结构（Thread → Block → Grid），而是 GPU 硬件实现该模型的方式。它有点像 CPU 的缓存行：正确性问题必须保证，但性能上你必须顺应它。
+
+硬件上，一个 SM 有若干 **Warp 调度器**，每个周期从一组就绪的 Warp 中挑一个发射指令。GPU 的高吞吐力量并不靠把单个线程做得很聪明，而是靠**同时供养大量 Warp，让某个 Warp 等在内存时马上切换到另一个 Warp**——这种机制叫 **延迟隐藏（latency hiding）**。为了让它生效，你需要尽量让 SM 上有足够多的活跃 Warp；这也解释了为什么 Block 太小、寄存器太多或者共享内存占用过多，都会让 GPU“没活干”。
+
 ### 4.2 Bank Conflict
 
 共享内存被分为 **32 个 Bank**，每个 Bank 宽度为 4 字节。**同一 Warp 内的不同线程如果访问同一 Bank 的不同地址，就会产生 Bank Conflict，访问变为串行**。可以把 Shared Memory 的 32 个 Bank 想象成银行的 32 个柜台，如果多个线程同时排到同一个柜台，就得排队等候；理想情况是每个线程各去一个柜台，大家同时办完。
@@ -447,6 +471,8 @@ ncu --metrics l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum ./app
 # 输出为 0 表示无 Bank Conflict
 ```
 
+> **术语再补充一条**：共享内存以 32 个 Bank、每个 Bank 4 字节组织，连续 4 字节会映射到下一个 Bank。所以“连续访问”在全局内存里对应合并访问，在共享内存里对应无 Bank Conflict；跨步访问则会让不同线程扎堆到同一 Bank，访问被串行化。结构体（AoS 转 SoA）就是你数据布局上的核心实践，本质上也是在避免这种跨步。
+
 ### 4.3 Occupancy
 
 Occupancy = 实际活跃 Warp 数 / SM 最大 Warp 数。它反映了 GPU 并行度的利用程度。
@@ -467,6 +493,46 @@ printf("Optimal block size: %d\n", blockSize);
 ```
 
 **重要提醒**：Occupancy 不是越高越好。对于 Tensor Core 密集型 kernel，25-50% 的 Occupancy 就可能达到峰值性能。**先保证没有寄存器溢出，再考虑 Occupancy。**
+
+> **为什么不是越高越好？** Occupancy 的目标是“用足够多的活跃 Warp 去延迟隐藏”，一旦 Warp 数量已经能覆盖内存访问的等待周期，再增加 Warp 反而会分掉每个线程可用的寄存器空间、降低每个 Block 能使用的共享内存，或者引入更多同步与缓存压力。高性能 GEMM 有时候只需要很低的 Occupancy，只要 Tensor Core 能被打满就够了。优化的最终目标，是让当前受限制的资源（算力或内存带宽）利用率尽量高，而不是一味追求 Occupancy。
+
+### 4.4 硬件单元速览：SM / CUDA Core / Tensor Core
+
+这一节把前面零散提到的硬件落点统一一下。对 AI Infra 工程师来说，至少要有这样的心智模型：
+
+| 名词 | 作用 | 直觉 |
+|------|------|------|
+| SM（流式多处理器） | GPU 的“核心盒子”，类似 CPU 核心，但里面一次性承载大量 Warp，而不是执行复杂分支预测 | H100 有 132 个 SM |
+| CUDA Core | SM 内的标量算术单元，执行整数、FP32/FP64 等操作 | 可以想象成“普通计算单元” |
+| Tensor Core | SM 内的矩阵乘法专用单元，单条指令处理一大块矩阵乘加 | 现代 AI 的主要算力来源 |
+| Warp Scheduler | SM 内的调度器，每周期选择一个 Warp 发射指令 | 相当于“每周期选一个 Warp 干活” |
+| Register File | SM 的高速寄存器池，所有线程的寄存器都从这里分配 | 是决定 Occupancy 的关键资源 |
+| L1 数据缓存 / 共享内存 | SM 私有的片上 SRAM，其中共享内存由程序员管理 | GEMM、FlashAttention 的数据中转站 |
+
+举例：H100 的 SM 通常有 128 个 FP32 CUDA Core、4 个 Tensor Core、4 个 Warp Scheduler，并且一个 SM 最多容纳 64 个 Warp（也就是 2048 个并发线程）。Tensor Core 的浮点算力往往是 CUDA Core 的几十到上百倍，这也是为什么现代 AI Kernel 拼命想把矩阵乘法喂给 Tensor Core，而不是用普通 CUDA Core 硬算。
+
+### 4.5 性能天花板：算术强度与 Roofline
+
+写 Kernel 时最常见的困惑是“为什么这个 Kernel 很慢？” 大多数时候，答案要么是**内存受限（memory-bound）**，要么是**计算受限（compute-bound）**。
+
+- 内存受限：瓶颈是 GPU 把数据从显存搬到 SM 的速度（内存带宽）。
+- 计算受限：瓶颈是 CUDA Core 或 Tensor Core 的算术吞吐量（算术带宽）。
+
+为了判断是哪种，可以用 Roofline 模型的简化版本：估一下你的 Kernel“**每个字节的搬运对应多少次算术操作**”，这个比值叫**算术强度（arithmetic intensity）**。如果算术强度高，Kernel 更容易受计算限制；如果低，则更容易受内存限制。
+
+比如逐元素加/ReLU 这类算子，每读一个 float 只做一两次操作，算术强度很低，所以它们通常是 **memory-bound**——这也是为什么算子融合（fusing）能大幅提速：它把多个 memory-bound 步骤合并，避免中间的全局内存读写。反过来，矩阵乘法 O(N³) 计算 / O(N²) 内存，算术强度随 N 线性增长，天生适合 GPU；只要分块（Tiling）把全局内存访问次数降下来，就能逼近计算受限。
+
+用 Nsight Compute 看 `Compute (SM) Throughput` 和 `Memory Throughput` 两个指标，就能快速判断当前 Kernel 卡在哪个屋顶下面。
+
+为了有个具体数字感，下表列出几个现代数据中心 GPU 在 BF16 Tensor Core 情况下的“脊点”（算术强度到多少才能从内存受限转为计算受限）：
+
+| 系统 | 算术带宽 (TFLOPs/s) | 内存带宽 (TB/s) | 脊点 (FLOPs/byte) |
+|------|--------------------:|----------------:|------------------:|
+| A100 80GB SXM / HBM2e | ~312 | ~2 | ~156 |
+| H100 SXM / HBM3 | ~989 | ~3.35 | ~295 |
+| B200 / HBM3e | ~2250 | ~8 | ~281 |
+
+直观理解：在 A100 上，你的 Kernel 至少要做到“每搬运 1 字节，顺便执行约 156 次浮点操作”才能有望打到算力天花板；而多数逐元素算子远达不到这个值，所以它们注定先撞内存带宽墙。
 
 ---
 
@@ -736,6 +802,10 @@ __global__ void gemmTiled(float* A, float* B, float* C,
 | 双缓冲（Double Buffering） | 加载与计算重叠 | 一个 Tile 计算时预加载下一个 |
 | Tensor Core (WMMA/CUTLASS) | 数量级提升 | 硬件矩阵乘加速 |
 
+> **Tensor Core 怎么编程？** 在 CUDA C++ 层，可以用 WMMA 内部函数（`wmma::mma_sync`）或直接调用 cuBLAS/CUTLASS；编译器会把矩阵乘加操作变成类似 `HMMA` 的 SASS 指令，由整个 Warp 协同完成一次大矩阵乘加。传统 CUDA Core 更擅长标量运算，Tensor Core 只做矩阵乘加，所以现代高性能 GEMM 的核心工作就是：把 GEMM 拆成很多“Tile”，把每次 Tile 喂给 Tensor Core，同时用寄存器分块和双缓冲保证 Tensor Core 不空转。
+
+到了 Hopper / Blackwell（H100/B200）代，进一步把执行粒度从 Warp 扩到 **Warpgroup（4 个 Warp 一组，即 128 线程）**，并引入了 **TMA（Tensor Memory Accelerator）** 来做异步数据搬运。所谓 TMA 可以理解成一个“DMA 搬运工”：它直接负责把全局内存的大 Tile 搬到共享内存 / 寄存器布局，Kernel 不再需要每个 Warp 自己慢吞吞地执行一堆 load 指令。FlashAttention-3 里的 WGMMA、Ping-Pong 流水线，本质上就是这些术语在真实算子里的组合。读到 FA3 时，你看到的“异步性”就是“TMA 搬运 + Tensor Core 计算 + 另一个 Tile 也在加载”重叠起来的意思。
+
 实际工程中，一般直接使用 **cuBLAS**（NVIDIA 官方高度优化的 BLAS 库）或 **CUTLASS**（可定制的模板库）：
 
 ```cpp
@@ -906,9 +976,11 @@ V2 在 V1 基础上进一步优化了并行策略：
 
 针对 Hopper 架构（H100）的进一步优化：
 
-- **利用 TMA**（Tensor Memory Accelerator）：硬件加速的异步数据搬运
-- **WGMMA 指令**：Warp Group 级别的矩阵乘加速
+- **利用 TMA**（Tensor Memory Accelerator）：硬件加速的异步数据搬运，把大块 Tensor 直接从全局内存搬到共享内存，减少每个 Warp 手工 load 的开销
+- **WGMMA 指令**：Warpgroup（4 个 Warp 一组）级别的矩阵乘加指令，让 128 个线程协作驱动 Tensor Core 做大块 GEMM
 - **Ping-Pong 流水线**：生产者-消费者模型，搬数据和算数据完全重叠
+
+> 如果这些名词现在看起来很抽象，先不要纠结指令层面。TL;DR 是：Hopper 之后，高性能算子把“搬 Tile”和“算 Tile”做成了两条并行的流水线，TMA 负责搬，WGMMA 负责算，程序再用 Ping-Pong / 双缓冲让两条流水线交错起来。这正是延迟隐藏思想在 Tensor Core 时代的延续。
 
 ### 7.5 Flash-Decoding
 
@@ -1093,6 +1165,14 @@ ncu --metrics \
 | L2 Hit Rate | L2 缓存命中率 | >70% |
 | Shared Memory Bank Conflicts | Bank 冲突次数 | 0 |
 
+除着这些宏观百分比，Nsight Compute 也显示很多像 Dispatched Warps、Warp Stall、Pipe Utilization 这样的硬件统计。它们背后是 glossary 里的几个状态概念：
+
+- **Warp Execution State / Stall**：一个 Warp 因为内存延迟、数据依赖、同步等待等原因不能发射下一条指令时，就处于 停滞（stall） 状态。
+- **Issue Efficiency**：有多少个周期真正向 Warp 发射了指令，其余时间只是调度器“扫了一圈但没活给某个 Warp 干”。
+- **Pipe Utilization**：算术流水线、Tensor Core、load/store 单元各自被利用得多充分。如果你看到 CUDA Core 利用率很高但 Tensor Core 几乎没动，说明 Kernel 没有把矩阵乘法喂给正确硬件。
+
+它们和 Occupancy、延迟隐藏是同一张图：Occupancy 决定你有多少 Warp，stall 决定这些 Warp 是否就绪；如果大量 Warp 都在等数据，Issue Efficiency 就会低。
+
 ### 9.2 Nsight Systems（系统级分析）
 
 ```bash
@@ -1119,15 +1199,38 @@ nvcc --ptx kernel.cu
 cuobjdump -sass kernel
 ```
 
+### 9.4 读懂底层：PTX / SASS / Compute Capability
+
+前面 1.3 节已经提过编译链路，这里把术语再串一下，方便你之后看源码、反汇编和分析工具输出时不发懵。
+
+- **PTX（Parallel Thread Execution）**：CUDA C++ 编译后得到的虚拟指令集中间表示。它不是某个具体 GPU 的机器码，而是描述“并行线程执行”的虚拟机指令；新 GPU 可以通过驱动（JIT）把它编译成目标硬件能执行的 SASS。
+- **SASS（Streaming ASSembler）**：NVIDIA GPU 真正执行的汇编级别指令，和具体 SM 架构绑定（例如 `sm_90` 对应 Hopper）。日常调优时看它主要为了确认编译器是否生成了预期的寄存器/内存访问模式。
+- **Compute Capability**：GPU 的能力版本号（如 `7.0`、`9.0`、`10.0`），决定它支持哪些 PTX 特性和哪些硬件指令。写 `-arch=sm_90` 本质上是在说“请为代号对应计算能力目标生成代码”。
+
+举个直观例子：`HMMA.1688.F32` 这类 SASS 指令就是 Tensor Core 矩阵乘加指令；一条指令由整个 Warp 协同执行，一次完成很多乘加运算。看它出现，就能确认你的 Kernel 确实喂给了 Tensor Core。
+
 ---
 
-## 10. 自我检验清单
+## 10. 进阶专题：把这些概念串起来用
+
+到这里，你已经把“硬件→线程→内存→性能模型”都串起来了。再从实战视角把几个最常用于把 GPU Glossary 概念落地的方向复习一遍：
+
+- **看一个 Kernel 快不快，先看它是 memory-bound 还是 compute-bound**：用 Nsight Compute 的 SM Throughput 和 Memory Throughput 两张图确认，再决定该调内存访问模式（合并、Tiling、共享内存）还是调计算密度（Tensor Core、寄存器分块、循环展开）。
+- **性能优化不是单独调某个指标**：Block 大小会影响 Occupancy；Occupancy 影响延迟隐藏；共享内存又影响每个 SM 能装多少 Block；寄存器用量又反过来限制线程数。它们是一整张互相牵扯的资源图，不是孤立指标。
+- **现代高性能 Kernel 的两条主线**：一是尽量用大 Tile + 共享内存降低全局内存访问（对应 Arithmetic Intensity），二是尽量把矩阵乘法喂给 Tensor Core，同时保证有足够 Warp 在等数据时切换（对应延迟隐藏）。
+- **如何继续深入**：GEMM 有寄存器分块、Double Buffering、Tensor Core；Attention 有 FlashAttention 的分块、Online Softmax、TMA/WGMMA；读这些高级案例时，你会发现它们反复用到的还是本指南里这几件事——线程层次、内存层次、Warp、Bank Conflict、延迟隐藏和算术强度。
+
+## 11. 自我检验清单
 
 完成本文学习后，你应该能够：
 
 - 能解释 Grid → Block → Thread 的三层结构，并根据数据规模配置合适的 Block 大小
 - 能区分 GPU 的 5 种内存类型（寄存器、Local、Shared、Global、Constant），并说明各自的作用域和生命周期
 - 能解释什么是 Warp、合并访存（Coalesced Access）和 Bank Conflict
+- 能解释 SM、CUDA Core、Tensor Core、Warp Scheduler、寄存器文件分别负责什么
+- 能用自己的话解释延迟隐藏，以及它和 Occupancy 的关系
+- 能判断一个 Kernel 是 memory-bound 还是 compute-bound，并知道算术强度 / Roofline 模型在说什么
+- 能区分 PTX、SASS、Compute Capability，并解释 `-arch=` 参数的作用
 - 能编写一个基本的 CUDA Kernel（如向量加法），并用 nvcc 编译运行
 - 能独立编写一个正确的 Reduce kernel，并做至少两轮优化（Warp Shuffle + 多元素累加）
 - 能实现 Tiled GEMM 并解释为什么 Tiling 能减少全局内存访问
@@ -1140,6 +1243,7 @@ cuobjdump -sass kernel
 
 - [NVIDIA CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-c-programming-guide/)
 - [NVIDIA CUDA C++ Best Practices Guide](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/)
+- [GPU Glossary 中文版（gpu-glossary-zh）](https://github.com/BBuf/gpu-glossary-zh)
 - [Nsight Compute Documentation](https://docs.nvidia.com/nsight-compute/)
 - [Nsight Systems User Guide](https://docs.nvidia.com/nsight-systems/UserGuide/)
 - [FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://arxiv.org/abs/2205.14135)
@@ -1156,4 +1260,3 @@ cuobjdump -sass kernel
 - [猛猿：图解FlashAttention V1/V2 系列](https://zhuanlan.zhihu.com/p/669926191)
 - [方佳瑞：深入浅出理解PagedAttention CUDA实现](https://zhuanlan.zhihu.com/p/691038809)
 - [猛猿：从啥也不会到CUDA GEMM优化](https://zhuanlan.zhihu.com/p/703256080)
-
