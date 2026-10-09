@@ -49,15 +49,15 @@ NVLink 是 NVIDIA 专为 GPU 间通信设计的高速互联协议。它绕过了
 
 **NVLink 代际演进**：
 
-| NVLink 版本 | 所属架构 | 单链路带宽 | 每 GPU 链路数 | 每 GPU 总带宽 |
+| NVLink 版本 | 所属架构 | 单链路带宽（双向） | 每 GPU 链路数 | 每 GPU 总带宽（双向） |
 |------------|---------|:---------:|:-----------:|:------------:|
 | NVLink 3.0 | Ampere (A100) | 50 GB/s | 12 | 600 GB/s |
 | NVLink 4.0 | Hopper (H100) | 50 GB/s | 18 | 900 GB/s |
 | NVLink 5.0 | Blackwell (B200) | 100 GB/s | 18 | 1,800 GB/s |
 
-与 PCIe 5.0 的带宽对比：
-- NVLink 4.0 (H100)：是 PCIe 5.0 的 **\~14 倍**
-- NVLink 5.0 (B200)：是 PCIe 5.0 的 **\~28 倍**
+与 PCIe 5.0 x16 的带宽对比（统一按双向口径，PCIe 5.0 x16 双向为 128 GB/s；按单向口径比，倍数相同）：
+- NVLink 4.0 (H100)：900 vs 128 GB/s，是 PCIe 5.0 的 **\~7 倍**
+- NVLink 5.0 (B200)：1,800 vs 128 GB/s，是 PCIe 5.0 的 **\~14 倍**
 
 这个差距直接决定了一条重要的工程准则：**需要高频通信的并行策略（如张量并行）必须限制在 NVLink 互联的范围内**。
 
@@ -522,7 +522,7 @@ mpirun -np 16 --hostfile hosts \
 - **algbw**（算法带宽）= 数据量 / 时间，反映应用层看到的吞吐
 - **busbw**（总线带宽）= algbw $\times \frac{2(N-1)}{N}$，修正了算法传输倍数，反映硬件链路的实际利用率
 
-💡 **提示**：对照硬件理论带宽时应看 `busbw`，而非 `algbw`。**经验参考值**（8x H100 SXM 单机 AllReduce）：busbw 应接近 **\~850 GB/s**（NVLink 4.0 理论 900 GB/s 的 \~95%）。如果实测远低于此值，说明 NVLink 拓扑或 NCCL 配置存在问题。
+💡 **提示**：对照硬件理论带宽时应看 `busbw`，而非 `algbw`。**经验参考值**（8x H100 SXM 单机 AllReduce）：busbw 应与 NVLink 4.0 的**单向** 450 GB/s 对照（而非双向 900 GB/s），实测通常在 \~360–480 GB/s 量级（开启 NVLS 时可略高于 450 GB/s）。如果实测远低于此值，说明 NVLink 拓扑或 NCCL 配置存在问题。
 
 ---
 
@@ -541,11 +541,11 @@ mpirun -np 16 --hostfile hosts \
 
 每个 Transformer 层包含 Attention 和 MLP 两个子模块，各自前向、反向各 1 次，合计 4 次 AllReduce。一个 80 层的大模型意味着 320 次 AllReduce。
 
-做一个简单的时间估算：假设每次 AllReduce 搬运 1GB 数据：
-- 走 NVLink 4.0（900 GB/s）：每次约 1.1 ms，320 次共 \~0.35 秒
-- 走 IB NDR（50 GB/s）：每次约 20 ms，320 次共 \~6.4 秒
+做一个简单的时间估算：假设每次 AllReduce 搬运 1GB 数据（统一按单向带宽计算）：
+- 走 NVLink 4.0（单向 450 GB/s）：每次约 2.2 ms，320 次共 \~0.71 秒
+- 走 IB NDR（400 Gb/s，单向 50 GB/s）：每次约 20 ms，320 次共 \~6.4 秒
 
-差距 **18 倍**，训练速度会断崖式下降。这就是"TP 不跨机"的物理原因。
+差距约 **9 倍**，训练速度会断崖式下降。这就是"TP 不跨机"的物理原因。
 
 ### 9.2 数据并行的通信开销
 
@@ -597,7 +597,7 @@ $$
 
 ## 🎯 自我检验清单
 
-- 能说出 NVLink 4.0 与 PCIe 5.0 的带宽对比（900 GB/s vs 64 GB/s，约 14 倍），并解释这对张量并行的影响
+- 能说出 NVLink 4.0 与 PCIe 5.0 x16 的带宽对比（双向 900 GB/s vs 128 GB/s，或单向 450 GB/s vs 64 GB/s，约 7 倍），并解释这对张量并行的影响
 - 能在 8 卡机器上用 `nvidia-smi topo -m` 读懂拓扑输出，判断哪些卡走 NVLink、哪些走 PCIe
 - 能画出 AllReduce、AllGather、ReduceScatter 的数据流动示意图，说出各自的典型用途及通信量公式
 - 能用 PyTorch 的 `torch.distributed` API 编写 AllReduce / AllGather / Send/Recv 代码

@@ -186,7 +186,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 动手是检验这一层的唯一标准，纸上谈兵不算数：
 
 - **硬件参数直觉**：拿到一块 H100，不查资料能说出 HBM 容量（80GB）、HBM 带宽（~3.35TB/s）、L2 大小（50MB）、共享内存上限（228KB/SM）的量级，并解释为什么"显存带宽"往往比"算力"先成为瓶颈
-- **带宽估算**：给定一个 AllReduce 操作的数据量（比如 2GB 梯度），能估算在 NVLink（900GB/s per GPU）vs PCIe Gen5（64GB/s）下的理论耗时差异
+- **带宽估算**：给定一个 AllReduce 操作的数据量（比如 2GB 梯度），能估算在 NVLink 4.0（单向 450GB/s per GPU，双向 900GB/s）vs PCIe Gen5 x16（单向 64GB/s）下的理论耗时差异
 
 - **Reduce 三连**：从最朴素的全局内存原子加开始，写一个 Reduce Sum kernel；然后用共享内存 + 树形归约消除原子操作；最后用 Warp Shuffle 干掉共享内存，三个版本跑 Nsight Compute 对比 throughput，能说清每一步优化到底省在哪里
 - **Bank Conflict 直觉**：手动构造一个 32x32 矩阵转置 kernel，先写一个有 32-way bank conflict 的版本，再加一列 padding 消除冲突，用 Nsight Compute 的 Shared Memory 面板验证 conflict 数从几十降到 0

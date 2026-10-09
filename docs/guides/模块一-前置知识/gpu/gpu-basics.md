@@ -139,15 +139,22 @@ GPU 的计算再快，如果数据"喂"不上来也白搭。在 AI 工作负载�
 
 ### 3.1 GPU 存储层级金字塔
 
-GPU 的存储层级和 CPU 类似，越靠近计算核心速度越快、容量越小：
+GPU 的存储层级和 CPU 类似，越靠近计算核心速度越快、容量越小。下表以 H100 SXM 为例，带宽为整卡聚合值：
 
-| 📊 层级 | 容量 | 带宽/延迟 | 作用域 | 说明 |
-|---|---|---|---|---|
-| Register（寄存器） | 每线程 ~255 个 | ~0 cycle | 单线程私有 | 最快，但容量极有限 |
-| Shared Memory | 每 SM ~228 KB | ~30 cycle | SM 内所有线程 | 程序员显式管理的"L1 级别"缓存 |
-| L1 Cache | 与 Shared Memory 共享 | ~30 cycle | SM 内 | 硬件自动管理 |
-| L2 Cache | 整卡 ~50 MB | ~200 cycle | 全局 | 所有 SM 共享 |
-| HBM（显存） | 80 GB | ~600 cycle | 全局 | 主存储，带宽决定吞吐上限 |
+| 📊 层级 | 容量 | 带宽 | 延迟 | 作用域 | 说明 |
+|---|---|---|---|---|---|
+| Register（寄存器） | 每线程 ~255 个 | — | ~0 cycle | 单线程私有 | 最快，但容量极有限 |
+| Shared Memory | 每 SM ~228 KB | ~31 TB/s | ~30 cycle | SM 内所有线程 | 程序员显式管理的"L1 级别"缓存 |
+| L1 Cache | 与 Shared Memory 共享 | 与 Shared Memory 合计 ~31 TB/s | ~30 cycle | SM 内 | 硬件自动管理 |
+| L2 Cache | 整卡 ~50 MB | ~9.45 TB/s | ~200 cycle | 全局 | 所有 SM 共享 |
+| HBM（显存） | 80 GB | 3.35 TB/s | ~600 cycle | 全局 | 主存储，带宽决定吞吐上限 |
+
+带宽数据说明：
+
+- Shared Memory 的 ~31 TB/s 是理论估算，按每 SM 32 个 bank × 4 B/cycle = 128 B/cycle 计算，即 132 SM × 128 B × 1.83 GHz ≈ 31 TB/s，前提是没有 Bank Conflict。
+- L1 和 Shared Memory 是同一块物理 SRAM，带宽共享。TileLang 论文给出的 30.92 TB/s 是两者合并的口径，不能当作 L1 单独的带宽。
+- L2 的 9.45 TB/s 取自 TileLang 论文附录 D 的 Table 2。不同测试方法得到的 L2 实测值差异较大，这里只作量级参考。
+- HBM3 的 3.35 TB/s 是 NVIDIA 官方给出的理论峰值。
 
 ### 3.2 HBM：高带宽显存
 
