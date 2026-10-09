@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title desc">
+<title id="title">对称与非对称量化的数值映射</title><desc id="desc">两条等距数轴分别展示对称与非对称覆盖范围，绿色箭头展示舍入，红色箭头展示超范围截断。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#64748b"/></marker></defs>
+<rect width="960" height="440" rx="16" fill="#f8fafc"/>
+<g transform="translate(0 -40)" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#172b4d">
+<text x="32" y="77" font-size="18" font-weight="400" fill="#475569" text-anchor="start">Scale 决定间距；Zero-point 标记实数 0 的编码位置</text>
+<text x="32" y="140" font-size="20" font-weight="700" fill="#172b4d" text-anchor="start">对称范围</text>
+<path d="M240,182 L840,182" fill="none" stroke="#64748b" stroke-width="2"/>
+<path d="M240,172 L240,192" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="240" y="216" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">-3</text>
+<path d="M340,172 L340,192" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="340" y="216" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">-2</text>
+<path d="M440,172 L440,192" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="440" y="216" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">-1</text>
+<path d="M540,172 L540,192" fill="none" stroke="#2563eb" stroke-width="2"/>
+<text x="540" y="216" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">0</text>
+<text x="540" y="244" font-size="16" font-weight="700" fill="#2563eb" text-anchor="middle">实数 0</text>
+<path d="M640,172 L640,192" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="640" y="216" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">1</text>
+<path d="M740,172 L740,192" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="740" y="216" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">2</text>
+<path d="M840,172 L840,192" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="840" y="216" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">3</text>
+<circle cx="575" cy="145" r="6" fill="#059669"/>
+<path d="M575,150 L540,178" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="630" y="144" font-size="17" font-weight="400" fill="#047857" text-anchor="start">舍入到最近可表示值</text>
+<circle cx="902" cy="182" r="6" fill="#dc2626"/>
+<path d="M892,177 L849,177" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="800" y="110" font-size="17" font-weight="400" fill="#b91c1c" text-anchor="start">超范围 → 端点</text>
+<text x="32" y="321" font-size="20" font-weight="700" fill="#172b4d" text-anchor="start">非对称范围</text>
+<path d="M240,363 L840,363" fill="none" stroke="#64748b" stroke-width="2"/>
+<path d="M240,353 L240,373" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="240" y="397" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">-1</text>
+<path d="M340,353 L340,373" fill="none" stroke="#2563eb" stroke-width="2"/>
+<text x="340" y="397" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">0</text>
+<text x="340" y="425" font-size="16" font-weight="700" fill="#2563eb" text-anchor="middle">实数 0</text>
+<path d="M440,353 L440,373" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="440" y="397" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">1</text>
+<path d="M540,353 L540,373" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="540" y="397" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">2</text>
+<path d="M640,353 L640,373" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="640" y="397" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">3</text>
+<path d="M740,353 L740,373" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="740" y="397" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">4</text>
+<path d="M840,353 L840,373" fill="none" stroke="#64748b" stroke-width="2"/>
+<text x="840" y="397" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">5</text>
+<circle cx="575" cy="326" r="6" fill="#059669"/>
+<path d="M575,331 L540,359" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="630" y="325" font-size="17" font-weight="400" fill="#047857" text-anchor="start">舍入到最近可表示值</text>
+<circle cx="902" cy="363" r="6" fill="#dc2626"/>
+<path d="M892,358 L849,358" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="800" y="291" font-size="17" font-weight="400" fill="#b91c1c" text-anchor="start">超范围 → 端点</text>
+<text x="32" y="450" font-size="16" font-weight="400" fill="#475569" text-anchor="start">示意图：每条轴省略了大部分编码；覆盖范围与可表示值由格式和 Scale 决定。</text>
+</g></svg>

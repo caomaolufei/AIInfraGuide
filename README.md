@@ -210,6 +210,12 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 2.4 | [Chunked Prefill 与统一调度](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/24-chunked-prefill-与统一调度/) | 切块 Prefill 消除对 Decode 的干扰，vLLM V1 用统一 Token 预算调度器抹平 Prefill/Decode 边界 |
 | 2.5 | [Attention 后端与图优化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/25-attention-后端与图优化/) | 可插拔 Attention 后端与 CUDA Graph、torch.compile 消除 Decode 阶段的 CPU 启动开销 |
 | 3.0 | [vLLM 快速入门](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/vllm快速入门/) | 从安装到部署你的第一个 LLM 推理服务，离线批量推理与在线 OpenAI 兼容服务 |
+| 4.1 | [量化基础](./docs/guides/模块四-推理优化/第4章-量化/4.1-量化基础.md) | Scale、对称与非对称量化、量化粒度、校准与 PTQ/QAT |
+| 4.2 | [W8A8 与 SmoothQuant](./docs/guides/模块四-推理优化/第4章-量化/4.2-W8A8与SmoothQuant.md) | 激活离群值、等价缩放、平滑系数与 INT8 GEMM |
+| 4.3 | [Weight-only INT4](./docs/guides/模块四-推理优化/第4章-量化/4.3-Weight-only-INT4.md) | GPTQ 误差补偿、AWQ 激活感知缩放与 Marlin 执行路径 |
+| 4.4 | [KV Cache 量化](./docs/guides/模块四-推理优化/第4章-量化/4.4-KV-Cache量化.md) | KIVI 分组与残留缓存、FP8 KV 校准及长上下文验证 |
+| 4.5 | [FP8 与 NVFP4/MXFP4](./docs/guides/模块四-推理优化/第4章-量化/4.5-FP8与NVFP4-MXFP4.md) | 浮点编码、微块缩放与硬件支持条件 |
+| 4.6 | [量化选型与 vLLM 实战](./docs/guides/模块四-推理优化/第4章-量化/4.6-量化选型与vLLM实战.md) | 按瓶颈选型，控制变量比较 FP16/AWQ 吞吐与生成质量 |
 | 5.1 | [投机解码核心原理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) | Draft + Verify、接受与残差采样的保分布证明、KV 回退 |
 | 5.2 | [Draft 模型与无模型方案](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) | 独立 Draft、Tokenizer 兼容、N-gram/Suffix、接受率与候选覆盖 |
 | 5.3 | [Medusa 与 EAGLE](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) | 多头预测、EAGLE-2/3、Draft Tree 与 Tree Attention、验收边界 |
