@@ -210,12 +210,23 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 2.4 | [Chunked Prefill 与统一调度](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/24-chunked-prefill-与统一调度/) | 切块 Prefill 消除对 Decode 的干扰，vLLM V1 用统一 Token 预算调度器抹平 Prefill/Decode 边界 |
 | 2.5 | [Attention 后端与图优化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/25-attention-后端与图优化/) | 可插拔 Attention 后端与 CUDA Graph、torch.compile 消除 Decode 阶段的 CPU 启动开销 |
 | 3.0 | [vLLM 快速入门](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-深入vllm/vllm快速入门/) | 从安装到部署你的第一个 LLM 推理服务，离线批量推理与在线 OpenAI 兼容服务 |
-| 4.1 | [量化基础](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/41-量化基础/) | 显存与带宽账本、Scale/Zero-point、对称/非对称、量化粒度、PTQ/QAT，附 CPU 误差实验 |
-| 4.2 | [W8A8 量化与 SmoothQuant](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/42-w8a8量化与smoothquant/) | 激活离群值、通道等价缩放、Alpha 权衡、校准与离线融合 |
-| 4.3 | [Weight-only INT4：GPTQ、AWQ 与 Marlin](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/43-weight-only-int4/) | GPTQ 二阶补偿、AWQ 激活感知缩放，区分量化算法、保存格式与计算 Kernel |
-| 4.4 | [KV Cache 量化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/44-kv-cache量化/) | KIVI 2-bit、Key/Value 粒度、残留缓存、FP8 Scale 与长上下文质量验证 |
-| 4.5 | [FP8 与 NVFP4/MXFP4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/45-fp8与nvfp4-mxfp4/) | E4M3/E5M2、块缩放与元数据成本，理解低比特浮点的硬件及部署边界 |
-| 4.6 | [量化选型与 vLLM 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/46-量化选型与vllm实战/) | 从业务瓶颈选候选，完成 FP16/AWQ 吞吐、延迟与生成质量对照 |
+| 4.1 | [量化基础](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/41-量化基础/) | Scale、对称与非对称量化、量化粒度、校准与 PTQ/QAT |
+| 4.2 | [W8A8 与 SmoothQuant](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/42-w8a8与smoothquant/) | 激活离群值、等价缩放、平滑系数与 INT8 GEMM |
+| 4.3 | [Weight-only INT4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/43-weight-only-int4/) | GPTQ 误差补偿、AWQ 激活感知缩放与 Marlin 执行路径 |
+| 4.4 | [KV Cache 量化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/44-kv-cache量化/) | KIVI 分组与残留缓存、FP8 KV 校准及长上下文验证 |
+| 4.5 | [FP8 与 NVFP4/MXFP4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/45-fp8与nvfp4-mxfp4/) | 浮点编码、微块缩放与硬件支持条件 |
+| 4.6 | [量化选型与 vLLM 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/46-量化选型与vllm实战/) | 按瓶颈选型，控制变量比较 FP16/AWQ 吞吐与生成质量 |
+| 4.1 补充 | [工程补充：量化基础](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/补充笔记/41-量化基础/) | 显存/带宽账本、量化误差与 CPU 实验 |
+| 4.2 补充 | [工程补充：W8A8量化与SmoothQuant](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/补充笔记/42-w8a8量化与smoothquant/) | 通道尺度推导、Alpha 权衡与 W8A8 部署 |
+| 4.3 补充 | [工程补充：Weight-only-INT4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/补充笔记/43-weight-only-int4/) | 输出重构实验、元数据账本与 Marlin Kernel 核对 |
+| 4.4 补充 | [工程补充：KV-Cache量化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/补充笔记/44-kv-cache量化/) | 流式缓存账本、Scale/后端与长上下文验证 |
+| 4.5 补充 | [工程补充：FP8与NVFP4-MXFP4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/补充笔记/45-fp8与nvfp4-mxfp4/) | 数值范围、块 Scale 成本与格式兼容 |
+| 4.6 补充 | [工程补充：量化选型与vLLM实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/补充笔记/46-量化选型与vllm实战/) | 同源 FP16/AWQ 性能、严格格式质量与排错流程 |
+| 5.1 | [投机解码核心原理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) | Draft + Verify、接受与残差采样的保分布证明、KV 回退 |
+| 5.2 | [Draft 模型与无模型方案](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) | 独立 Draft、Tokenizer 兼容、N-gram/Suffix、接受率与候选覆盖 |
+| 5.3 | [Medusa 与 EAGLE](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) | 多头预测、EAGLE-2/3、Draft Tree 与 Tree Attention、验收边界 |
+| 5.4 | [收益边界与限制](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) | 提交长度与轮耗时账本、并发、长上下文、量化与调度 |
+| 5.5 | [vLLM 投机解码实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/) | 固定版本的基线/N-gram/Draft 对照、代码与对话指标采集 |
 | 12.1 | [端侧推理基础：从模型导出到异构硬件执行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第12章-端侧推理/121-端侧推理基础/) | 端侧约束、软硬件栈、运行时选型、量化与内存优化、Benchmark，以及 ExecuTorch/XNNPACK 最小实例 |
 
 <br>

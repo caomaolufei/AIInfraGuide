@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img" aria-labelledby="title desc">
+<title id="title">SmoothQuant：配对缩放保持乘积</title><desc id="desc">一个输入通道从16除以8变为2，对应权重从0.5乘以8变为4，输出仍为12。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#64748b"/></marker></defs>
+<rect width="960" height="470" rx="16" fill="#f8fafc"/>
+<g transform="translate(0 -40)" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#172b4d">
+<text x="32" y="80" font-size="18" font-weight="400" fill="#475569" text-anchor="start">一个 Token × 一个输出通道；颜色标出同一输入通道</text>
+<text x="32" y="174" font-size="20" font-weight="700" fill="#172b4d" text-anchor="start">变换前</text>
+<text x="240" y="114" font-size="18" font-weight="700" fill="#172b4d" text-anchor="start">激活 X</text>
+<text x="555" y="114" font-size="18" font-weight="700" fill="#172b4d" text-anchor="start">权重 W</text>
+<rect x="168" y="126" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="200.5" y="153" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">1</text>
+<rect x="244" y="126" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="276.5" y="153" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">1</text>
+<rect x="320" y="126" width="65" height="58" rx="10" fill="#ffedd5" stroke="#fdba74"/>
+<text x="352.5" y="153" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">16</text>
+<rect x="500" y="126" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="532.5" y="153" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">2</text>
+<rect x="576" y="126" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="608.5" y="153" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">2</text>
+<rect x="652" y="126" width="65" height="58" rx="10" fill="#ffedd5" stroke="#fdba74"/>
+<text x="684.5" y="153" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">0.5</text>
+<text x="442" y="163" font-size="32" font-weight="700" fill="#172b4d" text-anchor="start">·</text>
+<text x="750" y="162" font-size="26" font-weight="700" fill="#172b4d" text-anchor="start">= 12</text>
+<text x="32" y="363" font-size="20" font-weight="700" fill="#172b4d" text-anchor="start">变换后</text>
+<text x="240" y="303" font-size="18" font-weight="700" fill="#172b4d" text-anchor="start">激活 X</text>
+<text x="555" y="303" font-size="18" font-weight="700" fill="#172b4d" text-anchor="start">权重 W</text>
+<rect x="168" y="315" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="200.5" y="342" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">1</text>
+<rect x="244" y="315" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="276.5" y="342" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">1</text>
+<rect x="320" y="315" width="65" height="58" rx="10" fill="#ffedd5" stroke="#fdba74"/>
+<text x="352.5" y="342" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">2</text>
+<rect x="500" y="315" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="532.5" y="342" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">2</text>
+<rect x="576" y="315" width="65" height="58" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="608.5" y="342" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">2</text>
+<rect x="652" y="315" width="65" height="58" rx="10" fill="#ffedd5" stroke="#fdba74"/>
+<text x="684.5" y="342" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">4</text>
+<text x="442" y="352" font-size="32" font-weight="700" fill="#172b4d" text-anchor="start">·</text>
+<text x="750" y="351" font-size="26" font-weight="700" fill="#172b4d" text-anchor="start">= 12</text>
+<path d="M352,195 L352,287" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="280" y="245" font-size="19" font-weight="700" fill="#c2410c" text-anchor="start">÷ 8</text>
+<path d="M684,195 L684,287" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="718" y="245" font-size="19" font-weight="700" fill="#c2410c" text-anchor="start">× 8</text>
+<rect x="32" y="414" width="896" height="65" rx="10" fill="#ecfdf5" stroke="#6ee7b7"/>
+<text x="480" y="441" font-size="22" font-weight="700" fill="#172b4d" text-anchor="middle">XW = (XS⁻¹)(SW)</text>
+<text x="480" y="465" font-size="17" font-weight="400" fill="#047857" text-anchor="middle">等价变换之后再量化；量化误差仍需评估</text>
+</g></svg>

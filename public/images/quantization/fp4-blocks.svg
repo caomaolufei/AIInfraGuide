@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="510" viewBox="0 0 960 510" role="img" aria-labelledby="title desc">
+<title id="title">FP4：数据编码之外，还有分组 Scale</title><desc id="desc">MXFP4每32个E2M1元素共享一个E8M0 Scale，NVFP4每16个E2M1元素共享一个E4M3 Scale并配张量级FP32 Scale。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#64748b"/></marker></defs>
+<rect width="960" height="510" rx="16" fill="#f8fafc"/>
+<g transform="translate(0 -40)" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#172b4d">
+<text x="32" y="81" font-size="17" font-weight="400" fill="#475569" text-anchor="start">每个小格代表一个 E2M1 元素；Scale 格子的宽度不按字节等比例绘制</text>
+<text x="32" y="151" font-size="22" font-weight="700" fill="#172b4d" text-anchor="start">MXFP4</text>
+<rect x="205" y="122" width="457" height="65" rx="10" fill="#dbeafe" stroke="#94a3b8"/>
+<path d="M219.281,123 L219.281,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M233.562,123 L233.562,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M247.844,123 L247.844,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M262.125,123 L262.125,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M276.406,123 L276.406,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M290.688,123 L290.688,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M304.969,123 L304.969,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M319.250,123 L319.250,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M333.531,123 L333.531,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M347.812,123 L347.812,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M362.094,123 L362.094,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M376.375,123 L376.375,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M390.656,123 L390.656,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M404.938,123 L404.938,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M419.219,123 L419.219,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M433.500,123 L433.500,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M447.781,123 L447.781,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M462.062,123 L462.062,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M476.344,123 L476.344,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M490.625,123 L490.625,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M504.906,123 L504.906,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M519.188,123 L519.188,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M533.469,123 L533.469,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M547.750,123 L547.750,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M562.031,123 L562.031,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M576.312,123 L576.312,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M590.594,123 L590.594,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M604.875,123 L604.875,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M619.156,123 L619.156,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M633.438,123 L633.438,186" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M647.719,123 L647.719,186" fill="none" stroke="#fff" stroke-width="2"/>
+<text x="434" y="219" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">32 个 E2M1 元素 / 微块</text>
+<rect x="697" y="122" width="225" height="65" rx="10" fill="#fff7ed" stroke="#fdba74"/>
+<text x="809.5" y="149" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">E8M0 Scale</text>
+<path d="M673,154 L689,154" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="32" y="324" font-size="22" font-weight="700" fill="#172b4d" text-anchor="start">NVFP4</text>
+<rect x="205" y="295" width="457" height="65" rx="10" fill="#dcfce7" stroke="#94a3b8"/>
+<path d="M233.56,296 L233.56,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M262.12,296 L262.12,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M290.68,296 L290.68,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M319.24,296 L319.24,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M347.79999999999995,296 L347.79999999999995,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M376.36,296 L376.36,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M404.91999999999996,296 L404.91999999999996,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M433.48,296 L433.48,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M462.03999999999996,296 L462.03999999999996,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M490.59999999999997,296 L490.59999999999997,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M519.16,296 L519.16,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M547.72,296 L547.72,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M576.28,296 L576.28,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M604.8399999999999,296 L604.8399999999999,359" fill="none" stroke="#fff" stroke-width="2"/>
+<path d="M633.4,296 L633.4,359" fill="none" stroke="#fff" stroke-width="2"/>
+<text x="434" y="392" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">16 个 E2M1 元素 / 微块</text>
+<rect x="697" y="295" width="225" height="65" rx="10" fill="#fff7ed" stroke="#fdba74"/>
+<text x="809.5" y="322" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">E4M3 Scale</text>
+<path d="M673,327 L689,327" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="410" y="440" width="350" height="65" rx="10" fill="#f3e8ff" stroke="#c4b5fd"/>
+<text x="585.0" y="467" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">NVFP4：另有张量级 FP32 Scale</text>
+<text x="32" y="240" font-size="18" font-weight="700" fill="#2563eb" text-anchor="start">平均 4.25 bit / 元素</text>
+<text x="32" y="410" font-size="18" font-weight="700" fill="#047857" text-anchor="start">平均 4.5 bit / 元素</text>
+<text x="32" y="527" font-size="16" font-weight="400" fill="#475569" text-anchor="start">平均位宽仅计数据和块 Scale；NVFP4 还需计入张量级 Scale 与实现中的对齐开销。</text>
+</g></svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-labelledby="title desc">
+<title id="title">KIVI：Key 与 Value 使用不同分组方向</title><desc id="desc">矩阵行代表Token、列代表通道。Key固定通道沿Token分组，Value固定Token沿通道分组；下方示意量化历史和高精度残留区。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#64748b"/></marker></defs>
+<rect width="960" height="620" rx="16" fill="#f8fafc"/>
+<g transform="translate(0 -40)" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" fill="#172b4d">
+<text x="32" y="81" font-size="18" font-weight="400" fill="#475569" text-anchor="start">矩阵视图：省略 Batch 和 Head 维；每个色框内共享量化参数</text>
+<text x="46" y="125" font-size="20" font-weight="700" fill="#172b4d" text-anchor="start">Key：固定通道，沿 Token 分组</text>
+<text x="221" y="158" font-size="17" font-weight="400" fill="#172b4d" text-anchor="middle">通道 →</text>
+<text x="51" y="198" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₀</text>
+<text x="51" y="252" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₁</text>
+<text x="51" y="306" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₂</text>
+<text x="51" y="360" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₃</text>
+<rect x="106" y="173" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="162" y="173" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="218" y="173" width="50" height="47" rx="3" fill="#fed7aa" stroke="#fff"/>
+<rect x="274" y="173" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="106" y="227" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="162" y="227" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="218" y="227" width="50" height="47" rx="3" fill="#fed7aa" stroke="#fff"/>
+<rect x="274" y="227" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="106" y="281" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="162" y="281" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="218" y="281" width="50" height="47" rx="3" fill="#fed7aa" stroke="#fff"/>
+<rect x="274" y="281" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="106" y="335" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="162" y="335" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="218" y="335" width="50" height="47" rx="3" fill="#fed7aa" stroke="#fff"/>
+<rect x="274" y="335" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="104" y="170" width="54" height="213" rx="5" fill="none" stroke="#2563eb"/>
+<rect x="160" y="170" width="54" height="213" rx="5" fill="none" stroke="#2563eb"/>
+<rect x="216" y="170" width="54" height="213" rx="5" fill="none" stroke="#ea580c"/>
+<rect x="272" y="170" width="54" height="213" rx="5" fill="none" stroke="#2563eb"/>
+<text x="216" y="414" font-size="17" font-weight="400" fill="#172b4d" text-anchor="middle">Token ↓</text>
+<text x="501" y="125" font-size="20" font-weight="700" fill="#172b4d" text-anchor="start">Value：固定 Token，沿通道分组</text>
+<text x="676" y="158" font-size="17" font-weight="400" fill="#172b4d" text-anchor="middle">通道 →</text>
+<text x="506" y="198" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₀</text>
+<text x="506" y="252" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₁</text>
+<text x="506" y="306" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₂</text>
+<text x="506" y="360" font-size="17" font-weight="400" fill="#172b4d" text-anchor="start">T₃</text>
+<rect x="561" y="173" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="617" y="173" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="673" y="173" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="729" y="173" width="50" height="47" rx="3" fill="#dbeafe" stroke="#fff"/>
+<rect x="561" y="227" width="50" height="47" rx="3" fill="#dcfce7" stroke="#fff"/>
+<rect x="617" y="227" width="50" height="47" rx="3" fill="#dcfce7" stroke="#fff"/>
+<rect x="673" y="227" width="50" height="47" rx="3" fill="#dcfce7" stroke="#fff"/>
+<rect x="729" y="227" width="50" height="47" rx="3" fill="#dcfce7" stroke="#fff"/>
+<rect x="561" y="281" width="50" height="47" rx="3" fill="#fef3c7" stroke="#fff"/>
+<rect x="617" y="281" width="50" height="47" rx="3" fill="#fef3c7" stroke="#fff"/>
+<rect x="673" y="281" width="50" height="47" rx="3" fill="#fef3c7" stroke="#fff"/>
+<rect x="729" y="281" width="50" height="47" rx="3" fill="#fef3c7" stroke="#fff"/>
+<rect x="561" y="335" width="50" height="47" rx="3" fill="#ede9fe" stroke="#fff"/>
+<rect x="617" y="335" width="50" height="47" rx="3" fill="#ede9fe" stroke="#fff"/>
+<rect x="673" y="335" width="50" height="47" rx="3" fill="#ede9fe" stroke="#fff"/>
+<rect x="729" y="335" width="50" height="47" rx="3" fill="#ede9fe" stroke="#fff"/>
+<rect x="558" y="171" width="227" height="51" rx="5" fill="none" stroke="#059669"/>
+<rect x="558" y="225" width="227" height="51" rx="5" fill="none" stroke="#059669"/>
+<rect x="558" y="279" width="227" height="51" rx="5" fill="none" stroke="#059669"/>
+<rect x="558" y="333" width="227" height="51" rx="5" fill="none" stroke="#059669"/>
+<text x="671" y="414" font-size="17" font-weight="400" fill="#172b4d" text-anchor="middle">Token ↓</text>
+<text x="32" y="461" font-size="20" font-weight="700" fill="#172b4d" text-anchor="start">流式缓存（概念示意）</text>
+<rect x="32" y="482" width="496" height="85" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="280.0" y="509" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">已量化的历史 KV</text>
+<text x="280.0" y="536" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">编码 + 分组 Scale / 零点</text>
+<rect x="554" y="482" width="282" height="85" rx="10" fill="#fff7ed" stroke="#fdba74"/>
+<text x="695.0" y="509" font-size="18" font-weight="700" fill="#172b4d" text-anchor="middle">高精度 Residual Cache</text>
+<text x="695.0" y="536" font-size="18" font-weight="400" fill="#172b4d" text-anchor="middle">按规则逐批转入历史区</text>
+<path d="M912,524 L846,524" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="908" y="486" font-size="17" font-weight="400" fill="#172b4d" text-anchor="middle">新 KV</text>
+<text x="32" y="610" font-size="17" font-weight="400" fill="#475569" text-anchor="start">量化组与 PagedAttention 的物理 Block 各有职责；图中组大小仅为示意。</text>
+</g></svg>

@@ -191,7 +191,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 - **Reduce 三连**：从最朴素的全局内存原子加开始，写一个 Reduce Sum kernel；然后用共享内存 + 树形归约消除原子操作；最后用 Warp Shuffle 干掉共享内存，三个版本跑 Nsight Compute 对比 throughput，能说清每一步优化到底省在哪里
 - **Bank Conflict 直觉**：手动构造一个 32x32 矩阵转置 kernel，先写一个有 32-way bank conflict 的版本，再加一列 padding 消除冲突，用 Nsight Compute 的 Shared Memory 面板验证 conflict 数从几十降到 0
 - **GEMM 分块**：实现一个基于 Shared Memory Tiling 的 GEMM kernel，在 1024x1024 矩阵上与 cuBLAS 对比，达到其 50% 以上的性能即为合格——这个过程中你会真正理解"为什么访存模式决定一切"
-- **FlashAttention 白板推导**：不看论文，能在白板上画出 FlashAttention 的 tiling 过程——外层循环遍历 KV 的 block，内层循环遍历 Q 的 block，每个 tile 在 SRAM 中完成 QK^T → scale → mask → softmax → PV，用 online softmax 避免两次遍历，关键是说清楚为什么 HBM 读写从 O(N^2) 降到了 O(N)
+- **FlashAttention 白板推导**：不看论文，能在白板上画出 FlashAttention 的 tiling 过程——以 V1 为例，外层循环遍历 KV 的 block，内层循环遍历 Q 的 block（V2 把两层循环对调为外层 Q、内层 KV），每个 tile 在 SRAM 中完成 QK^T → scale → mask → softmax → PV，用 online softmax 避免两次遍历，关键是说清楚为什么额外显存从 O(N^2) 降到了 O(N)（不再物化 N×N 矩阵），以及 HBM 访问量为什么从 Θ(N^2) 降到 Θ(N^2·d^2/M)（M 为 SRAM 大小，d^2 远小于 M，仍随 N^2 增长但常数大幅减小）
 - **Triton 上手**：用 Triton 实现一个 fused Softmax kernel（参考官方教程），与 PyTorch 原生实现对比正确性和性能，体会 Triton 的 block-level 编程模型与 CUDA 的 thread-level 编程模型有何不同
 - **Profiling 实战**：用 Nsight Systems 抓一次训练 iteration 的 trace，能指出 GPU idle gap 是来自 CPU 数据预处理、通信等待、还是 kernel launch overhead；用 Nsight Compute 打开一个 kernel 报告，能读懂 SOL（Speed of Light）面板判断该 kernel 是 memory bound 还是 compute bound
 
@@ -265,8 +265,8 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 这一层的检验核心是**算得清账、跑得通代码**：
 
-- **显存账本**：拿到一个 7B 参数的模型（如 LLaMA-2-7B），不查资料能口算出 FP16 下参数占 ~14GB、Adam 优化器状态占 ~56GB（FP32 参数副本 + 一阶/二阶动量各 14GB），进而判断单卡 80GB 能否放下完整训练状态、是否必须上 ZeRO
-- **ZeRO 拆解**：有人问你"ZeRO-2 和 ZeRO-3 到底差在哪"，你能一句话讲清：ZeRO-2 只在 backward 时按需 AllReduce 梯度，参数每卡各存一份；ZeRO-3 连参数也切了，forward/backward 都要 AllGather 拿参数、用完即弃，通信量约翻倍但每卡显存降到 1/N
+- **显存账本**：拿到一个 7B 参数的模型（如 LLaMA-2-7B），不查资料能口算出 FP16 下参数占 ~14GB、Adam 优化器状态占 ~84GB（FP32 参数副本 + 一阶/二阶动量各 28GB），进而判断单卡 80GB 能否放下完整训练状态、是否必须上 ZeRO
+- **ZeRO 拆解**：有人问你"ZeRO-2 和 ZeRO-3 到底差在哪"，你能一句话讲清：ZeRO-2 在 backward 时对梯度做 ReduceScatter（每卡只保留自己负责的那一份），更新完参数后再 AllGather，参数每卡各存一份，通信量 2Ψ 与 DDP 持平；ZeRO-3 连参数也切了，forward/backward 都要 AllGather 拿参数、用完即弃，通信量 3Ψ（约为 DDP 的 1.5 倍），但每卡的模型状态显存降到 1/N
 - **DDP 改造**：拿到一个单卡 PyTorch 训练脚本，30 分钟内改成 DDP 多卡版本并跑通——包括 `init_process_group`、`DistributedSampler`、模型 wrap、梯度同步，不需要查太多文档就能搞定
 - **3D 并行拓扑**：给一个 64 卡集群（8 节点 x 8 卡），能设计出 TP=8（机内）、PP=4（跨机）、DP=2 的并行方案，画出拓扑图标注哪些通信走 NVLink、哪些走 IB，并解释为什么 TP 不能跨机（带宽不够）
 - **混合精度原理**：能回答"BF16 和 FP16 都是 16 位，为什么大模型训练更偏爱 BF16"——因为 BF16 的指数位更宽（8 位 vs 5 位），动态范围接近 FP32，不容易 overflow/underflow，大多数情况下可以不做 Loss Scaling
@@ -435,7 +435,7 @@ Prefill/Decode 解耦是系统架构层面的优化，检验重点在于理解"�
 - **互扰定量分析**：在一个混合 batching 的推理服务上，构造一个场景——几个超长 prompt 的 prefill 请求和大量短 decode 请求同时到达，用指标证明 decode 的 P95 TPOT 被 prefill 拖慢了 3-5 倍，这就是解耦的动机
 - **Goodput 概念**：老板问"我们系统 QPS 很高啊为什么用户还在抱怨慢"，你能解释 goodput 的含义——满足 SLO（比如 TTFT < 500ms 且 TPOT < 50ms）的有效请求占比才是真正的服务质量指标，raw QPS 不等于用户体验
 - **资源配比推导**：给定一个工作负载特征（平均 prompt 长度 2000 token、平均输出 500 token），能估算 prefill 和 decode 的计算量比例，进而推导出 Prefill GPU 池和 Decode GPU 池的合理配比（比如 1:3 或 1:4）
-- **风险清单**：能列出解耦架构引入的新问题——KV Cache 从 Prefill 节点迁移到 Decode 节点的网络带宽压力（一个 7B 模型 2048 长度的 KV 约 4GB，IB 200Gb/s 也需要 ~160ms）、调度器的队列管理复杂度、Prefill/Decode 负载不均时某一池空转浪费资源
+- **风险清单**：能列出解耦架构引入的新问题——KV Cache 从 Prefill 节点迁移到 Decode 节点的网络带宽压力（以 LLaMA-2-7B 为例，单条 2048 长度序列的 KV 约 1GB，IB 200Gb/s 理论上也需要 ~40ms）、调度器的队列管理复杂度、Prefill/Decode 负载不均时某一池空转浪费资源
 
 ### 3.6 性能分析与 Benchmark
 
