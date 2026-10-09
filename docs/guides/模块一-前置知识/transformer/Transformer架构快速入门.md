@@ -215,7 +215,7 @@ $W_O$ 将多头拼接后的结果映射回模型的隐藏维度（下一节详�
 
 这意味着什么？当序列长度 $N$ 从 2K 增加到 128K 时，计算量和注意力矩阵的显存占用增长了 $(128K/2K)^2 =$ **4096 倍**。这就是为什么长上下文支持如此困难。
 
-> AI Infra 关联：这个 $O(N^2)$ 的显存瓶颈直接催生了 **FlashAttention**。标准实现需要把完整的 $N \times N$ 注意力矩阵写入 HBM（GPU 的高带宽显存），而 FlashAttention 通过 tiling（分块计算）+ online softmax，让注意力矩阵始终驻留在片上 SRAM 中，将 HBM 访问量从 $O(N^2)$ 降到 $O(N)$。计算量没变，但显存访问量大幅减少——这正是"Memory-aware"优化的核心思想。
+> AI Infra 关联：这个 $O(N^2)$ 的显存瓶颈直接催生了 **FlashAttention**。标准实现需要把完整的 $N \times N$ 注意力矩阵写入 HBM（GPU 的高带宽显存），而 FlashAttention 通过 tiling（分块计算）+ online softmax，每次只在片上 SRAM 中计算一小块注意力 tile，用完即丢弃，完整的 $N \times N$ 矩阵从不写回 HBM。这样额外显存从 $O(N^2)$ 降到 $O(N)$，HBM 访问量从 $\Theta(N^2)$ 降到 $\Theta(N^2 d^2 / M)$（$M$ 为 SRAM 大小，$d^2$ 远小于 $M$）——仍随 $N^2$ 增长，但常数大幅减小。计算量没变，但显存访问量大幅减少——这正是"Memory-aware"优化的核心思想。
 
 ### 3.4 Multi-Head Attention：为什么要多头
 
@@ -633,7 +633,7 @@ Output = h + down:         (2048, 4096)
 | 输出头（LM Head） | $d_{model} \times$ vocab_size = $4096 \times 32000$ | ~131M |
 | **总计** | | **~6,738M ≈ 6.7B** |
 
-注意：LLaMA-2 的 Token Embedding 和 LM Head 通常共享权重（weight tying），如果共享则减去一个 131M，约 6.6B。官方标注的 "7B" 是取整后的近似值。
+注意：LLaMA-2 的 Token Embedding 和 LM Head 是两套独立权重（没有 weight tying），所以 6.7B 已包含两份 131M；如果像 GPT-2 那样共享权重，则会减去一个 131M，约 6.6B。官方标注的 "7B" 是取整后的近似值。
 
 从参数分布可以看出：
 - **FFN 占了约 67\%**（每层 135M / 201M）

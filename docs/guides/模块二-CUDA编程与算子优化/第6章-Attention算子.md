@@ -13,7 +13,7 @@ Attention 是 Transformer 的核心计算，也是 AI Infra 优化的重中之�
 
 **标准 Attention 的性能问题**分析朴素实现的 O(N²) 显存占用和计算/显存瓶颈。
 
-**FlashAttention V1**详解核心思想：Tiling + Online Softmax 避免物化 N×N 矩阵，将 HBM 读写从 O(N²) 降到 O(N)，以及反向传播中的重计算策略。
+**FlashAttention V1**详解核心思想：Tiling + Online Softmax 避免物化 N×N 矩阵，将额外显存从 O(N²) 降到 O(N)、HBM 读写从 Θ(N²) 降到 Θ(N²d²/M)（M 为 SRAM 大小），以及反向传播中的重计算策略。
 
 **FlashAttention V2** 改进的并行策略（沿 Q 序列维度并行）和 Causal Mask 优化。
 
