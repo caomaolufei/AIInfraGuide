@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="940" viewBox="0 0 1200 940" role="img" aria-labelledby="title desc">
+<title id="title">7.5 算出 P:D 配比，还要过网络与显存两关</title>
+<desc id="desc">教学例子在12请求每秒下计算得2个P实例5个D实例共9张GPU；但每条1GiB超过100Gb每秒80%有效带宽；保留时间增加也提高待移交缓存。</desc>
+<defs>
+<marker id="blue" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="green" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="orange" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="gray" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#64748b"/>
+</marker>
+</defs>
+<rect width="1200" height="940" rx="24" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.5 算出 P:D 配比，还要过网络与显存两关</text>
+<text x="48" y="112" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">沿用正文假设：到达率 12 请求/s，目标负载率 u = 0.6</text>
+<rect x="48" y="154" width="1104" height="260" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="72" y="196" font-size="28" fill="#2563eb" font-weight="700" text-anchor="start">① 计算账：先算实例，再乘每实例 GPU 数</text>
+<text x="72" y="243" font-size="26" fill="#172b4d" font-weight="400" text-anchor="start">P：ceil(12 × 0.08 / 0.6) = 2 个实例</text>
+<text x="72" y="286" font-size="26" fill="#172b4d" font-weight="400" text-anchor="start">D：ceil(12 × 0.24 / 0.6) = 5 个实例</text>
+<text x="72" y="338" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">每个 P 假设占 2 张卡，每个 D 假设占 1 张卡</text>
+<text x="72" y="383" font-size="25" fill="#2563eb" font-weight="700" text-anchor="start">GPU 合计：2 × 2 + 5 × 1 = 9 张；实例比例 2:5，卡数比例 4:5</text>
+<rect x="48" y="446" width="1104" height="198" rx="16" fill="#fff7f7" stroke="#fecdd3" stroke-width="2"/>
+<text x="72" y="488" font-size="28" fill="#b42338" font-weight="700" text-anchor="start">② 网络账：这些实例产生的 KV，链路接得住吗？</text>
+<text x="72" y="532" font-size="26" fill="#172b4d" font-weight="400" text-anchor="start">若每条请求搬 1 GiB：12 × 1 = 12 GiB/s</text>
+<text x="72" y="576" font-size="26" fill="#172b4d" font-weight="400" text-anchor="start">100 Gb/s × 80% ÷ 8 ≈ 9.31 GiB/s，小于 12 GiB/s</text>
+<text x="72" y="617" font-size="25" fill="#b42338" font-weight="700" text-anchor="start">所以：即使按计算账配了 9 张卡，这条共享链路仍然不够。</text>
+<rect x="48" y="676" width="1104" height="175" rx="16" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+<text x="72" y="718" font-size="28" fill="#b45309" font-weight="700" text-anchor="start">③ 驻留账：等待交接时，P 还要保留多少状态？</text>
+<text x="72" y="763" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">另设稳定移交：12 请求/s × 保留 0.5 s × 1 GiB ≈ 6 GiB</text>
+<text x="72" y="807" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">若稳定保留增至 2 s，则约 24 GiB；持续积压时不能这样估稳态。</text>
+<text x="48" y="899" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">以上均为教学假设；驻留例子另设稳定条件，不是网络过载的稳态结果。</text>
+</g>
+</svg>

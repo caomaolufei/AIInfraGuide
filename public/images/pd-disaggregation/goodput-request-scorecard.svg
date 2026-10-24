@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="910" viewBox="0 0 1200 910" role="img" aria-labelledby="title desc">
+<title id="title">7.4 同一条请求，要同时过完所有门槛</title>
+<desc id="desc">四条请求中三条成功，只有第一条同时达到首字与平均出字目标；2秒窗口内完成QPS为1.5，Goodput为0.5，联合通过率25%。</desc>
+<defs>
+<marker id="blue" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="green" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="orange" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="gray" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#64748b"/>
+</marker>
+</defs>
+<rect width="1200" height="910" rx="24" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.4 同一条请求，要同时过完所有门槛</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">教学门槛：TTFT ≤ 1000 ms 且 TPOT ≤ 50 ms；还需成功与质量通过</text>
+<text x="48" y="152" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">四条尝试属于同一评测集合，统一窗口 2 秒；成功项均假设输出至少 2 Token</text>
+<rect x="48" y="220" width="1104" height="88" rx="16" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="72" y="273" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">请求 1</text>
+<text x="270" y="273" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">600 ms 通过</text>
+<text x="580" y="273" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">40 ms 通过</text>
+<text x="850" y="273" font-size="25" fill="#087f67" font-weight="700" text-anchor="start">1：联合合格</text>
+<rect x="48" y="330" width="1104" height="88" rx="16" fill="#fff7f7" stroke="#fecdd3" stroke-width="2"/>
+<text x="72" y="383" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">请求 2</text>
+<text x="270" y="383" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">1400 ms 超标</text>
+<text x="580" y="383" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">30 ms 通过</text>
+<text x="850" y="383" font-size="25" fill="#b42338" font-weight="700" text-anchor="start">0：首字不合格</text>
+<rect x="48" y="440" width="1104" height="88" rx="16" fill="#fff7f7" stroke="#fecdd3" stroke-width="2"/>
+<text x="72" y="493" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">请求 3</text>
+<text x="270" y="493" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">500 ms 通过</text>
+<text x="580" y="493" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">80 ms 超标</text>
+<text x="850" y="493" font-size="25" fill="#b42338" font-weight="700" text-anchor="start">0：出字不合格</text>
+<rect x="48" y="550" width="1104" height="88" rx="16" fill="#fff7f7" stroke="#fecdd3" stroke-width="2"/>
+<text x="72" y="603" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">请求 4</text>
+<text x="270" y="603" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">无有效值</text>
+<text x="580" y="603" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">无有效值</text>
+<text x="850" y="603" font-size="25" fill="#b42338" font-weight="700" text-anchor="start">0：请求失败</text>
+<text x="270" y="200" font-size="25" fill="#172b4d" font-weight="700" text-anchor="start">首字：TTFT</text>
+<text x="580" y="200" font-size="25" fill="#172b4d" font-weight="700" text-anchor="start">平均出字：TPOT</text>
+<rect x="48" y="690" width="345" height="132" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="220" y="733" font-size="26" fill="#172b4d" font-weight="700" text-anchor="middle">完成 QPS</text>
+<text x="220" y="782" font-size="26" fill="#2563eb" font-weight="700" text-anchor="middle">3 / 2 = 1.5 请求/s</text>
+<rect x="427" y="690" width="345" height="132" rx="16" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="600" y="733" font-size="26" fill="#172b4d" font-weight="700" text-anchor="middle">Goodput</text>
+<text x="600" y="782" font-size="26" fill="#087f67" font-weight="700" text-anchor="middle">1 / 2 = 0.5 请求/s</text>
+<rect x="807" y="690" width="345" height="132" rx="16" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+<text x="980" y="733" font-size="26" fill="#172b4d" font-weight="700" text-anchor="middle">联合通过率</text>
+<text x="980" y="782" font-size="26" fill="#b45309" font-weight="700" text-anchor="middle">1 / 4 = 25%</text>
+<text x="48" y="872" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">失败项计 0，仍在四条尝试的分母中；HTTP 成功也不等于质量通过。</text>
+</g>
+</svg>

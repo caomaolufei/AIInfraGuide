@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="970" viewBox="0 0 1200 970" role="img" aria-labelledby="title desc">
+<title id="title">7.6 四个终端，三类通路，不要接混</title>
+<desc id="desc">客户端连接代理8192，代理分别连接P8100和D8200；P和D侧信道为5600和5601；KV数据由NIXL后端直接在两端设备间搬运。</desc>
+<defs>
+<marker id="blue" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="green" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="orange" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="gray" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#64748b"/>
+</marker>
+</defs>
+<rect width="1200" height="970" rx="24" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.6 四个终端，三类通路，不要接混</text>
+<text x="48" y="111" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">vLLM v0.19.0 同机两卡示例；地址均为 127.0.0.1</text>
+<rect x="60" y="155" width="340" height="150" rx="16" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+<text x="230" y="202" font-size="28" fill="#172b4d" font-weight="700" text-anchor="middle">终端 C：客户端</text>
+<text x="230" y="247" font-size="24" fill="#172b4d" font-weight="400" text-anchor="middle">curl / vllm bench serve</text>
+<text x="230" y="283" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">只把生成请求发给代理</text>
+<rect x="700" y="155" width="440" height="150" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="920" y="202" font-size="28" fill="#172b4d" font-weight="700" text-anchor="middle">终端 R：协议代理</text>
+<text x="920" y="247" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">HTTP :8192</text>
+<text x="920" y="283" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">关联身份，转交移交元数据</text>
+<path d="M 400 220 H 700" fill="none" stroke="#2563eb" stroke-width="4"   marker-end="url(#blue)"/>
+<text x="550" y="198" font-size="24" fill="#2563eb" font-weight="400" text-anchor="middle">生成请求</text>
+<path d="M 700 270 H 400" fill="none" stroke="#2563eb" stroke-width="4"   marker-end="url(#blue)"/>
+<text x="550" y="302" font-size="24" fill="#2563eb" font-weight="400" text-anchor="middle">输出返回</text>
+<path d="M 700 305 V 365 H 280 V 455" fill="none" stroke="#2563eb" stroke-width="4"  marker-start="url(#blue)" marker-end="url(#blue)"/>
+<text x="300" y="345" font-size="25" fill="#2563eb" font-weight="400" text-anchor="start">① 准备请求 / 元数据返回</text>
+<path d="M 980 305 V 455" fill="none" stroke="#2563eb" stroke-width="4"  marker-start="url(#blue)" marker-end="url(#blue)"/>
+<text x="1010" y="354" font-size="24" fill="#2563eb" font-weight="400" text-anchor="start">② 原请求</text>
+<text x="1010" y="392" font-size="24" fill="#2563eb" font-weight="400" text-anchor="start">+ 移交信息</text>
+<text x="1010" y="431" font-size="22" fill="#2563eb" font-weight="400" text-anchor="start">输出反向返回</text>
+<rect x="60" y="455" width="450" height="190" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="285" y="500" font-size="28" fill="#172b4d" font-weight="700" text-anchor="middle">终端 P · 物理 GPU 0</text>
+<text x="285" y="545" font-size="26" fill="#2563eb" font-weight="700" text-anchor="middle">HTTP :8100</text>
+<text x="285" y="586" font-size="25" fill="#b45309" font-weight="700" text-anchor="middle">侧信道 :5600</text>
+<text x="285" y="625" font-size="24" fill="#172b4d" font-weight="400" text-anchor="middle">模型权重 + 待移交 KV</text>
+<rect x="690" y="455" width="450" height="190" rx="16" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="915" y="500" font-size="28" fill="#172b4d" font-weight="700" text-anchor="middle">终端 D · 物理 GPU 1</text>
+<text x="915" y="545" font-size="26" fill="#2563eb" font-weight="700" text-anchor="middle">HTTP :8200</text>
+<text x="915" y="586" font-size="25" fill="#b45309" font-weight="700" text-anchor="middle">侧信道 :5601</text>
+<text x="915" y="625" font-size="24" fill="#172b4d" font-weight="400" text-anchor="middle">模型权重 + 接收 KV</text>
+<path d="M 510 580 H 690" fill="none" stroke="#b45309" stroke-width="4" stroke-dasharray="10 7" marker-start="url(#orange)" marker-end="url(#orange)"/>
+<text x="600" y="554" font-size="24" fill="#b45309" font-weight="700" text-anchor="middle">握手</text>
+<path d="M 285 645 V 715 H 915 V 645" fill="none" stroke="#087f67" stroke-width="7"   marker-end="url(#green)"/>
+<text x="600" y="697" font-size="25" fill="#087f67" font-weight="700" text-anchor="middle">③ 实际 KV：NIXL 后端建立的设备数据通路</text>
+<rect x="48" y="766" width="1104" height="170" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="72" y="808" font-size="25" fill="#2563eb" font-weight="700" text-anchor="start">8100 / 8200 / 8192：HTTP 业务请求</text>
+<text x="72" y="852" font-size="25" fill="#b45309" font-weight="700" text-anchor="start">5600 / 5601：侧信道握手，不能当作 KV 数据端口直接套用</text>
+<text x="72" y="896" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">按 ① → ② → ③ 核对日志；健康检查通过仍需证明 D 真正复用了 KV。</text>
+</g>
+</svg>
