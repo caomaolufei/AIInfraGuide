@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850" role="img" aria-labelledby="title desc">
+<title id="title">7.3 移交的是相同逻辑历史，物理地址可以不同</title>
+<desc id="desc">两个完整块和一个部分使用尾块；P物理块7和19映射到D的42和5。尾块处理取决于后端协议。</desc>
+<defs>
+<marker id="blue" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="green" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="orange" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="gray" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#64748b"/>
+</marker>
+</defs>
+<rect width="1200" height="850" rx="24" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.3 移交的是相同逻辑历史，物理地址可以不同</text>
+<text x="48" y="111" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">教学设定：35 个输入 Token，每个 Block 容纳 16 个 Token</text>
+<text x="48" y="152" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">位置从 0 编号：0～15、16～31、32～34；尾块还有 13 个空位</text>
+<rect x="70" y="192" width="300" height="128" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="220" y="233" font-size="27" fill="#172b4d" font-weight="700" text-anchor="middle">位置 0～15</text>
+<text x="220" y="277" font-size="24" fill="#2563eb" font-weight="400" text-anchor="middle">16 / 16 有效</text>
+<rect x="70" y="363" width="300" height="74" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="220" y="409" font-size="27" fill="#172b4d" font-weight="400" text-anchor="middle">P：Block 7</text>
+<path d="M 220 437 V 512" fill="none" stroke="#087f67" stroke-width="4"   marker-end="url(#green)"/>
+<rect x="70" y="515" width="300" height="74" rx="16" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="220" y="561" font-size="27" fill="#172b4d" font-weight="400" text-anchor="middle">D：Block 42</text>
+<rect x="450" y="192" width="300" height="128" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="600" y="233" font-size="27" fill="#172b4d" font-weight="700" text-anchor="middle">位置 16～31</text>
+<text x="600" y="277" font-size="24" fill="#2563eb" font-weight="400" text-anchor="middle">16 / 16 有效</text>
+<rect x="450" y="363" width="300" height="74" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="600" y="409" font-size="27" fill="#172b4d" font-weight="400" text-anchor="middle">P：Block 19</text>
+<path d="M 600 437 V 512" fill="none" stroke="#087f67" stroke-width="4"   marker-end="url(#green)"/>
+<rect x="450" y="515" width="300" height="74" rx="16" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="600" y="561" font-size="27" fill="#172b4d" font-weight="400" text-anchor="middle">D：Block 5</text>
+<rect x="830" y="192" width="300" height="128" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="980" y="233" font-size="27" fill="#172b4d" font-weight="700" text-anchor="middle">位置 32～34</text>
+<text x="980" y="277" font-size="24" fill="#b45309" font-weight="400" text-anchor="middle">3 / 16 有效</text>
+<rect x="830" y="363" width="300" height="74" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="980" y="409" font-size="27" fill="#172b4d" font-weight="400" text-anchor="middle">P：Block 2</text>
+<path d="M 980 437 V 512" fill="none" stroke="#b45309" stroke-width="4" stroke-dasharray="10 7"  marker-end="url(#orange)"/>
+<rect x="830" y="515" width="300" height="74" rx="16" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="980" y="561" font-size="27" fill="#172b4d" font-weight="400" text-anchor="middle">D：尾部处理</text>
+<text x="48" y="350" font-size="23" fill="#2563eb" font-weight="700" text-anchor="start">P 本机</text>
+<text x="48" y="625" font-size="23" fill="#087f67" font-weight="700" text-anchor="start">D 本机</text>
+<rect x="48" y="660" width="1104" height="153" rx="16" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+<text x="72" y="702" font-size="27" fill="#172b4d" font-weight="700" text-anchor="start">物理 Block 编号属于各自的缓存池，不能直接照抄。</text>
+<text x="72" y="746" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">若某机制只复用完整块，可移交前 32 个位置，再补算尾部。</text>
+<text x="72" y="785" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">这是块粒度示意；尾块能否传、怎样补算，以具体后端为准。</text>
+</g>
+</svg>
