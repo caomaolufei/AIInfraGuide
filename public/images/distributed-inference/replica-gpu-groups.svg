@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="910" viewBox="0 0 1200 910" role="img" aria-labelledby="title desc">
+<title id="title">6.1 八张 GPU，怎样组成两份模型副本</title>
+<desc id="desc">两个副本，每份有两个流水阶段，每阶段两张卡张量并行。副本0用GPU0到3，副本1用4到7。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="910" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">6.1 八张 GPU，怎样组成两份模型副本</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">教学编号；每份副本先经过两个 PP Stage，每个 Stage 内两卡做 TP</text>
+<rect x="48" y="155" width="524" height="540" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="310" y="201" font-size="27" fill="#172b4d" font-weight="700" text-anchor="middle">副本 0：一条完整模型路径</text>
+<text x="76" y="235" font-size="24" fill="#2563eb" font-weight="700" text-anchor="start">PP Stage 0</text>
+<rect x="83" y="250" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="193" y="293" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 0</text>
+<text x="193" y="334" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<rect x="318" y="250" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="428" y="293" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 1</text>
+<text x="428" y="334" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<text x="310" y="401" font-size="24" fill="#087f67" font-weight="700" text-anchor="middle">两卡协作完成同一阶段</text>
+<text x="76" y="475" font-size="24" fill="#2563eb" font-weight="700" text-anchor="start">PP Stage 1</text>
+<rect x="83" y="490" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="193" y="533" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 2</text>
+<text x="193" y="574" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<rect x="318" y="490" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="428" y="533" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 3</text>
+<text x="428" y="574" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<text x="310" y="641" font-size="24" fill="#087f67" font-weight="700" text-anchor="middle">两卡协作完成同一阶段</text>
+<path d="M 310 410 V 475" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<text x="328" y="451" font-size="22" fill="#087f67" font-weight="400" text-anchor="start">边界激活</text>
+<rect x="628" y="155" width="524" height="540" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="890" y="201" font-size="27" fill="#172b4d" font-weight="700" text-anchor="middle">副本 1：一条完整模型路径</text>
+<text x="656" y="235" font-size="24" fill="#2563eb" font-weight="700" text-anchor="start">PP Stage 0</text>
+<rect x="663" y="250" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="773" y="293" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 4</text>
+<text x="773" y="334" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<rect x="898" y="250" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="1008" y="293" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 5</text>
+<text x="1008" y="334" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<text x="890" y="401" font-size="24" fill="#087f67" font-weight="700" text-anchor="middle">两卡协作完成同一阶段</text>
+<text x="656" y="475" font-size="24" fill="#2563eb" font-weight="700" text-anchor="start">PP Stage 1</text>
+<rect x="663" y="490" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="773" y="533" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 6</text>
+<text x="773" y="574" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<rect x="898" y="490" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="1008" y="533" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">GPU 7</text>
+<text x="1008" y="574" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">本段层的一份分片</text>
+<text x="890" y="641" font-size="24" fill="#087f67" font-weight="700" text-anchor="middle">两卡协作完成同一阶段</text>
+<path d="M 890 410 V 475" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<text x="908" y="451" font-size="22" fill="#087f67" font-weight="400" text-anchor="start">边界激活</text>
+<rect x="48" y="738" width="1104" height="132" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+<text x="72" y="782" font-size="26" fill="#b45309" font-weight="700" text-anchor="start">TP=2、PP=2、DP=2 → 8 张 GPU；完整模型副本数为 2。</text>
+<text x="72" y="826" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">请求 A 可选左边，请求 B 可选右边；每条请求仍须走完自己副本的两段。</text>
+</g>
+</svg>

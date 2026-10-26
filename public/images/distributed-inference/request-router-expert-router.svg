@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="905" viewBox="0 0 1200 905" role="img" aria-labelledby="title desc">
+<title id="title">6.4 两个都叫 Router，为什么决策对象不同</title>
+<desc id="desc">入口Router选择完整副本A；模型内部Router为Token a选择专家E0和E3，以0.75和0.25加权专家输出得到1.5,1。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="905" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">6.4 两个都叫 Router，为什么决策对象不同</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">上半图选择完整服务副本；下半图展开一个 MoE 层中的一个 Token</text>
+<rect x="48" y="157" width="1104" height="250" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="72" y="200" font-size="28" fill="#2563eb" font-weight="700" text-anchor="start">① 请求路由：选谁回答这条请求</text>
+<rect x="80" y="240" width="290" height="110" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="225" y="285" font-size="27" fill="#2563eb" font-weight="700" text-anchor="middle">请求 Router</text>
+<text x="225" y="326" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">看队列、容量等信息</text>
+<rect x="700" y="230" width="390" height="65" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="895" y="272" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">副本 A：完整路径</text>
+<rect x="700" y="325" width="390" height="65" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="895" y="367" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">副本 B：完整路径</text>
+<path d="M 370 275 H 700" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<text x="510" y="257" font-size="23" fill="#2563eb" font-weight="400" text-anchor="middle">请求 r17 选 A</text>
+<rect x="48" y="455" width="1104" height="355" rx="14" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="72" y="499" font-size="28" fill="#087f67" font-weight="700" text-anchor="start">② 专家路由：同一个 Token 的向量去找专家</text>
+<rect x="80" y="555" width="250" height="150" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="205" y="604" font-size="26" fill="#087f67" font-weight="700" text-anchor="middle">模型内 Router</text>
+<text x="205" y="649" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">Token a 选 E0、E3</text>
+<rect x="470" y="540" width="250" height="98" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="595" y="576" font-size="25" fill="#087f67" font-weight="700" text-anchor="middle">E0，本地</text>
+<text x="595" y="618" font-size="24" fill="#172b4d" font-weight="400" text-anchor="middle">输出 [2, 0]</text>
+<rect x="470" y="660" width="250" height="98" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="595" y="696" font-size="25" fill="#087f67" font-weight="700" text-anchor="middle">E3，远端</text>
+<text x="595" y="738" font-size="24" fill="#172b4d" font-weight="400" text-anchor="middle">输出 [0, 4]</text>
+<path d="M 330 590 H 470" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<path d="M 330 670 H 400 V 705 H 470" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<path d="M 720 585 H 825" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<path d="M 720 705 H 785 V 645 H 825" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<rect x="830" y="555" width="280" height="177" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="970" y="601" font-size="25" fill="#087f67" font-weight="700" text-anchor="middle">按 a 的权重合成</text>
+<text x="970" y="648" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">0.75×E0 + 0.25×E3</text>
+<text x="970" y="695" font-size="27" fill="#087f67" font-weight="700" text-anchor="middle">[1.5, 1.0]</text>
+<text x="72" y="784" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">专家处理隐藏向量；请求经过多个层时，每个 MoE 层都可能重新选择专家。</text>
+<text x="48" y="860" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">上面按请求分工，下面按 Token 的专家计算分工；两个 Router 的输入和输出不同。</text>
+</g>
+</svg>

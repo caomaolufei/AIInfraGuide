@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="915" viewBox="0 0 1200 915" role="img" aria-labelledby="title desc">
+<title id="title">6.5 Ray 安排谁来算，GPU 之间再交换计算数据</title>
+<desc id="desc">Ray控制进程在启动时安排节点A和B的常驻GPU Worker，数据通过节点内TP和阶段间激活传递。Head不是额外GPU。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="915" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">6.5 Ray 安排谁来算，GPU 之间再交换计算数据</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">示意：两节点各两卡，TP=2、PP=2，共同组成一份模型副本</text>
+<rect x="340" y="155" width="520" height="135" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+<text x="600" y="200" font-size="28" fill="#b45309" font-weight="700" text-anchor="middle">Ray 控制进程 / 资源视图</text>
+<text x="600" y="247" font-size="24" fill="#172b4d" font-weight="400" text-anchor="middle">示意驻留节点 A；安排常驻 Actor</text>
+<rect x="48" y="390" width="504" height="250" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="300" y="435" font-size="28" fill="#172b4d" font-weight="700" text-anchor="middle">节点 A：PP Stage 0</text>
+<rect x="70" y="475" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="180" y="519" font-size="24" fill="#2563eb" font-weight="700" text-anchor="middle">GPU Worker 0</text>
+<text x="180" y="562" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">常驻权重与本段 KV</text>
+<rect x="310" y="475" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="420" y="519" font-size="24" fill="#2563eb" font-weight="700" text-anchor="middle">GPU Worker 1</text>
+<text x="420" y="562" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">常驻权重与本段 KV</text>
+<rect x="648" y="390" width="504" height="250" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="900" y="435" font-size="28" fill="#172b4d" font-weight="700" text-anchor="middle">节点 B：PP Stage 1</text>
+<rect x="670" y="475" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="780" y="519" font-size="24" fill="#2563eb" font-weight="700" text-anchor="middle">GPU Worker 0</text>
+<text x="780" y="562" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">常驻权重与本段 KV</text>
+<rect x="910" y="475" width="220" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="1020" y="519" font-size="24" fill="#2563eb" font-weight="700" text-anchor="middle">GPU Worker 1</text>
+<text x="1020" y="562" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">常驻权重与本段 KV</text>
+<path d="M 440 290 V 340 H 300 V 390" fill="none" stroke="#b45309" stroke-width="4" stroke-dasharray="9 7" marker-end="url(#mb45309)"/>
+<path d="M 760 290 V 340 H 900 V 390" fill="none" stroke="#b45309" stroke-width="4" stroke-dasharray="9 7" marker-end="url(#mb45309)"/>
+<path d="M 552 520 H 648" fill="none" stroke="#087f67" stroke-width="7"  marker-end="url(#m087f67)"/>
+<text x="600" y="486" font-size="22" fill="#087f67" font-weight="700" text-anchor="middle">激活</text>
+<text x="48" y="710" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">橙色虚线：服务启动与资源编排；绿色粗线：已运行 Worker 间的模型数据。</text>
+<rect x="48" y="753" width="1104" height="115" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="72" y="798" font-size="24" fill="#2563eb" font-weight="700" text-anchor="start">请求到来后，使用已经启动和加载好的 Worker 执行；不会逐请求重新摆放模型。</text>
+<text x="72" y="841" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">Ray 能列出资源，是控制链路的一层证据；GPU 通信与真实生成仍需分别验证。</text>
+</g>
+</svg>
