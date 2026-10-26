@@ -1,31 +1,30 @@
 ---
 title: "第5章：Speculative Decoding"
-description: "理解 Draft + Verify 与保分布采样，比较独立 Draft、N-gram/Suffix、Medusa/EAGLE-2/3，并掌握收益边界与 vLLM 对照实验"
+description: "理解 Draft + Verify 与保分布采样，比较独立 Draft、N-gram/Suffix、Medusa/EAGLE/MTP，并掌握收益边界与 vLLM 对照实验"
 pubDate: 2026-04-16
-updatedDate: 2026-10-07
+updatedDate: 2026-10-26
 category: "inference-optimization"
 order: 34
-tags: ["Speculative Decoding", "投机解码", "Medusa", "EAGLE", "N-gram", "Rejection Sampling"]
+tags: ["Speculative Decoding", "投机解码", "Medusa", "EAGLE", "MTP", "N-gram"]
 ---
 
-## 本章简介
+## 📖 本章简介
 
-自回归解码的串行瓶颈是 Decode 阶段效率低的根本原因。Speculative Decoding 通过"先猜后验"打破这一瓶颈。本章原理与 vLLM 中的实际配置并重。
+Decode 慢，是因为大模型每读一遍权重只写出一个 Token。投机解码换了一种分工：让便宜的 Draft 先写一段草稿，再让 Target 一次前向批量验收，猜对的直接收下，猜错的由 Target 改写。只要验收与修正的规则做对，最终输出和 Target 自己逐个生成的分布完全一样。
 
-**核心原理**详解 Speculative Sampling 框架：Draft 模型快速猜测多个 Token，Target 模型并行验证。通过接受规则与拒绝后的残差采样保证正确性——数学上证明最终输出服从 Target 分布；单独条件在“已接受”事件上的 Token 分布一般不同。
+本章按"为什么对、怎么猜、什么时候值、怎么测"四步展开：
 
-**Draft 模型与无模型方案**讨论独立小模型的选择（大小、架构、能力匹配），以及无需额外模型的 N-gram / Suffix Decoding（基于 Prompt 与历史输出做前缀匹配），并分析 Acceptance Rate 对加速比的影响。
+- **原理**：一轮 Draft + Verify 的流程、接受概率与残差分布、无损证明，以及 KV Cache 怎样回退被拒的草稿。
+- **草稿来源**：独立小模型、并行 Draft、N-gram 与 Suffix Decoding；Medusa、EAGLE 系列等复用 Target 特征的方案；以及模型自带的 MTP 模块。
+- **收益边界**：用"每轮提交多少 Token / 每轮花多久"建立性能账本，分析投机长度、并发、长上下文、量化和流式输出的影响。
+- **实战**：在 vLLM 上用同一个 Target 依次对比普通 Decode、N-gram、独立 Draft 与 EAGLE-3，同时采集接受指标、输出内容和延迟吞吐。
 
-**Self-Draft 与辅助草稿方案**覆盖 Medusa 的多 Decoding Head、EAGLE 的特征草稿、EAGLE-2 的动态 Draft Tree，以及 EAGLE-3 的多层特征融合与训练改进；同时区分 Tree Attention、Token 级验收和 Block 级联合验证的职责与保证。
+> ⏰ **信息时效**：原理部分与框架无关；vLLM 相关的参数、方法名与指标基于 v0.32.0（2026-10-18 发布）。投机解码的配置项在近几个版本中变动频繁，换版本时请对照官方文档核对。
 
-**收益边界与限制**通过接受前缀与完整轮耗时建立性能账本，分析代码重复、开放对话、并发和长上下文下的不同机会；接受率高不保证提速，还要核对量化后的 Target 基准、缓存容量和 Continuous Batching 的调度成本。
+## 📑 本章小节
 
-**在 vLLM 中配置投机解码实战**：按 v0.31.0 的配置与指标定义，依次比较普通 Decode、N-gram 与独立 Draft，介绍 Suffix/EAGLE 的接入条件，并提供代码与对话的接受指标、性能和正常生成质量采集流程。
-
-## 本章小节
-
-- [**5.1 投机解码核心原理：先猜一段，再让大模型验收**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/)：Draft + Verify、保分布证明、首个拒绝与 KV 回退
-- [**5.2 Draft 模型与无模型方案：怎样便宜地猜得更准**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/)：独立小模型、Tokenizer、N-gram/Suffix 与候选覆盖
-- [**5.3 Medusa 与 EAGLE：复用大模型信息生成更好的草稿**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/)：多头、动态树、EAGLE-3、Tree Attention 与验收边界
-- [**5.4 投机解码的收益边界：接受率高，为什么仍可能变慢**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/)：提交长度、轮耗时、批处理、量化与流式延迟
-- [**5.5 vLLM 投机解码实战：配置、接受率与性能一起测**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/)：服务配置、code/chat 指标采集与基线对照
+- [**5.1 投机解码核心原理：先猜一段，再让大模型验收**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/)：Draft + Verify 流程、保分布证明、one-hot Draft、首个拒绝与 KV 回退
+- [**5.2 Draft 模型与无模型方案：怎样便宜地猜得更准**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/)：独立小模型与 PARD、Tokenizer 兼容、N-gram/Suffix，以及接受率、平均接受长度与候选覆盖的统一口径
+- [**5.3 Medusa、EAGLE 与 MTP：复用大模型信息生成更好的草稿**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/)：Medusa 多头、Tree Attention、EAGLE-1/2/3、DeepSeek-V3 MTP、DFlash 与 Block Verification
+- [**5.4 投机解码的收益边界：接受率高，为什么仍可能变慢**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/)：提交长度与轮耗时、投机长度的收益递减、Dynamic SD、并发、量化与流式延迟
+- [**5.5 vLLM 投机解码实战：配置、接受率与性能一起测**](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/)：基线、N-gram、Draft、EAGLE-3 对照，逐请求接受指标与 Benchmark

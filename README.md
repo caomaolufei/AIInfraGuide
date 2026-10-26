@@ -191,7 +191,7 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 第 2 章 推理引擎核心技术 | PagedAttention、Continuous Batching、Prefix Cache、Chunked Prefill、Attention 后端与图优化 |
 | 第 3 章 nano-vllm 源码解读 | 以约 1200 行极简引擎 nano-vllm 为主线，逐模块读懂连续批处理、PagedAttention、FlashAttention、张量并行与 CUDA Graph |
 | 第 4 章 量化 | 量化基础、SmoothQuant、GPTQ/AWQ、FP8、NVFP4/MXFP4、KV Cache 量化 |
-| 第 5 章 Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE、vLLM 投机解码实战 |
+| 第 5 章 Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE/MTP、vLLM 投机解码实战 |
 | 第 6 章 分布式推理与大模型部署 | 张量并行、流水线并行、数据/专家并行、Ray 多节点、vLLM 分布式部署 |
 | 第 7 章 PD 解耦架构 | 混合 Batching 干扰、DistServe/Splitwise、KV Cache 传输、Goodput 与 SLO 调度 |
 | 第 8 章 性能分析与 Benchmark | 推理指标体系、vllm bench/GenAI-Perf、Nsight、性能回归门禁 |
@@ -225,12 +225,12 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 4.4 | [KV Cache 量化](./docs/guides/模块四-推理优化/第4章-量化/4.4-KV-Cache量化.md) | KIVI 分组与残留缓存、FP8 KV 校准及长上下文验证 |
 | 4.5 | [FP8 与 NVFP4/MXFP4](./docs/guides/模块四-推理优化/第4章-量化/4.5-FP8与NVFP4-MXFP4.md) | 浮点编码、微块缩放与硬件支持条件 |
 | 4.6 | [量化选型与 vLLM 实战](./docs/guides/模块四-推理优化/第4章-量化/4.6-量化选型与vLLM实战.md) | 按瓶颈选型，控制变量比较 FP16/AWQ 吞吐与生成质量 |
-| 第 5 章｜ Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE、vLLM 投机解码实战 |
-| 5.1 | [投机解码核心原理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) | Draft + Verify、接受与残差采样的保分布证明、KV 回退 |
-| 5.2 | [Draft 模型与无模型方案](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) | 独立 Draft、Tokenizer 兼容、N-gram/Suffix、接受率与候选覆盖 |
-| 5.3 | [Medusa 与 EAGLE](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) | 多头预测、EAGLE-2/3、Draft Tree 与 Tree Attention、验收边界 |
-| 5.4 | [收益边界与限制](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) | 提交长度与轮耗时账本、并发、长上下文、量化与调度 |
-| 5.5 | [vLLM 投机解码实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/) | 固定版本的基线/N-gram/Draft 对照、代码与对话指标采集 |
+| 第 5 章 | Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE/MTP、vLLM 投机解码实战 |
+| 5.1 | [投机解码核心原理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) | Draft + Verify、接受与残差采样的保分布证明、one-hot Draft、KV 回退 |
+| 5.2 | [Draft 模型与无模型方案](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) | 独立 Draft 与 PARD、Tokenizer 兼容、N-gram/Suffix、接受率与候选覆盖 |
+| 5.3 | [Medusa、EAGLE 与 MTP](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) | 多头预测、Tree Attention、EAGLE-2/3、DeepSeek-V3 MTP、Block Verification |
+| 5.4 | [收益边界与限制](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) | 提交长度与轮耗时账本、投机长度递减、Dynamic SD、并发、量化与流式延迟 |
+| 5.5 | [vLLM 投机解码实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/) | 基于 v0.32.0 的基线/N-gram/Draft/EAGLE-3 对照、逐请求接受指标与 Benchmark |
 | 第 6 章 | 分布式推理与大模型部署 | 张量并行、流水线并行、数据/专家并行、Ray 多节点、vLLM 分布式部署 |
 | 6.1 | [推理并行策略总览](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/61-推理并行策略总览/) | 从容量、延迟和吞吐出发比较 TP、PP、DP、EP，建立权重、KV Cache、通信与 GPU 数量的部署账本 |
 | 6.2 | [张量并行推理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/62-张量并行推理/) | 推导 Column/Row Parallel 的前向、MLP 与 Attention 的切分，分析 AllReduce、KV Head 复制和 TP 的延迟收益边界 |
