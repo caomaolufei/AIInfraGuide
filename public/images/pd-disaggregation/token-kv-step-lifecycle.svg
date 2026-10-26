@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="885" viewBox="0 0 1200 885" role="img" aria-labelledby="title desc">
+<title id="title">7.1 先读完输入，再把新生成的 Token 接着送入模型</title>
+<desc id="desc">输入三个Token经Prefill得到三个位置KV并预测y0；下一步处理y0追加位置3的KV并预测y1。预测Token不等于其KV已经生成。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="885" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.1 先读完输入，再把新生成的 Token 接着送入模型</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">只画同一条请求的两个前向步骤；Token ID 是教学符号，不等于单个汉字</text>
+<rect x="48" y="180" width="1104" height="240" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="72" y="225" font-size="29" fill="#2563eb" font-weight="700" text-anchor="start">① Prefill</text>
+<rect x="80" y="273" width="330" height="91" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="245.0" y="327" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">输入 x0、x1、x2</text>
+<rect x="530" y="273" width="380" height="91" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="720.0" y="327" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">KV：位置 0、1、2</text>
+<rect x="995" y="273" width="125" height="91" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="1057.5" y="327" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">预测 y0</text>
+<path d="M 410 317 H 530" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<path d="M 910 317 H 995" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<text x="72" y="399" font-size="24" fill="#2563eb" font-weight="400" text-anchor="start">处理输入、建立历史状态</text>
+<rect x="48" y="485" width="1104" height="240" rx="14" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="72" y="530" font-size="29" fill="#087f67" font-weight="700" text-anchor="start">② 下一步 Decode</text>
+<rect x="80" y="578" width="330" height="91" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="245.0" y="632" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">新输入 y0 + 已有 KV</text>
+<rect x="530" y="578" width="380" height="91" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="720.0" y="632" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">KV：位置 0、1、2、3</text>
+<rect x="995" y="578" width="125" height="91" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="1057.5" y="632" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">预测 y1</text>
+<path d="M 410 622 H 530" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<path d="M 910 622 H 995" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<text x="72" y="704" font-size="24" fill="#087f67" font-weight="400" text-anchor="start">处理刚生成的 y0，追加它的 KV，再预测下一个</text>
+<path d="M 1060 420 V 452 H 250 V 485" fill="none" stroke="#b45309" stroke-width="4"  marker-end="url(#mb45309)"/>
+<text x="550" y="447" font-size="23" fill="#b45309" font-weight="700" text-anchor="start">y0 成为下一轮的新输入</text>
+<text x="48" y="788" font-size="25" fill="#172b4d" font-weight="700" text-anchor="start">刚预测出来的 y0，要到下一轮把它送进模型后，才得到它本身对应的 KV。</text>
+<text x="48" y="837" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">图描述计算依赖；具体解耦协议如何处理或返回首 Token，仍需对照实现。</text>
+</g>
+</svg>

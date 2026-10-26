@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="960" viewBox="0 0 1200 960" role="img" aria-labelledby="title desc">
+<title id="title">7.6 跑通、传对、值得用，是三层不同的验收</title>
+<desc id="desc">依次验证正常输出，Connector确实复用，最后同GPU预算固定工作负载验证联合SLO与收益。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="960" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.6 跑通、传对、值得用，是三层不同的验收</text>
+<text x="48" y="112" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">按证据逐层推进；每层通过以后，才进入下一层实验</text>
+<rect x="48" y="173" width="1104" height="161" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="72" y="216" font-size="29" fill="#2563eb" font-weight="700" text-anchor="start">① 生成链路</text>
+<text x="72" y="259" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">检查：内容、结束原因、实际用量</text>
+<text x="72" y="304" font-size="25" fill="#2563eb" font-weight="700" text-anchor="start">可支持的结论：这条请求能得到合格输出</text>
+<path d="M600 334 V376" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<rect x="48" y="383" width="1104" height="161" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="72" y="426" font-size="29" fill="#087f67" font-weight="700" text-anchor="start">② 状态移交</text>
+<text x="72" y="469" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">检查：接收记录、有效块、加载失败与回退</text>
+<text x="72" y="514" font-size="25" fill="#087f67" font-weight="700" text-anchor="start">可支持的结论：D 确实使用了远端状态</text>
+<path d="M600 544 V586" fill="none" stroke="#087f67" stroke-width="4"  marker-end="url(#m087f67)"/>
+<rect x="48" y="593" width="1104" height="161" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="72" y="636" font-size="29" fill="#b45309" font-weight="700" text-anchor="start">③ 同预算收益</text>
+<text x="72" y="679" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">检查：相同负载、统一窗口、失败与质量</text>
+<text x="72" y="724" font-size="25" fill="#b45309" font-weight="700" text-anchor="start">可支持的结论：在这组条件下减少互扰或提高 Goodput</text>
+<text x="48" y="869" font-size="25" fill="#172b4d" font-weight="700" text-anchor="start">HTTP 200 不能独自证明 KV 复用；KV 复用成功也不能独自证明性能更好。</text>
+<text x="48" y="914" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">CPU 数据生成与语法检查属于准备工作，真实 GPU/NIXL 证据要在目标环境采集。</text>
+</g>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="885" viewBox="0 0 1200 885" role="img" aria-labelledby="title desc">
+<title id="title">7.4 把一秒钟首字预算画成一把尺子</title>
+<desc id="desc">第一组300加200加150加100等于750，剩余250；第二组传输450，总1050，超出1000门槛50。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="885" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.4 把一秒钟首字预算画成一把尺子</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">首字门槛 1000 ms；下图是预测账本，不是一次实测或达标保证</text>
+<text x="48" y="180" font-size="28" fill="#172b4d" font-weight="700" text-anchor="start">预测一：还剩 250 ms 余量</text>
+<rect x="70" y="210" width="300" height="85" rx="4" fill="#2563eb" stroke="white" stroke-width="2"/>
+<text x="220.0" y="262" font-size="23" fill="white" font-weight="700" text-anchor="middle">已用 300</text>
+<rect x="370" y="210" width="200" height="85" rx="4" fill="#7048b8" stroke="white" stroke-width="2"/>
+<text x="470.0" y="262" font-size="23" fill="white" font-weight="700" text-anchor="middle">P 200</text>
+<rect x="570" y="210" width="150" height="85" rx="4" fill="#b45309" stroke="white" stroke-width="2"/>
+<text x="645.0" y="262" font-size="23" fill="white" font-weight="700" text-anchor="middle">传 150</text>
+<rect x="720" y="210" width="100" height="85" rx="4" fill="#087f67" stroke="white" stroke-width="2"/>
+<text x="770.0" y="262" font-size="23" fill="white" font-weight="700" text-anchor="middle">D 100</text>
+<rect x="820" y="210" width="250" height="85" rx="4" fill="#64748b" stroke="white" stroke-width="2"/>
+<text x="945.0" y="262" font-size="23" fill="white" font-weight="700" text-anchor="middle">余量 250</text>
+<path d="M1070 200 V210 M1070 295 V325" stroke="#b42338" stroke-width="3" stroke-dasharray="8 6"/>
+<text x="1070" y="357" font-size="23" fill="#b42338" font-weight="700" text-anchor="middle">1000 ms</text>
+<text x="48" y="435" font-size="28" fill="#172b4d" font-weight="700" text-anchor="start">预测二：传输由 150 增到 450，超出 50 ms</text>
+<rect x="70" y="465" width="300" height="85" rx="4" fill="#2563eb" stroke="white" stroke-width="2"/>
+<text x="220.0" y="517" font-size="23" fill="white" font-weight="700" text-anchor="middle">已用 300</text>
+<rect x="370" y="465" width="200" height="85" rx="4" fill="#7048b8" stroke="white" stroke-width="2"/>
+<text x="470.0" y="517" font-size="23" fill="white" font-weight="700" text-anchor="middle">P 200</text>
+<rect x="570" y="465" width="450" height="85" rx="4" fill="#b45309" stroke="white" stroke-width="2"/>
+<text x="795.0" y="517" font-size="23" fill="white" font-weight="700" text-anchor="middle">传输 450</text>
+<rect x="1020" y="465" width="100" height="85" rx="4" fill="#087f67" stroke="white" stroke-width="2"/>
+<text x="1070.0" y="517" font-size="23" fill="white" font-weight="700" text-anchor="middle">D 100</text>
+<path d="M1070 455 V465 M1070 550 V580" stroke="#b42338" stroke-width="3" stroke-dasharray="8 6"/>
+<text x="1070" y="612" font-size="23" fill="#b42338" font-weight="700" text-anchor="middle">1000 ms</text>
+<rect x="48" y="694" width="1104" height="145" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="72" y="740" font-size="28" fill="#2563eb" font-weight="700" text-anchor="start">Slack = 门槛 − 已消耗时间 − 预计剩余各段时间</text>
+<text x="72" y="784" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">250 ms：预测下仍有余量；−50 ms：这条路径预计已赶不上首字期限。</text>
+<text x="72" y="820" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">剩余各段还要覆盖排队；入口、返回和预测误差也应留预算。</text>
+</g>
+</svg>

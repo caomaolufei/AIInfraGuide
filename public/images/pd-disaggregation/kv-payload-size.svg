@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">7.3 文字只有几千 Token，KV 为什么可能有一 GiB</title>
+<desc id="desc">教学结构每历史Token KV纯数据128KiB。1024Token为128MiB，4096为512MiB，8192为1GiB。100Gb每秒80%有效率下传1GiB约107毫秒。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="900" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.3 文字只有几千 Token，KV 为什么可能有一 GiB</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">假设结构：32 层、8 个 KV Head、每 Head 128 个数、每数 2 字节</text>
+<rect x="48" y="153" width="1104" height="118" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="72" y="198" font-size="27" fill="#2563eb" font-weight="700" text-anchor="start">每个历史 Token：2 × 32 × 8 × 128 × 2 = 131072 byte</text>
+<text x="72" y="240" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">最前面的 2 是 Key 与 Value 两份；131072 byte = 128 KiB。</text>
+<text x="72" y="366" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">1024 Token</text>
+<rect x="310" y="330" width="83.2" height="55" rx="5" fill="#087f67" stroke="white" stroke-width="2"/>
+<text x="411.2" y="367" font-size="26" fill="#087f67" font-weight="700" text-anchor="start">128 MiB</text>
+<text x="72" y="481" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">4096 Token</text>
+<rect x="310" y="445" width="332.8" height="55" rx="5" fill="#087f67" stroke="white" stroke-width="2"/>
+<text x="660.8" y="482" font-size="26" fill="#087f67" font-weight="700" text-anchor="start">512 MiB</text>
+<text x="72" y="596" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">8192 Token</text>
+<rect x="310" y="560" width="665.6" height="55" rx="5" fill="#087f67" stroke="white" stroke-width="2"/>
+<text x="993.6" y="597" font-size="26" fill="#087f67" font-weight="700" text-anchor="start">1 GiB</text>
+<rect x="48" y="714" width="1104" height="141" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+<text x="72" y="758" font-size="25" fill="#b45309" font-weight="700" text-anchor="start">100 Gb/s × 80% ÷ 8 = 10 GB/s：搬 1 GiB 的纯数据下界约 107 ms。</text>
+<text x="72" y="805" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">网络用 bit，缓存用 byte；先统一单位。实际发送量、排队与重叠还需单独测量。</text>
+</g>
+</svg>

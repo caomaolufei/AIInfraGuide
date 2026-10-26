@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="855" viewBox="0 0 1200 855" role="img" aria-labelledby="title desc">
+<title id="title">7.2 都有“阶段”，PP 与 P/D 究竟切了哪里</title>
+<desc id="desc">PP前后实例各存一半层并传激活；P和D各有四层权重，传历史KV；各实例内部还可使用模型并行。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="855" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.2 都有“阶段”，PP 与 P/D 究竟切了哪里</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">假设模型只有四层，两种分法都用两份实例位置，但权重与移交内容不同</text>
+<rect x="48" y="175" width="1104" height="255" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="72" y="218" font-size="29" fill="#2563eb" font-weight="700" text-anchor="start">PP：按模型层分</text>
+<rect x="80" y="262" width="360" height="95" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="260" y="318" font-size="26" fill="#172b4d" font-weight="700" text-anchor="middle">层 1、2 的权重</text>
+<rect x="760" y="262" width="360" height="95" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="940" y="318" font-size="26" fill="#172b4d" font-weight="700" text-anchor="middle">层 3、4 的权重</text>
+<path d="M 440 307 H 760" fill="none" stroke="#2563eb" stroke-width="6"  marker-end="url(#m2563eb)"/>
+<text x="600" y="284" font-size="25" fill="#2563eb" font-weight="700" text-anchor="middle">边界激活</text>
+<text x="72" y="399" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">两段各处理本段层的 Prefill 和 Decode；KV 按各自层保存。</text>
+<rect x="48" y="490" width="1104" height="255" rx="14" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="72" y="533" font-size="29" fill="#087f67" font-weight="700" text-anchor="start">P/D：按推理阶段分</text>
+<rect x="80" y="577" width="360" height="95" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="260" y="633" font-size="26" fill="#172b4d" font-weight="700" text-anchor="middle">P：层 1～4 的权重</text>
+<rect x="760" y="577" width="360" height="95" rx="14" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="940" y="633" font-size="26" fill="#172b4d" font-weight="700" text-anchor="middle">D：层 1～4 的权重</text>
+<path d="M 440 622 H 760" fill="none" stroke="#087f67" stroke-width="6"  marker-end="url(#m087f67)"/>
+<text x="600" y="599" font-size="25" fill="#087f67" font-weight="700" text-anchor="middle">历史 KV</text>
+<text x="72" y="714" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">P 处理输入，D 用同一模型的历史状态继续生成；D 也要完整前向路径。</text>
+<text x="48" y="809" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">完整路径可以继续在实例内部使用 TP/PP；图中“两份位置”不规定真实卡数。</text>
+</g>
+</svg>
