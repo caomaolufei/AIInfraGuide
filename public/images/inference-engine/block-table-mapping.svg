@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#475569"/></marker>
+  </defs>
+  <rect width="900" height="350" rx="12" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Block Table：一个已写入 9 个 Token 的请求（block_size = 4）</text>
+  <text x="196" y="66" text-anchor="middle" font-size="12" font-weight="600" fill="#1d4ed8">请求看到的逻辑块（连续）</text>
+  <text x="740" y="54" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">GPU 显存中的物理块池</text>
+  <!-- logical blocks -->
+  <g font-size="12" fill="#0f172a">
+    <text x="40" y="107">逻辑块 0</text>
+    <text x="40" y="157">逻辑块 1</text>
+    <text x="40" y="207">逻辑块 2</text>
+  </g>
+  <g fill="none" stroke="#2563eb" stroke-width="1.5">
+    <rect x="104" y="82" width="184" height="42" rx="6"/>
+    <rect x="104" y="132" width="184" height="42" rx="6"/>
+    <rect x="104" y="182" width="184" height="42" rx="6"/>
+  </g>
+  <g fill="#eff6ff" stroke="#2563eb">
+    <rect x="110" y="86" width="40" height="34" rx="4"/><rect x="154" y="86" width="40" height="34" rx="4"/><rect x="198" y="86" width="40" height="34" rx="4"/><rect x="242" y="86" width="40" height="34" rx="4"/>
+    <rect x="110" y="136" width="40" height="34" rx="4"/><rect x="154" y="136" width="40" height="34" rx="4"/><rect x="198" y="136" width="40" height="34" rx="4"/><rect x="242" y="136" width="40" height="34" rx="4"/>
+    <rect x="110" y="186" width="40" height="34" rx="4"/>
+  </g>
+  <g fill="#ffffff" stroke="#94a3b8" stroke-dasharray="4 3">
+    <rect x="154" y="186" width="40" height="34" rx="4"/><rect x="198" y="186" width="40" height="34" rx="4"/><rect x="242" y="186" width="40" height="34" rx="4"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#1d4ed8">
+    <text x="130" y="108">t0</text><text x="174" y="108">t1</text><text x="218" y="108">t2</text><text x="262" y="108">t3</text>
+    <text x="130" y="158">t4</text><text x="174" y="158">t5</text><text x="218" y="158">t6</text><text x="262" y="158">t7</text>
+    <text x="130" y="208">t8</text>
+  </g>
+  <!-- block table -->
+  <g fill="#f8fafc" stroke="#64748b" stroke-width="1.3">
+    <rect x="340" y="60" width="200" height="22" rx="4" fill="#e2e8f0"/>
+    <rect x="340" y="86" width="200" height="34" rx="4"/>
+    <rect x="340" y="136" width="200" height="34" rx="4"/>
+    <rect x="340" y="186" width="200" height="34" rx="4"/>
+  </g>
+  <g text-anchor="middle" fill="#0f172a">
+    <text x="370" y="75" font-size="11" font-weight="600">逻辑块</text><text x="435" y="75" font-size="11" font-weight="600">物理块</text><text x="505" y="75" font-size="11" font-weight="600">已填</text>
+    <text x="370" y="108">0</text><text x="435" y="108" font-weight="600" fill="#1d4ed8">#7</text><text x="505" y="108">4 / 4</text>
+    <text x="370" y="158">1</text><text x="435" y="158" font-weight="600" fill="#1d4ed8">#2</text><text x="505" y="158">4 / 4</text>
+    <text x="370" y="208">2</text><text x="435" y="208" font-weight="600" fill="#1d4ed8">#5</text><text x="505" y="208">1 / 4</text>
+  </g>
+  <text x="440" y="240" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">Block Table</text>
+  <!-- arrows: logical -> table -> physical -->
+  <g stroke="#475569" stroke-width="1.5" marker-end="url(#a)">
+    <path d="M290 103H337"/><path d="M290 153H337"/><path d="M290 203H337"/>
+    <path d="M542 103L626 284"/><path d="M542 153L626 139"/><path d="M542 203L626 228"/>
+  </g>
+  <!-- physical pool -->
+  <g text-anchor="start" font-size="12" fill="#334155">
+    <text x="862" y="81">#0</text><text x="862" y="111">#1</text><text x="862" y="141">#2</text><text x="862" y="171">#3</text>
+    <text x="862" y="201">#4</text><text x="862" y="231">#5</text><text x="862" y="261">#6</text><text x="862" y="291">#7</text>
+  </g>
+  <g fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.3">
+    <rect x="630" y="64" width="224" height="26" rx="6"/><rect x="630" y="154" width="224" height="26" rx="6"/>
+  </g>
+  <g fill="#ffffff" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="5 3">
+    <rect x="630" y="94" width="224" height="26" rx="6"/><rect x="630" y="184" width="224" height="26" rx="6"/><rect x="630" y="244" width="224" height="26" rx="6"/>
+  </g>
+  <g fill="#ffffff" stroke="#2563eb" stroke-width="1.5">
+    <rect x="630" y="124" width="224" height="26" rx="6"/><rect x="630" y="214" width="224" height="26" rx="6"/><rect x="630" y="274" width="224" height="26" rx="6"/>
+  </g>
+  <g fill="#eff6ff" stroke="#2563eb">
+    <rect x="634" y="128" width="51" height="18" rx="3"/><rect x="689" y="128" width="51" height="18" rx="3"/><rect x="744" y="128" width="51" height="18" rx="3"/><rect x="799" y="128" width="51" height="18" rx="3"/>
+    <rect x="634" y="218" width="51" height="18" rx="3"/>
+    <rect x="634" y="278" width="51" height="18" rx="3"/><rect x="689" y="278" width="51" height="18" rx="3"/><rect x="744" y="278" width="51" height="18" rx="3"/><rect x="799" y="278" width="51" height="18" rx="3"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#1d4ed8">
+    <text x="659" y="141">t4</text><text x="714" y="141">t5</text><text x="769" y="141">t6</text><text x="824" y="141">t7</text>
+    <text x="659" y="231">t8</text><text x="769" y="231" fill="#64748b">3 个空槽，留给 t9–t11</text>
+    <text x="659" y="291">t0</text><text x="714" y="291">t1</text><text x="769" y="291">t2</text><text x="824" y="291">t3</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#64748b">
+    <text x="742" y="81">其他请求占用</text><text x="742" y="171">其他请求占用</text>
+    <text x="742" y="111">空闲</text><text x="742" y="201">空闲</text><text x="742" y="261">空闲</text>
+  </g>
+  <!-- addressing note -->
+  <g text-anchor="middle" font-size="12" fill="#334155">
+    <text x="196" y="262">Kernel 寻址：第 i 个 Token → 逻辑块 ⌊i / 4⌋</text>
+    <text x="196" y="280">→ 查表得物理块号，块内偏移 = i mod 4</text>
+  </g>
+  <text x="450" y="332" text-anchor="middle" fill="#64748b" font-size="12">Decode 时 t9–t11 依次写进 #5 的空槽；#5 写满后，才从空闲池再申请一个物理块挂到逻辑块 3</text>
+</svg>

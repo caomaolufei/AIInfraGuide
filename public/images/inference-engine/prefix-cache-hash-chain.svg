@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#475569"/></marker>
+  </defs>
+  <rect width="900" height="360" rx="12" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">链式块哈希：请求 B 复用请求 A 的系统提示前缀（block_size = 4）</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#64748b">hₖ = H(hₖ₋₁, 本块 Token, 额外键)，第一块的父哈希为 NONE_HASH；只有写满的块才算哈希</text>
+  <g font-size="12" font-weight="600" fill="#0f172a">
+    <text x="40" y="108">请求 A</text><text x="40" y="193">缓存表</text><text x="40" y="280">请求 B</text>
+  </g>
+  <!-- request A -->
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="1.5">
+    <rect x="110" y="78" width="150" height="50" rx="6"/><rect x="280" y="78" width="150" height="50" rx="6"/><rect x="450" y="78" width="150" height="50" rx="6"/>
+  </g>
+  <!-- cache table -->
+  <g fill="#f8fafc" stroke="#64748b" stroke-width="1.3">
+    <rect x="110" y="168" width="150" height="40" rx="6"/><rect x="280" y="168" width="150" height="40" rx="6"/><rect x="450" y="168" width="150" height="40" rx="6"/>
+  </g>
+  <!-- request B: hits -->
+  <g fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5">
+    <rect x="110" y="250" width="150" height="50" rx="6"/><rect x="280" y="250" width="150" height="50" rx="6"/>
+  </g>
+  <!-- request B: miss -->
+  <rect x="450" y="250" width="150" height="50" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <!-- partial tail blocks -->
+  <g fill="#ffffff" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="5 3">
+    <rect x="620" y="78" width="150" height="50" rx="6"/><rect x="620" y="250" width="150" height="50" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <g fill="#1d4ed8">
+      <text x="185" y="99">系统提示 0–3</text><text x="355" y="99">系统提示 4–7</text><text x="525" y="99">问题 A 0–3</text>
+      <text x="185" y="118" font-size="12" font-weight="600">h₁</text><text x="355" y="118" font-size="12" font-weight="600">h₂</text><text x="525" y="118" font-size="12" font-weight="600">h₃</text>
+    </g>
+    <g fill="#0f172a"><text x="185" y="193">h₁ → #3</text><text x="355" y="193">h₂ → #8</text><text x="525" y="193">h₃ → #1</text></g>
+    <g fill="#15803d">
+      <text x="185" y="271">系统提示 0–3</text><text x="355" y="271">系统提示 4–7</text>
+      <text x="185" y="290" font-size="12" font-weight="600">h₁ 命中，复用 #3</text><text x="355" y="290" font-size="12" font-weight="600">h₂ 命中，复用 #8</text>
+    </g>
+    <g fill="#b91c1c"><text x="525" y="271">问题 B 0–3</text><text x="525" y="290" font-size="12" font-weight="600">h₃′ 未命中，新块 #6</text></g>
+    <g fill="#64748b">
+      <text x="695" y="99">问题 A 4–5</text><text x="695" y="118" font-size="11">未写满，不算哈希</text>
+      <text x="695" y="271">问题 B 4</text><text x="695" y="290" font-size="11">未写满，不算哈希</text>
+    </g>
+  </g>
+  <!-- hash chain arrows -->
+  <g stroke="#475569" stroke-width="1.5" marker-end="url(#a)">
+    <path d="M262 103H277"/><path d="M432 103H447"/><path d="M262 275H277"/><path d="M432 275H447"/>
+    <path d="M185 130V165"/><path d="M355 130V165"/><path d="M525 130V165"/>
+    <path d="M185 248V211"/><path d="M355 248V211"/>
+  </g>
+  <path d="M525 248V214" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <g font-size="11">
+    <text x="192" y="151" fill="#64748b">A 算完后登记</text>
+    <text x="192" y="233" fill="#15803d">B 查表</text><text x="362" y="233" fill="#15803d">B 查表</text>
+    <text x="532" y="233" fill="#b91c1c">查无 h₃′，需要 Prefill</text>
+  </g>
+  <text x="450" y="340" text-anchor="middle" fill="#64748b" font-size="12">B 与 A 前 8 个 Token 相同，h₁、h₂ 一致而直接复用；第 3 块内容不同，哈希从此分叉，只需对 B 剩余的 5 个 Token 做 Prefill</text>
+</svg>

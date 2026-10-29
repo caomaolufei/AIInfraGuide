@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13">
+  <rect width="900" height="360" rx="12" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">一个 4000 Token 的 Prompt 插入 8 个 Decode 请求：不分块 vs 按 512 分块</text>
+  <g font-size="12" font-weight="600" fill="#0f172a">
+    <text x="40" y="64">不分块：整段 Prefill 挤进一步</text>
+    <text x="40" y="174">Chunked Prefill：每步只带一块</text>
+  </g>
+  <!-- decode portions (blue) -->
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="1.3">
+    <rect x="130" y="80" width="30" height="34"/><rect x="160" y="80" width="30" height="34"/><rect x="190" y="80" width="30" height="34"/>
+    <rect x="460" y="80" width="30" height="34"/><rect x="490" y="80" width="30" height="34"/><rect x="520" y="80" width="30" height="34"/>
+    <rect x="130" y="190" width="30" height="34"/><rect x="160" y="190" width="30" height="34"/>
+    <rect x="190" y="190" width="30" height="34"/><rect x="251" y="190" width="30" height="34"/><rect x="312" y="190" width="30" height="34"/><rect x="373" y="190" width="30" height="34"/>
+    <rect x="434" y="190" width="30" height="34"/><rect x="495" y="190" width="30" height="34"/><rect x="556" y="190" width="30" height="34"/><rect x="617" y="190" width="30" height="34"/>
+    <rect x="672" y="190" width="30" height="34"/><rect x="702" y="190" width="30" height="34"/>
+  </g>
+  <!-- prefill portions (orange) -->
+  <g fill="#fff7ed" stroke="#f97316" stroke-width="1.3">
+    <rect x="220" y="80" width="240" height="34"/>
+    <rect x="220" y="190" width="31" height="34"/><rect x="281" y="190" width="31" height="34"/><rect x="342" y="190" width="31" height="34"/><rect x="403" y="190" width="31" height="34"/>
+    <rect x="464" y="190" width="31" height="34"/><rect x="525" y="190" width="31" height="34"/><rect x="586" y="190" width="31" height="34"/><rect x="647" y="190" width="25" height="34"/>
+  </g>
+  <!-- step boundaries -->
+  <g fill="none" stroke="#334155" stroke-width="1.6">
+    <rect x="190" y="78" width="270" height="38" rx="3"/>
+    <rect x="190" y="188" width="61" height="38" rx="3"/><rect x="251" y="188" width="61" height="38" rx="3"/><rect x="312" y="188" width="61" height="38" rx="3"/><rect x="373" y="188" width="61" height="38" rx="3"/>
+    <rect x="434" y="188" width="61" height="38" rx="3"/><rect x="495" y="188" width="61" height="38" rx="3"/><rect x="556" y="188" width="61" height="38" rx="3"/><rect x="617" y="188" width="55" height="38" rx="3"/>
+  </g>
+  <g text-anchor="middle" font-size="11">
+    <text x="340" y="101" fill="#c2410c" font-size="12">Prefill 4000 Token</text>
+    <g fill="#c2410c">
+      <text x="235.5" y="211">512</text><text x="296.5" y="211">512</text><text x="357.5" y="211">512</text><text x="418.5" y="211">512</text>
+      <text x="479.5" y="211">512</text><text x="540.5" y="211">512</text><text x="601.5" y="211">512</text><text x="659.5" y="211">416</text>
+    </g>
+  </g>
+  <!-- first-token markers -->
+  <g stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 3">
+    <path d="M460 70V124"/><path d="M672 180V234"/>
+  </g>
+  <g font-size="11" fill="#b45309">
+    <text x="466" y="72">长 Prompt 首 Token</text>
+    <text x="678" y="182">首 Token，晚约 7 个 Decode 步</text>
+  </g>
+  <g font-size="12">
+    <text x="325" y="138" text-anchor="middle" fill="#b91c1c">这一步耗时约为纯 Decode 步的 9 倍，8 个请求同时卡顿</text>
+    <text x="431" y="248" text-anchor="middle" fill="#15803d">每步只加 512 Token，步长约为纯 Decode 步的 2 倍，出字平稳</text>
+  </g>
+  <!-- time axis -->
+  <path d="M130 272H850" stroke="#475569" stroke-width="1.2"/>
+  <path d="M843 268L851 272L843 276" fill="none" stroke="#475569" stroke-width="1.2"/>
+  <text x="850" y="290" text-anchor="end" font-size="11" fill="#64748b">时间 →</text>
+  <!-- legend -->
+  <g font-size="12" fill="#334155">
+    <rect x="250" y="298" width="14" height="14" fill="#eff6ff" stroke="#2563eb"/><text x="270" y="310">8 个 Decode 请求各出 1 个 Token</text>
+    <rect x="490" y="298" width="14" height="14" fill="#fff7ed" stroke="#f97316"/><text x="510" y="310">长 Prompt 的 Prefill 部分</text>
+  </g>
+  <text x="450" y="342" text-anchor="middle" fill="#64748b" font-size="12">示意，非实测：步耗时按"固定开销 + 与 Prefill Token 数成正比"估算；黑框为含 Prefill 的步，4000 = 7 × 512 + 416</text>
+</svg>

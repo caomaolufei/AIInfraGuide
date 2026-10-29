@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13">
+  <rect width="900" height="400" rx="12" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Piecewise CUDA Graph：在 Attention 处切图，只得到 3 种子图</text>
+  <text x="40" y="62" font-size="12" font-weight="600" fill="#0f172a">PIECEWISE：Attention 之外的部分分段捕获</text>
+  <!-- subgraphs (blue) -->
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="1.5">
+    <rect x="40" y="76" width="130" height="48" rx="6"/><rect x="242" y="76" width="140" height="48" rx="6"/>
+    <rect x="454" y="76" width="140" height="48" rx="6"/><rect x="706" y="76" width="154" height="48" rx="6"/>
+  </g>
+  <!-- attention (orange) -->
+  <g fill="#fff7ed" stroke="#f97316" stroke-width="1.5">
+    <rect x="178" y="76" width="56" height="48" rx="6"/><rect x="390" y="76" width="56" height="48" rx="6"/><rect x="634" y="76" width="64" height="48" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <g fill="#1d4ed8" font-weight="600">
+      <text x="105" y="96">子图 ①</text><text x="312" y="96">子图 ②</text><text x="524" y="96">子图 ②</text><text x="783" y="96">子图 ③</text>
+    </g>
+    <g fill="#1d4ed8" font-size="11">
+      <text x="105" y="114">Embed + 首层 QKV</text><text x="312" y="114">上层 MLP + 下层 QKV</text>
+      <text x="524" y="114">同一子图，复用</text><text x="783" y="114">末层 MLP + 最终 Norm</text>
+    </g>
+    <g fill="#c2410c" font-size="12"><text x="206" y="104">Attn 0</text><text x="418" y="104">Attn 1</text><text x="666" y="104">Attn N−1</text></g>
+    <text x="614" y="104" fill="#64748b">…</text>
+  </g>
+  <g font-size="11" text-anchor="middle">
+    <text x="418" y="146" fill="#1d4ed8">中间各层结构相同，都是子图 ②，只编译一次；N 层模型共 N 个 Attention、N+1 段子图</text>
+  </g>
+  <!-- FULL_AND_PIECEWISE panels -->
+  <text x="40" y="186" font-size="12" font-weight="600" fill="#0f172a">FULL_AND_PIECEWISE（V1 默认）：运行时按批次类型选图</text>
+  <g fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2">
+    <rect x="40" y="200" width="400" height="118" rx="8"/><rect x="460" y="200" width="400" height="118" rx="8"/>
+  </g>
+  <g font-size="12" font-weight="600" text-anchor="middle">
+    <text x="240" y="226" fill="#15803d">纯 Decode 批次 → FULL</text>
+    <text x="660" y="226" fill="#334155">含 Prefill 的批次 → PIECEWISE</text>
+  </g>
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="1.2">
+    <rect x="70" y="246" width="50" height="26"/><rect x="142" y="246" width="50" height="26"/><rect x="214" y="246" width="50" height="26"/><rect x="286" y="246" width="50" height="26"/><rect x="358" y="246" width="50" height="26"/>
+    <rect x="490" y="246" width="50" height="26"/><rect x="562" y="246" width="50" height="26"/><rect x="634" y="246" width="50" height="26"/><rect x="706" y="246" width="50" height="26"/><rect x="778" y="246" width="50" height="26"/>
+  </g>
+  <g fill="#fff7ed" stroke="#f97316" stroke-width="1.2">
+    <rect x="120" y="246" width="22" height="26"/><rect x="192" y="246" width="22" height="26"/><rect x="264" y="246" width="22" height="26"/><rect x="336" y="246" width="22" height="26"/>
+    <rect x="540" y="246" width="22" height="26"/><rect x="612" y="246" width="22" height="26"/><rect x="684" y="246" width="22" height="26"/><rect x="756" y="246" width="22" height="26"/>
+  </g>
+  <!-- graph frames -->
+  <rect x="64" y="240" width="350" height="38" rx="4" fill="none" stroke="#16a34a" stroke-width="2"/>
+  <g fill="none" stroke="#334155" stroke-width="1.6">
+    <rect x="487" y="242" width="56" height="34" rx="3"/><rect x="559" y="242" width="56" height="34" rx="3"/><rect x="631" y="242" width="56" height="34" rx="3"/>
+    <rect x="703" y="242" width="56" height="34" rx="3"/><rect x="775" y="242" width="56" height="34" rx="3"/>
+  </g>
+  <g font-size="12" text-anchor="middle">
+    <text x="240" y="302" fill="#15803d">Attention 也录进图里，整步 1 张图、1 次 replay</text>
+    <text x="660" y="302" fill="#334155">Attention 在图外 eager 执行，其余各段分别 replay</text>
+  </g>
+  <!-- legend -->
+  <g font-size="12" fill="#334155">
+    <rect x="70" y="334" width="14" height="14" fill="#eff6ff" stroke="#2563eb"/><text x="90" y="346">torch.compile 编译后的子图</text>
+    <rect x="290" y="334" width="14" height="14" fill="#fff7ed" stroke="#f97316"/><text x="310" y="346">Attention（不透明自定义算子）</text>
+    <rect x="530" y="334" width="14" height="14" fill="none" stroke="#334155" stroke-width="1.6"/><text x="550" y="346">一张 CUDA Graph</text>
+    <rect x="680" y="334" width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2"/><text x="700" y="346">整步一张 FULL 图</text>
+  </g>
+  <text x="450" y="380" text-anchor="middle" fill="#64748b" font-size="12">Batch 先向上 Padding 到最近的捕获尺寸再重放；超过 max_cudagraph_capture_size 的批次不走 CUDA Graph</text>
+</svg>

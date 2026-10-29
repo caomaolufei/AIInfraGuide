@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 362" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13">
+  <rect width="900" height="362" rx="12" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Decode 一步里的 8 个小 Kernel：逐个启动 vs CUDA Graph 重放</text>
+  <g font-size="12" font-weight="600" fill="#0f172a">
+    <text x="40" y="62">逐 Kernel 启动（eager）</text>
+    <text x="40" y="186">CUDA Graph：一次 replay</text>
+  </g>
+  <g font-size="12" fill="#334155">
+    <text x="40" y="97">CPU</text><text x="40" y="131">GPU</text>
+    <text x="40" y="221">CPU</text><text x="40" y="255">GPU</text>
+  </g>
+  <!-- eager: CPU launches (orange) -->
+  <g fill="#fff7ed" stroke="#f97316" stroke-width="1.3">
+    <rect x="130" y="80" width="40" height="26" rx="3"/><rect x="175" y="80" width="40" height="26" rx="3"/><rect x="220" y="80" width="40" height="26" rx="3"/><rect x="265" y="80" width="40" height="26" rx="3"/>
+    <rect x="310" y="80" width="40" height="26" rx="3"/><rect x="355" y="80" width="40" height="26" rx="3"/><rect x="400" y="80" width="40" height="26" rx="3"/><rect x="445" y="80" width="40" height="26" rx="3"/>
+  </g>
+  <!-- eager: GPU idle (gray dashed) -->
+  <g fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3">
+    <rect x="130" y="114" width="40" height="26"/>
+    <rect x="188" y="114" width="27" height="26"/><rect x="233" y="114" width="27" height="26"/><rect x="278" y="114" width="27" height="26"/><rect x="323" y="114" width="27" height="26"/>
+    <rect x="368" y="114" width="27" height="26"/><rect x="413" y="114" width="27" height="26"/><rect x="458" y="114" width="27" height="26"/>
+  </g>
+  <!-- eager: GPU kernels (blue) -->
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="1.3">
+    <rect x="170" y="114" width="18" height="26"/><rect x="215" y="114" width="18" height="26"/><rect x="260" y="114" width="18" height="26"/><rect x="305" y="114" width="18" height="26"/>
+    <rect x="350" y="114" width="18" height="26"/><rect x="395" y="114" width="18" height="26"/><rect x="440" y="114" width="18" height="26"/><rect x="485" y="114" width="18" height="26"/>
+  </g>
+  <!-- graph: CPU replay (green) and GPU kernels -->
+  <rect x="130" y="204" width="50" height="26" rx="3" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.3"/>
+  <rect x="130" y="238" width="50" height="26" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="1.3">
+    <rect x="180" y="238" width="18" height="26"/><rect x="198" y="238" width="18" height="26"/><rect x="216" y="238" width="18" height="26"/><rect x="234" y="238" width="18" height="26"/>
+    <rect x="252" y="238" width="18" height="26"/><rect x="270" y="238" width="18" height="26"/><rect x="288" y="238" width="18" height="26"/><rect x="306" y="238" width="18" height="26"/>
+  </g>
+  <g text-anchor="middle" font-size="11">
+    <g fill="#c2410c">
+      <text x="150" y="97">L1</text><text x="195" y="97">L2</text><text x="240" y="97">L3</text><text x="285" y="97">L4</text>
+      <text x="330" y="97">L5</text><text x="375" y="97">L6</text><text x="420" y="97">L7</text><text x="465" y="97">L8</text>
+    </g>
+    <text x="155" y="221" fill="#15803d">replay</text>
+    <g fill="#1d4ed8" font-size="10">
+      <text x="179" y="131">K1</text><text x="224" y="131">K2</text><text x="269" y="131">K3</text><text x="314" y="131">K4</text>
+      <text x="359" y="131">K5</text><text x="404" y="131">K6</text><text x="449" y="131">K7</text><text x="494" y="131">K8</text>
+      <text x="189" y="255">K1</text><text x="207" y="255">K2</text><text x="225" y="255">K3</text><text x="243" y="255">K4</text>
+      <text x="261" y="255">K5</text><text x="279" y="255">K6</text><text x="297" y="255">K7</text><text x="315" y="255">K8</text>
+    </g>
+  </g>
+  <text x="338" y="221" font-size="11" fill="#64748b">CPU 提交后即空闲，可去准备下一步调度</text>
+  <!-- completion markers -->
+  <g stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5 3">
+    <path d="M503 72V148"/><path d="M324 196V272"/>
+  </g>
+  <g font-size="11" fill="#b45309">
+    <text x="509" y="146">本步完成</text><text x="330" y="270">本步完成</text>
+  </g>
+  <!-- side notes -->
+  <g font-size="12">
+    <text x="580" y="98" fill="#b91c1c">CPU 每发射一条，GPU 才能动一下</text>
+    <text x="580" y="116" fill="#b91c1c">Kernel 越短，空等占比越高</text>
+    <text x="580" y="226" fill="#15803d">录好的 8 个 Kernel 在 GPU 上首尾相接</text>
+    <text x="580" y="244" fill="#15803d">8 次 launch 开销压成 1 次</text>
+  </g>
+  <!-- time axis -->
+  <path d="M130 284H850" stroke="#475569" stroke-width="1.2"/>
+  <path d="M843 280L851 284L843 288" fill="none" stroke="#475569" stroke-width="1.2"/>
+  <text x="850" y="300" text-anchor="end" font-size="11" fill="#64748b">时间 →</text>
+  <!-- legend -->
+  <g font-size="12" fill="#334155">
+    <rect x="150" y="300" width="14" height="14" fill="#fff7ed" stroke="#f97316"/><text x="170" y="312">CPU 发射 Kernel</text>
+    <rect x="300" y="300" width="14" height="14" fill="#f0fdf4" stroke="#16a34a"/><text x="320" y="312">CPU 提交整张图</text>
+    <rect x="450" y="300" width="14" height="14" fill="#eff6ff" stroke="#2563eb"/><text x="470" y="312">GPU 执行 Kernel</text>
+    <rect x="600" y="300" width="14" height="14" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="4 3"/><text x="620" y="312">GPU 空等指令</text>
+  </g>
+  <text x="450" y="346" text-anchor="middle" fill="#64748b" font-size="12">示意，非实测：真实模型一步有成百上千个 Kernel，小 Batch Decode 时单个 Kernel 的执行时间可能短于其启动开销</text>
+</svg>

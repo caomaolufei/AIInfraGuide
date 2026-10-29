@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13">
+  <rect width="900" height="390" rx="12" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">4 个批次槽位上的时间线：Static Batching 与 Continuous Batching</text>
+  <!-- step grid -->
+  <path stroke="#e2e8f0" stroke-width="1" d="M120 70V326M180 70V326M240 70V326M300 70V326M360 70V326M420 70V326M480 70V326M540 70V326M600 70V326M660 70V326M720 70V326M780 70V326M840 70V326"/>
+  <g font-size="12" font-weight="600" fill="#0f172a">
+    <text x="40" y="62">Static Batching：整批一起进、一起出</text>
+    <text x="40" y="210">Continuous Batching：每步重新调度，完成即退、随到随补</text>
+  </g>
+  <text x="720" y="62" text-anchor="middle" font-size="11" fill="#b91c1c">第 10 步整批结束，才放行 E、F、G</text>
+  <g font-size="12" fill="#334155">
+    <text x="40" y="91">槽位 0</text><text x="40" y="117">槽位 1</text><text x="40" y="143">槽位 2</text><text x="40" y="169">槽位 3</text>
+    <text x="40" y="239">槽位 0</text><text x="40" y="265">槽位 1</text><text x="40" y="291">槽位 2</text><text x="40" y="317">槽位 3</text>
+  </g>
+  <!-- first-batch requests A-D (blue) -->
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="1.3">
+    <rect x="121" y="76" width="178" height="22" rx="4"/><rect x="121" y="102" width="598" height="22" rx="4"/><rect x="121" y="128" width="298" height="22" rx="4"/><rect x="121" y="154" width="418" height="22" rx="4"/>
+    <rect x="121" y="224" width="178" height="22" rx="4"/><rect x="121" y="250" width="598" height="22" rx="4"/><rect x="121" y="276" width="298" height="22" rx="4"/><rect x="121" y="302" width="418" height="22" rx="4"/>
+  </g>
+  <!-- idle slots in static batching (red) -->
+  <g fill="#fef2f2" stroke="#dc2626" stroke-width="1.3" stroke-dasharray="5 3">
+    <rect x="301" y="76" width="418" height="22" rx="4"/><rect x="421" y="128" width="298" height="22" rx="4"/><rect x="541" y="154" width="178" height="22" rx="4"/>
+  </g>
+  <!-- later arrivals E-G (orange) -->
+  <g fill="#fff7ed" stroke="#f97316" stroke-width="1.3">
+    <rect x="721" y="76" width="118" height="22" rx="4"/><rect x="721" y="128" width="118" height="22" rx="4"/><rect x="721" y="154" width="118" height="22" rx="4"/>
+    <rect x="301" y="224" width="538" height="22" rx="4"/><rect x="421" y="276" width="418" height="22" rx="4"/><rect x="541" y="302" width="298" height="22" rx="4"/>
+  </g>
+  <!-- free slot -->
+  <g fill="#ffffff" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="5 3">
+    <rect x="721" y="102" width="118" height="22" rx="4"/><rect x="721" y="250" width="118" height="22" rx="4"/>
+  </g>
+  <g text-anchor="middle" font-size="12">
+    <g fill="#1d4ed8">
+      <text x="210" y="91">A</text><text x="420" y="117">B</text><text x="270" y="143">C</text><text x="330" y="169">D</text>
+      <text x="210" y="239">A</text><text x="420" y="265">B</text><text x="270" y="291">C</text><text x="330" y="317">D</text>
+    </g>
+    <g fill="#b91c1c" font-size="11">
+      <text x="510" y="91">A 已结束，空转 7 步</text><text x="570" y="143">空转 5 步</text><text x="630" y="169">空转 3 步</text>
+    </g>
+    <g fill="#c2410c">
+      <text x="780" y="91">E</text><text x="780" y="143">F</text><text x="780" y="169">G</text>
+      <text x="570" y="239">E：第 3 步到达，立即补位</text><text x="630" y="291">F：第 5 步到达</text><text x="690" y="317">G：第 7 步到达</text>
+    </g>
+    <g fill="#64748b" font-size="11"><text x="780" y="117">空闲</text><text x="780" y="265">空闲</text></g>
+  </g>
+  <!-- step axis -->
+  <path stroke="#475569" stroke-width="1.2" d="M120 330H840"/>
+  <g text-anchor="middle" font-size="11" fill="#64748b">
+    <text x="120" y="346">0</text><text x="240" y="346">2</text><text x="360" y="346">4</text><text x="480" y="346">6</text><text x="600" y="346">8</text><text x="720" y="346">10</text><text x="840" y="346">12</text>
+  </g>
+  <text x="852" y="334" font-size="11" fill="#64748b">迭代步</text>
+  <text x="450" y="374" text-anchor="middle" fill="#64748b" font-size="12">示意：A–D 同时到达，E、F、G 分别在第 3、5、7 步到达。Static 下前 10 步有 15 个槽位步空转，Continuous 下为 0</text>
+</svg>

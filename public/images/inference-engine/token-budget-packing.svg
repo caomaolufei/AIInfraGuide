@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#475569"/></marker>
+  </defs>
+  <rect width="900" height="400" rx="12" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">一步的 Token 预算如何装箱（max_num_batched_tokens = 2048）</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#64748b">先扫 running 队列，再从 waiting 队列接新请求；每个请求本步处理 min(剩余需求, 剩余预算) 个 Token</text>
+  <!-- budget bar -->
+  <rect x="110" y="78" width="44" height="44" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <rect x="154" y="78" width="491" height="44" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="645" y="78" width="205" height="44" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <rect x="110" y="78" width="740" height="44" fill="none" stroke="#334155" stroke-width="1.6" rx="2"/>
+  <text x="40" y="105" font-size="12" font-weight="600" fill="#0f172a">本步</text>
+  <g text-anchor="middle" font-size="12">
+    <text x="132" y="105" fill="#1d4ed8">8×1</text>
+    <text x="399.5" y="105" fill="#c2410c">R：Prefill 续块 1440 Token</text>
+    <text x="747.5" y="105" fill="#15803d">W1：首块 600 Token</text>
+  </g>
+  <!-- token ticks -->
+  <g stroke="#475569" stroke-width="1.2">
+    <path d="M110 130H850"/><path d="M110 126V134"/><path d="M154 126V134"/><path d="M645 126V134"/><path d="M850 126V134"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#64748b">
+    <text x="110" y="148">0</text><text x="154" y="148">8</text><text x="645" y="148">1448</text><text x="850" y="148">2048</text>
+  </g>
+  <text x="482" y="166" text-anchor="middle" font-size="11" fill="#64748b">Prefill 段按 Token 数等比例绘制；Decode 段只有 8 个 Token，放大显示</text>
+  <!-- budget ledger -->
+  <g fill="#f8fafc" stroke="#64748b" stroke-width="1.3">
+    <rect x="60" y="192" width="150" height="56" rx="6"/><rect x="260" y="192" width="170" height="56" rx="6"/>
+    <rect x="480" y="192" width="170" height="56" rx="6"/><rect x="700" y="192" width="150" height="56" rx="6"/>
+  </g>
+  <g stroke="#475569" stroke-width="1.5" marker-end="url(#a)">
+    <path d="M212 220H257"/><path d="M432 220H477"/><path d="M652 220H697"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="135" y="215" fill="#0f172a" font-weight="600">剩余预算 2048</text>
+    <text x="135" y="235" font-size="11" fill="#64748b">本步开始</text>
+    <text x="345" y="215" fill="#0f172a" font-weight="600">剩余 2040</text>
+    <text x="345" y="235" font-size="11" fill="#1d4ed8">8 个 Decode 各取 1</text>
+    <text x="565" y="215" fill="#0f172a" font-weight="600">剩余 600</text>
+    <text x="565" y="235" font-size="11" fill="#c2410c">R 取 min(1440, 2040) = 1440</text>
+    <text x="775" y="215" fill="#0f172a" font-weight="600">剩余 0</text>
+    <text x="775" y="235" font-size="11" fill="#15803d">W1 取 min(900, 600) = 600</text>
+  </g>
+  <!-- request states after this step -->
+  <text x="40" y="282" font-size="12" font-weight="600" fill="#0f172a">本步结束后各请求的状态</text>
+  <g stroke-width="1.5">
+    <rect x="60" y="296" width="250" height="44" rx="6" fill="#fff7ed" stroke="#f97316"/>
+    <rect x="330" y="296" width="250" height="44" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+    <rect x="600" y="296" width="250" height="44" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="5 3"/>
+  </g>
+  <g text-anchor="middle" font-size="12">
+    <text x="185" y="314" fill="#c2410c">R：已算 Token 2560 → 4000</text>
+    <text x="185" y="331" fill="#c2410c">Prefill 完成，下一步转入 Decode</text>
+    <text x="455" y="314" fill="#15803d">W1：900 Token 的 Prompt 算了 600</text>
+    <text x="455" y="331" fill="#15803d">剩余 300 留到下一步继续</text>
+    <text x="725" y="314" fill="#64748b">W2：预算已用完</text>
+    <text x="725" y="331" fill="#64748b">本步不调度，继续留在 waiting</text>
+  </g>
+  <text x="450" y="378" text-anchor="middle" fill="#64748b" font-size="12">切块没有单独的分块器：R 和 W1 被截成多大，完全由轮到它们时的剩余预算决定</text>
+</svg>

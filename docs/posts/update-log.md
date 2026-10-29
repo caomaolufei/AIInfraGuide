@@ -9,6 +9,56 @@ tags: ["公告", "更新日志"]
 
 ---
 
+## 2026-10-29
+
+### 调整内容
+
+**模块四 · 推理优化** 第 2 章「推理引擎核心技术」全面修订：5 篇文章新增 9 张示意图，参数默认值与源码走读对齐 vLLM v0.32.0，并修正了部分过时或不准确的表述：
+
+- **文章：** [2.1 PagedAttention：像操作系统管理内存一样管理 KV Cache](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/21-pagedattention/) | 新增 Block Table 映射图与碎片对比图；`gpu_memory_utilization` 默认值更新为 0.92；补充 V1 抢占只走重计算、不再使用 Copy-on-Write；修正 `free_blocks` 的空闲队列入队逻辑
+
+- **文章：** [2.2 Continuous Batching：让 GPU 不再空等的动态批处理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/22-continuous-batching/) | 新增 Static 与 Continuous Batching 时间线对比图；用空转槽位算例和 Orca 论文数据替换无出处的利用率数字；抢占伪代码改为源码中的重试循环
+
+- **文章：** [2.3 Prefix Cache 与 RadixAttention：复用共享前缀的 KV](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/23-prefix-cache-与-radixattention/) | 新增链式块哈希图与 Radix Tree 示例图；补充 `cache_salt`、哈希种子与 RadixAttention 的引用计数、先淘汰叶子的 LRU 和按缓存命中调度
+
+- **文章：** [2.4 Chunked Prefill 与统一 Token Budget 调度](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/24-chunked-prefill-与统一调度/) | 新增分块时间线图与 Token 预算装箱图；说明 vLLM 的块长由剩余预算决定；补充 `long_prefill_token_threshold` 与官方 `max_num_batched_tokens` 调优建议
+
+- **文章：** [2.5 Attention 后端与图优化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/25-attention-后端与图优化/) | 新增 Kernel 启动与 CUDA Graph 对比图、Piecewise CUDA Graph 图；补充按 GPU 架构的默认后端；修正 CUDA Graph 的 Padding 规则与 V1 默认的 `FULL_AND_PIECEWISE` 模式
+
+---
+
+## 2026-10-26
+
+### 调整内容
+
+**模块四 · 推理优化** 第 4 章「量化」6 篇文章修订，框架相关内容对齐 vLLM v0.32.0，各篇补充信息时效说明，并重新组织章节结构：
+
+- **文章：** [4.1 量化基础：Scale、粒度与 PTQ/QAT](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/41-量化基础/) | 用"刻度有限的尺子"重写量化与反量化的讲解；位宽、矩阵轴与量化粒度拆成独立小节；校准单列一章，讲清量程选择与静态、动态校准
+
+- **文章：** [4.2 W8A8 量化：SmoothQuant 如何处理激活离群值](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/42-w8a8与smoothquant/) | 等价缩放补充公式与单个点积的直观推导；平滑系数一节改为讲迁移强度 α 的选择；补充离线流程、收益与适用条件，以及可动手验证的点积示例
+
+- **文章：** [4.3 Weight-only INT4：GPTQ、AWQ 与 Marlin](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/43-weight-only-int4/) | 补充 GPTQ 的代价与效果、AWQ 用缩放代替混合精度的思路；新增 vLLM 中的 Kernel 选择、量化工具选择与排查顺序
+
+- **文章：** [4.4 KV Cache 量化：KIVI 与 FP8 缓存](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/44-kv-cache量化/) | 新增 KV 占用估算；FP8 KV Cache 一节按 v0.32.0 重写，覆盖格式选择、Scale 校准、跳过敏感层，以及存储精度与计算精度的区别；注明旧版 `calculate_kv_scales` 参数已移除
+
+- **文章：** [4.5 FP8 与 NVFP4/MXFP4：低比特浮点怎样工作](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/45-fp8与nvfp4-mxfp4/) | 补充 E2M1 的 8 个幅值、微块粒度的形状写法与 Scale 自身的格式；对比 NVFP4 两层 Scale 与 MXFP4 一层 Scale；新增在 vLLM v0.32.0 中的使用方式
+
+- **文章：** [4.6 量化选型与 vLLM 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/46-量化选型与vllm实战/) | 区分量化方法、检查点格式与 Kernel 三层，补充 vLLM 各量化入口的含义；实验基准更新到 v0.32.0
+
+**模块四 · 推理优化** 第 5 章「Speculative Decoding」5 篇文章修订，配置基准从 vLLM v0.31.0 升级到 v0.32.0，并新增 MTP 相关内容：
+
+- **文章：** [5.1 投机解码核心原理：先猜一段，再让大模型验收](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) | 重写 Draft + Verify 一轮的完整流程；新增"Draft 只给 Token、不给概率"时的验证方式
+
+- **文章：** [5.2 Draft 模型与无模型方案：怎样便宜地猜得更准](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) | 新增"与 Target 对得上比自身分数高更重要"和并行 Draft 两节；统一接受率、平均接受长度与候选覆盖三个指标的口径
+
+- **文章：** [5.3 Medusa、EAGLE 与 MTP：复用大模型信息生成更好的草稿](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) | 新增第 7 节 MTP，覆盖它从预训练目标到推理加速的转变、实际效果、在 vLLM 中的形态，以及一次前向生成整块草稿的探索；EAGLE-2 补充置信度只用于分配预算的说明
+
+- **文章：** [5.4 投机解码的收益边界：接受率高，为什么仍可能变慢](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) | 补充加速条件与投机长度收益递减的推导；新增随负载调整的动态投机长度；结构化输出纳入停止条件的讨论
+
+- **文章：** [5.5 vLLM 投机解码实战：配置、接受率与性能一起测](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/) | 基准升级到 vLLM v0.32.0；新增第四组 EAGLE-3 实验与 MTP 接入条件；采集脚本改为逐请求接受指标，并补充常见现象的排查顺序与下一轮调参方向
+
+---
+
 ## 2026-10-12
 
 ### 新增内容
