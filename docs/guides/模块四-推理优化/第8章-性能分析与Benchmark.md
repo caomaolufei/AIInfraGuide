@@ -1,5 +1,5 @@
 ---
-title: "第9章：性能分析与 Benchmark"
+title: "第8章：性能分析与 Benchmark"
 description: "建立完整的推理性能指标体系，掌握 vllm bench、GenAI-Perf 等压测工具和性能分析工具，制定性能回归门禁"
 pubDate: 2026-04-16
 category: "inference-optimization"

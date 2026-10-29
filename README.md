@@ -219,12 +219,12 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 3.5 | [Scheduler 与连续批处理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/35-scheduler与连续批处理/) | Waiting/Running 双队列、Prefill/Decode 分离调度、Token Budget、chunked prefill 与抢占重算 |
 | 3.6 | [ModelRunner、CUDA Graph 与性能基准](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/36-modelrunner引擎循环与性能/) | 序列张量化、全局 Context、KV Cache 显存切分、CUDA Graph 捕获回放，以及官方基准与 vLLM 对比 |
 | 第 4 章 | 量化 | 量化基础、SmoothQuant、GPTQ/AWQ、FP8、NVFP4/MXFP4、KV Cache 量化 |
-| 4.1 | [量化基础](./docs/guides/模块四-推理优化/第4章-量化/4.1-量化基础.md) | Scale、对称与非对称量化、量化粒度、校准与 PTQ/QAT |
-| 4.2 | [W8A8 与 SmoothQuant](./docs/guides/模块四-推理优化/第4章-量化/4.2-W8A8与SmoothQuant.md) | 激活离群值、等价缩放、平滑系数与 INT8 GEMM |
-| 4.3 | [Weight-only INT4](./docs/guides/模块四-推理优化/第4章-量化/4.3-Weight-only-INT4.md) | GPTQ 误差补偿、AWQ 激活感知缩放与 Marlin 执行路径 |
-| 4.4 | [KV Cache 量化](./docs/guides/模块四-推理优化/第4章-量化/4.4-KV-Cache量化.md) | KIVI 分组与残留缓存、FP8 KV 校准及长上下文验证 |
-| 4.5 | [FP8 与 NVFP4/MXFP4](./docs/guides/模块四-推理优化/第4章-量化/4.5-FP8与NVFP4-MXFP4.md) | 浮点编码、微块缩放与硬件支持条件 |
-| 4.6 | [量化选型与 vLLM 实战](./docs/guides/模块四-推理优化/第4章-量化/4.6-量化选型与vLLM实战.md) | 按瓶颈选型，控制变量比较 FP16/AWQ 吞吐与生成质量 |
+| 4.1 | [量化基础](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/41-量化基础/) | Scale 与零点、对称与非对称、位宽与格距、量化粒度、校准与 PTQ/QAT |
+| 4.2 | [W8A8 与 SmoothQuant](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/42-w8a8与smoothquant/) | 激活离群值、等价缩放与迁移强度 α、INT8 GEMM、LLM Compressor 配方 |
+| 4.3 | [Weight-only INT4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/43-weight-only-int4/) | GPTQ 误差补偿、AWQ 激活感知缩放、Marlin 融合 Kernel 与 vLLM 的 Kernel 选择 |
+| 4.4 | [KV Cache 量化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/44-kv-cache量化/) | KIVI 分组与残留缓存、FP8 KV 的 Scale 校准与跳层、长上下文验证 |
+| 4.5 | [FP8 与 NVFP4/MXFP4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/45-fp8与nvfp4-mxfp4/) | E4M3/E5M2、FP8 Scale、E2M1 微块缩放、NVFP4 与 MXFP4 对比及硬件执行条件 |
+| 4.6 | [量化选型与 vLLM 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/46-量化选型与vllm实战/) | 基于 v0.32.0 的按瓶颈选型、在线量化入口、FP16/AWQ 吞吐与生成质量对照 |
 | 第 5 章 | Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE/MTP、vLLM 投机解码实战 |
 | 5.1 | [投机解码核心原理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) | Draft + Verify、接受与残差采样的保分布证明、one-hot Draft、KV 回退 |
 | 5.2 | [Draft 模型与无模型方案](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) | 独立 Draft 与 PARD、Tokenizer 兼容、N-gram/Suffix、接受率与候选覆盖 |
