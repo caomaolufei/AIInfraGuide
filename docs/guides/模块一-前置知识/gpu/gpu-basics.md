@@ -192,7 +192,7 @@ $$
 
 ## 4. Tensor Core：AI 加速的核心引擎
 
-CUDA Core 是通用计算核心，一个时钟周期执行一次 FMA（fused multiply-add）运算。而 Tensor Core 是专门为矩阵运算设计的加速单元——一个时钟周期可以完成一个小矩阵的乘累加运算。
+CUDA Core 执行标量算术指令；以支持每周期一次 FP32 FMA（fused multiply-add）的执行单元为例，其峰值吞吐量为每周期 2 FLOPs。Tensor Core 则是专门执行矩阵乘累加的单元，每周期可完成多次标量乘加等价运算，具体吞吐量取决于架构、输入精度、累加精度及是否使用结构化稀疏。
 
 ### 4.1 工作原理
 
@@ -204,11 +204,14 @@ $$
 
 其中 $A$、$B$、$C$、$D$ 是小尺寸矩阵（具体尺寸取决于精度和架构代次）。
 
-以 Hopper 架构为例，单个 Tensor Core 一个时钟周期可以完成 $16 \times 8 \times 16$ 的 FP16 矩阵乘累加——相当于一个 CUDA Core 要执行数千个时钟周期的工作量。16×8×16 是什么意思？这是一次矩阵乘累加（MMA）的操作维度：
-- 矩阵 A：形状 16 × 16，FP16
-- 矩阵 B：形状 16 × 8，FP16
-- 矩阵 C（累加目标）：形状 16 × 8，FP32
-- 即在一个时钟周期内完成：C += A × B
+以 PTX 指令 `mma.sync.aligned.m16n8k16.row.col.f32.f16.f16.f32` 为例，$16 \times 8 \times 16$ 表示逻辑矩阵尺寸 $m \times n \times k$：
+
+- 矩阵 A：形状 16 × 16，FP16。
+- 矩阵 B：形状 16 × 8，FP16。
+- 矩阵 C 和 D：形状 16 × 8，FP32，用于累加及输出。
+- 一次完整 MMA 的计算量为 $2mnk = 2 \times 16 \times 8 \times 16 = 4096$ FLOPs，按一次标量乘加计 2 FLOPs。
+
+**指令形状不等于单个 Tensor Core 每周期的吞吐量。** 上述 `mma.sync` 由整个 Warp 的线程协同执行，4096 FLOPs 是这次 Warp 级操作的总计算量，不能再乘以 32，也不能直接当作单个 Tensor Core 一个周期完成的计算量。PTX 描述的是指令语义；硬件执行吞吐量和指令延迟需要另查目标架构资料，不能仅由 $m,n,k$ 推出。[NVIDIA PTX ISA：mma](https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-instructions-mma)
 
 ### 4.2 精度格式演进
 
@@ -228,13 +231,16 @@ $$
 
 ### 4.3 Tensor Core 的算力倍增
 
-Tensor Core 对比 CUDA Core 的性能提升非常显著（以 H100 SXM 为例）：
+不同计算路径的峰值差异很大。以 H100 SXM 为例，下表统一采用稠密（Dense）口径，Tensor Core 行采用 FP32 累加：
 
-| 📊 精度 | CUDA Core 算力 | Tensor Core 算力 | 加速比 |
-|---|---|---|---|
-| FP32 | 67 TFLOPS | 495 TFLOPS（TF32） | ~7.4× |
-| FP16 | 134 TFLOPS | 989 TFLOPS | ~7.4× |
-| FP8 | — | 1,979 TFLOPS | — |
+| 📊 计算路径 | 理论峰值算力（约） |
+|---|---|
+| CUDA Core，FP32 FMA | 67 TFLOPS |
+| Tensor Core，TF32 输入 | 495 TFLOPS |
+| Tensor Core，FP16 / BF16 输入 | 989 TFLOPS |
+| Tensor Core，FP8 输入 | 1,979 TFLOPS |
+
+这些是不同精度和执行路径的硬件峰值，不能直接当作应用加速比；尤其 TF32 不具有完整 FP32 的尾数精度。NVIDIA H100 产品页中带星号的 Tensor Core 数值包含稀疏加速，上表将其除以 2 后取近似值。[NVIDIA H100 规格及稀疏脚注](https://www.nvidia.com/en-us/data-center/h100/)
 
 📌 **关键点**：要触发 Tensor Core 加速，矩阵的维度必须满足对齐要求（通常是 8 或 16 的倍数）。在实际工程中，如果模型的 hidden_size 不是 8 的倍数，Tensor Core 可能无法被充分利用。
 
@@ -358,17 +364,41 @@ print(f"CPU: {cpu_time*1000:.2f} ms | GPU: {gpu_time*1000:.2f} ms | 加速比: {
 
 ### 6.2 算力计算公式
 
-GPU 的理论峰值算力可以通过硬件参数推算：
+计算理论峰值前，必须明确 **GPU 型号、执行路径、输入与累加精度、稠密或稀疏口径、时钟频率**。单说“FP16 算力”不足以确定数值，CUDA Core 和 Tensor Core 的 FP16 吞吐量并不相同。
+
+**通用公式：计算单元数 × 每单元每周期运算量 × 每秒周期数。**
 
 $$
-\text{FP16 算力} = \text{SM 数量} \times \text{每 SM 的 FP16 Core 数} \times 2 \times \text{时钟频率}
+P_{\text{peak}} = N_{\text{SM}} \times U_{\text{SM}} \times q \times f
 $$
 
-其中 $\times 2$ 是因为每个 FP Core 每周期执行一次 FMA（Fused Multiply-Add），包含一次乘法和一次加法。
+- $N_{\text{SM}}$：该 GPU 实际启用的 SM 数量。
+- $U_{\text{SM}}$：每个 SM 中所选类型的计算单元数。
+- $q$：指定精度与计算模式下，每个单元每周期可完成的浮点运算数，单位为 FLOPs/(单元·周期)。
+- $f$：与该吞吐规格匹配的核心时钟频率，单位为 Hz；结果为 FLOP/s，除以 $10^{12}$ 得到 TFLOPS。这里不使用显存频率，也不能把不适用于该执行路径的最高频率直接代入。
 
-Tensor Core 的算力计算方式不同，需要考虑每个 Tensor Core 每周期完成的 MMA 运算规模。
+**CUDA Core：乘以 2 是 FMA 的计数约定。** 一次标量 FMA（$a \times b + c$）计作一次乘法加一次加法，即 2 FLOPs；它并不意味着所有计算单元每周期都只完成 2 FLOPs。若某 FP32 执行单元的峰值为每周期一次标量 FMA，则 $q=2$；换成 FP16、FP64 或其他指令时，应重新查该架构的吞吐规格。`half2` 一条指令可表达两个 FP16 元素的运算，但其每周期执行率仍取决于硬件，不能笼统地用“FP16 Core 数 × 2”推算。[CUDA 编程指南：算术指令吞吐量](https://docs.nvidia.com/cuda/archive/12.6.3/cuda-c-programming-guide/index.html#arithmetic-instructions)
 
-💡 **提示**：厂商标称的 TFLOPS 通常是带 Tensor Core 的稀疏（Sparsity）模式峰值，实际应用中的有效算力通常只有峰值的 30%~60%。当你做性能分析时，应该用实测值而非标称值。
+**Tensor Core：必须计入每周期的多次乘加。** 设 $r_{\text{TC}}$ 为单个 Tensor Core 每周期完成的标量 FMA 等价次数，则稠密峰值为：
+
+$$
+P_{\text{TC,dense}} = N_{\text{SM}} \times N_{\text{TC/SM}} \times r_{\text{TC}} \times 2 \times f
+$$
+
+这里的 $r_{\text{TC}}$ 是硬件的持续吞吐量，不能用一条 MMA 的 $mnk$ 直接替代，也不能由单条指令的延迟简单取倒数得到；流水线允许多条独立操作重叠执行。若资料已给出 FLOPs/周期，则已经包含乘加的 $\times 2$，不要重复乘。
+
+**计算实例：A100 的 FP16 输入、FP32 累加、稠密 Tensor Core 峰值。** NVIDIA 白皮书给出 A100 有 108 个 SM，每个 SM 有 4 个 Tensor Core；每个 Tensor Core 每周期完成 256 次 FP16 乘加，即 $256 \times 2 = 512$ FLOPs。取规格表中的 1.41 GHz Boost 频率：
+
+$$
+P_{\text{TC,dense}} = 108 \times 4 \times 256 \times 2 \times 1.41 \times 10^9
+\approx 312 \times 10^{12}\ \text{FLOP/s} = 312\ \text{TFLOPS}
+$$
+
+同一 A100 的常规 FP32 路径，每 SM 有 64 个 FP32 CUDA Core，按每单元每周期一次 FMA 计算并换算单位，得到 $108 \times 64 \times 2 \times 1.41 \times 10^9 / 10^{12} \approx 19.5$ TFLOPS。两者说明了为何只数“核心数”或只看数据位宽无法比较算力。[NVIDIA A100 架构白皮书，第 20、24 页及规格表](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/nvidia-ampere-architecture-whitepaper.pdf)
+
+**稀疏峰值与实测性能要分开。** A100 在满足 2:4 结构化稀疏要求并使用对应稀疏 Tensor Core 指令时，FP16 的稠密等价峰值可达约 624 TFLOPS，是上述稠密峰值的 2 倍。该数字按等价稠密矩阵的运算量计数；普通稠密矩阵或任意分布的零值不会自动获得这一倍增。阅读厂商规格时，应逐项确认是否标注“with sparsity”，不能默认所有 TFLOPS 都包含稀疏加速。[NVIDIA Ampere 架构说明](https://developer.nvidia.com/blog/nvidia-ampere-architecture-in-depth/)
+
+实际吞吐量应按“完成的计算量 / 实测耗时”计算，例如稠密 GEMM 常按 $2MNK/t$ 估算，并与相同精度、执行路径和计数口径的峰值比较。矩阵形状、访存、指令混合、并行度及功耗/温度导致的频率变化都会影响利用率，不存在普遍适用的“峰值的 30%~60%”范围；GPU 计算为异步执行，计时还需正确同步或使用 CUDA Events。
 
 ---
 
