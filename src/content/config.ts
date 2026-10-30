@@ -15,6 +15,7 @@ const guides = defineCollection({
       'distributed-training',
       'inference-optimization',
       'performance-analysis',
+      'ascend',
       'course',
     ]),
     order: z.number().default(0),

@@ -38,7 +38,7 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 
 ## 📖 AIInfraGuide 内容体系
 
-知识库围绕 **4 大学习模块 + 2 个辅助板块 + 面试宝典**，覆盖 AI Infra 工程师需要掌握的关键技术栈：
+知识库围绕 **5 大学习模块 + 2 个辅助板块 + 面试宝典**，覆盖 AI Infra 工程师需要掌握的关键技术栈：
 
 | 板块 | 涵盖内容 |
 |---|---|
@@ -47,6 +47,7 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | **模块二：CUDA 编程与算子优化** | CUDA 编程入门、性能优化基础、Reduce/GEMM/Softmax/Attention 经典算子实现、AI 编译器、性能分析工具链 |
 | **模块三：分布式训练** | 分布式训练总论、优化器、数据并行(DP/DDP/FSDP)、ZeRO 系列、张量并行与序列并行、流水线并行、3D 并行、训练框架实战 |
 | **模块四：推理优化** | LLM 推理基础、推理引擎核心技术、主流推理框架(vLLM 等)、量化、Speculative Decoding、PD 解耦架构、性能分析与 Benchmark |
+| **模块五：昇腾 AI 芯片与算子开发** | 昇腾硬件架构与达芬奇 AI Core、CANN 软件栈与 AscendCL、Ascend C 算子开发、HCCL 集合通信与分布式训练、MindSpore 框架、MindIE/vLLM-Ascend 推理 |
 | **性能分析** | Nsight Systems/Compute、Roofline 模型、Profiling 实战 |
 | **面试宝典** | 目前共收录 180+ 场面试真题，覆盖 60+ 家公司，按梯队分类组织，助你高效备战拿下心仪 Offer |
 
@@ -237,6 +238,35 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 第 9 章 | 生产部署与运维 | 容器化与 K8s 部署、可观测性、自动扩缩容、负载均衡、容量规划 |
 | 第 10 章 | 端侧推理 | 端侧软硬件栈、异构执行、运行时选型、量化、内存优化与 Benchmark |
 | 10.1 | [端侧推理基础：从模型导出到异构硬件执行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第12章-端侧推理/121-端侧推理基础/) | 端侧约束、软硬件栈、运行时选型、量化与内存优化、Benchmark，以及 ExecuTorch/XNNPACK 最小实例 |
+
+<br>
+
+## 🧠 模块五：昇腾 AI 芯片与算子开发
+
+从昇腾硬件架构与达芬奇 AI Core 出发，系统掌握国产 AI 算力全栈：CANN 软件栈、AscendCL 应用开发、Ascend C 算子开发、HCCL 集合通信与分布式训练、MindSpore 框架，以及 MindIE/vLLM-Ascend 推理部署。
+
+| 章节 | 主要内容 |
+| --- | --- |
+| 第 1 章 昇腾 AI 芯片与硬件架构 | 芯片家族与演进路线（310P/910B/910C/950）、达芬奇架构与 AI Core、存储层次、HCCS/PCIe/RoCE 互联拓扑 |
+| 第 2 章 CANN 软件栈与 AscendCL | CANN 全栈分层、AscendCL 编程模型（Device/Context/Stream/内存）、aclnn 算子调用、torch_npu 迁移 |
+| 第 3 章 Ascend C 算子开发 | 编程模型与 Tiling、矢量编程（Elementwise）、数据搬运与内存管理、矩阵编程（GEMM）、算子工程与性能分析 |
+| 第 4 章 HCCL 集合通信与分布式训练 | HCCL 通信原语与 Ring 算法、多卡多机拓扑与配置、昇腾分布式训练实战 |
+| 第 5 章 MindSpore 框架 | MindSpore 架构与图模式、训练实战、PyTorch 生态迁移 |
+| 第 6 章 推理与 MindIE | 推理软硬件栈与模型转换、MindIE 推理引擎、vLLM-Ascend 适配、量化与 KV Cache 优化 |
+
+**已更新文章：**
+
+| 序号 | 文章 | 说明 |
+| --- | --- | --- |
+| 1.1 | [昇腾芯片家族与演进路线](./docs/guides/模块五-昇腾AI芯片与算子开发/1.1-昇腾芯片家族与演进路线.md) | 310P/910B/910C/950 产品定位、训练卡与推理卡设计差异 |
+| 1.2 | [达芬奇架构：AI Core 与三大计算单元](./docs/guides/模块五-昇腾AI芯片与算子开发/1.2-达芬奇架构与AI Core计算单元.md) | AI Cube/Vector/Scalar 分工与协作，与 NVIDIA GPU 对比 |
+| 1.3 | [昇腾存储层次与数据流](./docs/guides/模块五-昇腾AI芯片与算子开发/1.3-昇腾存储层次与数据流.md) | HBM/L2/UB/L0 存储层次，与 CUDA 内存模型映射 |
+| 1.4 | [多卡互联：HCCS、PCIe 与 RoCE 组网](./docs/guides/模块五-昇腾AI芯片与算子开发/1.4-多卡互联HCCS与组网拓扑.md) | 机内 HCCS 高速互连、跨节点 RoCE 无损网络、拓扑感知 |
+| 2.1 | [CANN 全栈架构](./docs/guides/模块五-昇腾AI芯片与算子开发/2.1-CANN全栈架构.md) | CANN 分层设计、ATC/AKG 编译器、Runtime/算子库/HCCL |
+| 2.2 | [AscendCL 编程模型](./docs/guides/模块五-昇腾AI芯片与算子开发/2.2-AscendCL编程模型.md) | Device/Context/Stream/Event/内存管理，最小可运行示例 |
+| 2.3 | [AscendCL 算子调用与 aclnn](./docs/guides/模块五-昇腾AI芯片与算子开发/2.3-AscendCL算子调用与aclnn.md) | 两段式调用范式、aclnnAdd 完整示例、workspace 管理 |
+
+> 模块五内容持续更新中，更多章节（Ascend C 算子、HCCL、MindSpore、MindIE 推理）将陆续发布。
 
 <br>
 
