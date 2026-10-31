@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="920" viewBox="0 0 1200 920" role="img" aria-labelledby="title desc">
+<title id="title">7.1 为什么平均出字速度会掩盖卡顿</title>
+<desc id="desc">九个间隔：基线均为20毫秒合计180；混合为八个20和一个100合计260；分散为五个20和四个40合计260。</desc>
+<defs>
+<marker id="blue" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="green" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="orange" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="gray" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 12 6 L 0 12 Z" fill="#64748b"/>
+</marker>
+</defs>
+<rect width="1200" height="920" rx="24" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.1 为什么平均出字速度会掩盖卡顿</text>
+<text x="48" y="108" font-size="25" fill="#172b4d" font-weight="400" text-anchor="start">同一条 Decode 请求：从首 Token 起，观察后续 9 个输出间隔</text>
+<text x="48" y="148" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">教学时间线；每个圆点是一个 Token，色块长度与时间成正比</text>
+<text x="48" y="250" font-size="27" fill="#172b4d" font-weight="700" text-anchor="start">没有额外互扰</text>
+<text x="48" y="288" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">平均 20.0 ms</text>
+<text x="48" y="322" font-size="23" fill="#2563eb" font-weight="400" text-anchor="start">最长 20 ms</text>
+<rect x="330" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="358.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="330" cy="300" r="5" fill="#172b4d"/>
+<rect x="386.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="414.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="386.0" cy="300" r="5" fill="#172b4d"/>
+<rect x="442.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="470.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="442.0" cy="300" r="5" fill="#172b4d"/>
+<rect x="498.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="526.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="498.0" cy="300" r="5" fill="#172b4d"/>
+<rect x="554.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="582.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="554.0" cy="300" r="5" fill="#172b4d"/>
+<rect x="610.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="638.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="610.0" cy="300" r="5" fill="#172b4d"/>
+<rect x="666.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="694.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="666.0" cy="300" r="5" fill="#172b4d"/>
+<rect x="722.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="750.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="722.0" cy="300" r="5" fill="#172b4d"/>
+<rect x="778.0" y="222" width="56.0" height="58" rx="4" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="806.0" y="260" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="778.0" cy="300" r="5" fill="#172b4d"/>
+<circle cx="834.0" cy="300" r="5" fill="#172b4d"/>
+<text x="848.0" y="262" font-size="23" fill="#2563eb" font-weight="400" text-anchor="start">180 ms</text>
+<text x="48" y="414" font-size="27" fill="#172b4d" font-weight="700" text-anchor="start">一次长暂停</text>
+<text x="48" y="452" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">平均 28.9 ms</text>
+<text x="48" y="486" font-size="23" fill="#b42338" font-weight="400" text-anchor="start">最长 100 ms</text>
+<rect x="330" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="358.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="330" cy="464" r="5" fill="#172b4d"/>
+<rect x="386.0" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="414.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="386.0" cy="464" r="5" fill="#172b4d"/>
+<rect x="442.0" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="470.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="442.0" cy="464" r="5" fill="#172b4d"/>
+<rect x="498.0" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="526.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="498.0" cy="464" r="5" fill="#172b4d"/>
+<rect x="554.0" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="582.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="554.0" cy="464" r="5" fill="#172b4d"/>
+<rect x="610.0" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="638.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="610.0" cy="464" r="5" fill="#172b4d"/>
+<rect x="666.0" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="694.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="666.0" cy="464" r="5" fill="#172b4d"/>
+<rect x="722.0" y="386" width="56.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="750.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="722.0" cy="464" r="5" fill="#172b4d"/>
+<rect x="778.0" y="386" width="280.0" height="58" rx="4" fill="#b42338" stroke="#ffffff" stroke-width="2"/>
+<text x="918.0" y="424" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">100</text>
+<circle cx="778.0" cy="464" r="5" fill="#172b4d"/>
+<circle cx="1058.0" cy="464" r="5" fill="#172b4d"/>
+<text x="1072.0" y="426" font-size="23" fill="#b42338" font-weight="400" text-anchor="start">260 ms</text>
+<text x="48" y="578" font-size="27" fill="#172b4d" font-weight="700" text-anchor="start">额外时间分散</text>
+<text x="48" y="616" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">平均 28.9 ms</text>
+<text x="48" y="650" font-size="23" fill="#b45309" font-weight="400" text-anchor="start">最长 40 ms</text>
+<rect x="330" y="550" width="56.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="358.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="330" cy="628" r="5" fill="#172b4d"/>
+<rect x="386.0" y="550" width="56.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="414.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="386.0" cy="628" r="5" fill="#172b4d"/>
+<rect x="442.0" y="550" width="56.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="470.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="442.0" cy="628" r="5" fill="#172b4d"/>
+<rect x="498.0" y="550" width="56.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="526.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="498.0" cy="628" r="5" fill="#172b4d"/>
+<rect x="554.0" y="550" width="56.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="582.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">20</text>
+<circle cx="554.0" cy="628" r="5" fill="#172b4d"/>
+<rect x="610.0" y="550" width="112.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="666.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">40</text>
+<circle cx="610.0" cy="628" r="5" fill="#172b4d"/>
+<rect x="722.0" y="550" width="112.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="778.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">40</text>
+<circle cx="722.0" cy="628" r="5" fill="#172b4d"/>
+<rect x="834.0" y="550" width="112.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="890.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">40</text>
+<circle cx="834.0" cy="628" r="5" fill="#172b4d"/>
+<rect x="946.0" y="550" width="112.0" height="58" rx="4" fill="#b45309" stroke="#ffffff" stroke-width="2"/>
+<text x="1002.0" y="588" font-size="22" fill="#ffffff" font-weight="700" text-anchor="middle">40</text>
+<circle cx="946.0" cy="628" r="5" fill="#172b4d"/>
+<circle cx="1058.0" cy="628" r="5" fill="#172b4d"/>
+<text x="1072.0" y="590" font-size="23" fill="#b45309" font-weight="400" text-anchor="start">260 ms</text>
+<path d="M 330 718 H 1110" fill="none" stroke="#64748b" stroke-width="2"   marker-end="url(#gray)"/>
+<path d="M 330.0 712 V 724" stroke="#64748b" stroke-width="2"/>
+<text x="330.0" y="753" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">0</text>
+<path d="M 610.0 712 V 724" stroke="#64748b" stroke-width="2"/>
+<text x="610.0" y="753" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">100</text>
+<path d="M 890.0 712 V 724" stroke="#64748b" stroke-width="2"/>
+<text x="890.0" y="753" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">200</text>
+<path d="M 1058.0 712 V 724" stroke="#64748b" stroke-width="2"/>
+<text x="1058.0" y="753" font-size="22" fill="#172b4d" font-weight="400" text-anchor="middle">260</text>
+<text x="48" y="750" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">首 Token 设为 0</text>
+<rect x="48" y="785" width="1104" height="105" rx="16" fill="#eff6ff" stroke="#bfdbfe" stroke-width="2"/>
+<text x="72" y="824" font-size="26" fill="#172b4d" font-weight="700" text-anchor="start">两条 260 ms 的时间线，平均速度相同，最长暂停却不同。</text>
+<text x="72" y="864" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">这里不包含首字等待，也没有模拟真实 GPU 的 Chunk 调度。</text>
+</g>
+</svg>

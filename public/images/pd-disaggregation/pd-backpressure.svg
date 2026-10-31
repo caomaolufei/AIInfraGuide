@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="870" viewBox="0 0 1200 870" role="img" aria-labelledby="title desc">
+<title id="title">7.5 P 算得更快，为什么反而可能先耗尽显存</title>
+<desc id="desc">P每秒6份，D每秒4份，理想10秒净积压20份；每份1GiB则占20GiB。下游需向上游反馈容量形成背压。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="870" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">7.5 P 算得更快，为什么反而可能先耗尽显存</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">另一个教学场景：P 每秒产出 6 份 KV，D 每秒只能接走 4 份</text>
+<rect x="60" y="195" width="300" height="156" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="210.0" y="247" font-size="29" fill="#2563eb" font-weight="700" text-anchor="middle">P 池</text>
+<text x="210.0" y="303" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">每秒产出 6 份</text>
+<rect x="465" y="195" width="270" height="156" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="600.0" y="247" font-size="29" fill="#2563eb" font-weight="700" text-anchor="middle">待移交 KV</text>
+<text x="600.0" y="303" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">显存仍被占用</text>
+<rect x="845" y="195" width="300" height="156" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="995.0" y="247" font-size="29" fill="#2563eb" font-weight="700" text-anchor="middle">D 池</text>
+<text x="995.0" y="303" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">每秒接走 4 份</text>
+<path d="M360 273 H465" fill="none" stroke="#087f67" stroke-width="6"  marker-end="url(#m087f67)"/>
+<path d="M735 273 H845" fill="none" stroke="#087f67" stroke-width="6"  marker-end="url(#m087f67)"/>
+<rect x="48" y="403" width="1104" height="116" rx="14" fill="#fff7f7" stroke="#fecdd3" stroke-width="2"/>
+<text x="72" y="447" font-size="25" fill="#b42338" font-weight="700" text-anchor="start">没有取消、拒绝和回收时：10 秒净积压约 (6 − 4) × 10 = 20 份。</text>
+<text x="72" y="491" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">若每份保留 1 GiB，这部分状态就额外占约 20 GiB，继续过载还会增长。</text>
+<path d="M995 351 H1170 V575 H30 V273 H60" fill="none" stroke="#b45309" stroke-width="4" stroke-dasharray="9 7" marker-end="url(#mb45309)"/>
+<text x="600" y="565" font-size="26" fill="#b45309" font-weight="700" text-anchor="middle">下游容量不足 → 反馈上游准入与生产速度</text>
+<rect x="48" y="655" width="1104" height="170" rx="14" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="72" y="701" font-size="28" fill="#087f67" font-weight="700" text-anchor="start">背压要在“把新请求算成昂贵的 KV”之前发挥作用。</text>
+<text x="72" y="747" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">先检查下游预算与有界队列，再接入新工作；失败与取消还要安全释放状态。</text>
+<text x="72" y="790" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">仅把产出限制到平均 4/s，也不等于保证尾延迟；突发和长度分布仍需验证。</text>
+</g>
+</svg>
