@@ -232,6 +232,12 @@ AIInfraGuide 正是为了解决这些问题而创建的——一个**开源、�
 | 5.4 | [收益边界与限制](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) | 提交长度与轮耗时账本、投机长度递减、Dynamic SD、并发、量化与流式延迟 |
 | 5.5 | [vLLM 投机解码实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/) | 基于 v0.32.0 的基线/N-gram/Draft/EAGLE-3 对照、逐请求接受指标与 Benchmark |
 | 第 6 章 | 分布式推理与大模型部署 | 张量并行、流水线并行、数据/专家并行、Ray 多节点、vLLM 分布式部署 |
+| 6.1 | [推理并行策略总览](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/61-推理并行策略总览/) | 从容量、延迟和吞吐出发比较 TP、PP、DP、EP，建立权重、KV Cache、通信与 GPU 数量的部署账本 |
+| 6.2 | [张量并行推理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/62-张量并行推理/) | 推导 Column/Row Parallel 的前向、MLP 与 Attention 的切分，分析 AllReduce、KV Head 复制和 TP 的延迟收益边界 |
+| 6.3 | [流水线并行推理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/63-流水线并行推理/) | 理解推理 PP 的层切分、阶段依赖、Micro-batch 与自回归反馈，推导理想气泡并分析 TP×PP 的拓扑映射 |
+| 6.4 | [数据并行与专家并行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/64-数据并行与专家并行/) | 区分独立 Dense 副本与 MoE 的 DP+EP，理解 All-to-All 路由、专家热点、KV 感知负载均衡与 EPLB |
+| 6.5 | [多节点部署与 Ray](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/65-多节点部署与ray/) | 理解 Ray Head、Worker、Actor 与 Placement Group，搭建两节点 TP×PP 部署并按环境、放置、集合通信和服务四层排错 |
+| 6.6 | [vLLM 分布式部署实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/66-vllm分布式部署实战/) | 固定 vLLM 版本与模型，建立单卡、两卡 TP/PP/DP 和 Ray 多节点的对照流程，核对显存、吞吐、尾延迟与质量 |
 | 第 7 章 | PD 解耦架构 | 混合 Batching 干扰、DistServe/Splitwise、KV Cache 传输、Goodput 与 SLO 调度 |
 | 第 8 章 | 性能分析与 Benchmark | 推理指标体系、vllm bench/GenAI-Perf、Nsight、性能回归门禁 |
 | 第 9 章 | 生产部署与运维 | 容器化与 K8s 部署、可观测性、自动扩缩容、负载均衡、容量规划 |

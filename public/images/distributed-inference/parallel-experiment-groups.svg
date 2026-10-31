@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="845" viewBox="0 0 1200 845" role="img" aria-labelledby="title desc">
+<title id="title">6.6 四组实验，先看清楚几张卡和几份模型</title>
+<desc id="desc">单卡一个完整模型；TP两卡层内切分一个模型；PP两卡层切分一个模型；DP两卡两个完整模型。比较时记录资源。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="845" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">6.6 四组实验，先看清楚几张卡和几份模型</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">依次运行，固定模型、长度、精度和全局并发；下图仅表示组织方式</text>
+<rect x="48" y="170" width="264" height="340" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="180" y="215" font-size="28" fill="#2563eb" font-weight="700" text-anchor="middle">A：单卡</text>
+<rect x="68" y="245" width="224" height="66" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="180" y="288" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">完整模型</text>
+<text x="180" y="462" font-size="23" fill="#172b4d" font-weight="700" text-anchor="middle">1 GPU，1 副本</text>
+<rect x="336" y="170" width="264" height="340" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="468" y="215" font-size="28" fill="#2563eb" font-weight="700" text-anchor="middle">B：TP=2</text>
+<rect x="356" y="245" width="224" height="66" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="468" y="288" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">同层分片 0</text>
+<rect x="356" y="330" width="224" height="66" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="468" y="373" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">同层分片 1</text>
+<text x="468" y="462" font-size="23" fill="#172b4d" font-weight="700" text-anchor="middle">2 GPU，1 副本</text>
+<rect x="624" y="170" width="264" height="340" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="756" y="215" font-size="28" fill="#2563eb" font-weight="700" text-anchor="middle">C：PP=2</text>
+<rect x="644" y="245" width="224" height="66" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="756" y="288" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">前半模型层</text>
+<rect x="644" y="330" width="224" height="66" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="756" y="373" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">后半模型层</text>
+<text x="756" y="462" font-size="23" fill="#172b4d" font-weight="700" text-anchor="middle">2 GPU，1 副本</text>
+<rect x="912" y="170" width="264" height="340" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="1044" y="215" font-size="28" fill="#2563eb" font-weight="700" text-anchor="middle">D：DP=2</text>
+<rect x="932" y="245" width="224" height="66" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="1044" y="288" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">完整模型 A</text>
+<rect x="932" y="330" width="224" height="66" rx="14" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="1044" y="373" font-size="25" fill="#172b4d" font-weight="400" text-anchor="middle">完整模型 B</text>
+<text x="1044" y="462" font-size="23" fill="#172b4d" font-weight="700" text-anchor="middle">2 GPU，2 副本</text>
+<path d="M 180 510 V 580" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<path d="M 468 510 V 580" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<path d="M 756 510 V 580" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<path d="M 1044 510 V 580" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#m2563eb)"/>
+<rect x="48" y="590" width="1104" height="151" rx="14" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+<text x="72" y="637" font-size="26" fill="#087f67" font-weight="700" text-anchor="start">每组都留下：生成验收 → 请求成功与长度 → 延迟和吞吐 → GPU 预算</text>
+<text x="72" y="683" font-size="23" fill="#172b4d" font-weight="400" text-anchor="start">A 是一张卡，B/C/D 是两张卡；比较架构时先对齐资源，比较扩展时报告每卡效率。</text>
+<text x="48" y="800" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">例如单卡 100、两卡 160 输出 Token/s：总产出 1.6 倍，线性扩展效率 80%。</text>
+</g>
+</svg>

@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1368" viewBox="0 0 1200 1368" role="img" aria-labelledby="title desc">
+  <title id="title">TP、PP、DP、EP 的数据流对比</title>
+  <desc id="desc">四行分别展示两张 GPU 上的最小数据流。TP 的行并行示例将同一批 Token 的输入通道与权重分片，局部部分和经 AllReduce 合成同一层输出。PP 将同一请求的激活依次送过不同模型层的阶段。DP 把不同请求交给独立的完整模型副本，分别返回结果。EP 的 Top-2 示例将同一 Token 路由到不同 GPU 的专家，回传后按路由权重合成。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#64748b"/>
+    </marker>
+    <style>
+      text { font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif; fill: #172b4d; }
+      .title { font-size: 32px; font-weight: 700; }
+      .heading { font-size: 27px; font-weight: 700; }
+      .label { font-size: 23px; font-weight: 600; }
+      .body { font-size: 22px; }
+      .small { font-size: 20px; fill: #475569; }
+      .note { font-size: 22px; fill: #334155; }
+      .flow { fill: none; stroke: #64748b; stroke-width: 2.5; stroke-linejoin: round; marker-end: url(#arrow); }
+      .panel { fill: #fff; stroke: #dbe3ed; stroke-width: 1.5; }
+      .io { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.5; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="1368" rx="20" fill="#f1f5f9"/>
+  <text x="32" y="49" class="title">同样两张 GPU，数据到底怎样流动？</text>
+  <text x="32" y="84" class="body" fill="#475569">先看箭头：是层内分片、层间接力、请求分流，还是专家路由。</text>
+
+  <!-- TP: one row-parallel layer; local outputs are partial sums. -->
+  <g transform="translate(24 108)">
+    <rect width="1152" height="280" rx="16" class="panel"/>
+    <rect x="20" y="18" width="65" height="38" rx="10" fill="#dbeafe"/>
+    <text x="52" y="46" class="heading" text-anchor="middle" style="fill:#1d4ed8">TP</text>
+    <text x="103" y="46" class="heading">张量并行：同一层，分片计算后合成</text>
+
+    <rect x="22" y="112" width="186" height="82" rx="12" class="io"/>
+    <text x="115" y="145" class="label" text-anchor="middle">同一批 Token</text>
+    <text x="115" y="177" class="body" text-anchor="middle">输入激活 X</text>
+
+    <rect x="298" y="76" width="346" height="68" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="471" y="103" class="label" text-anchor="middle">GPU 0 · 权重分片 W₀</text>
+    <text x="471" y="130" class="body" text-anchor="middle">部分和 Y₀ = X₀W₀</text>
+    <rect x="298" y="164" width="346" height="68" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="471" y="191" class="label" text-anchor="middle">GPU 1 · 权重分片 W₁</text>
+    <text x="471" y="218" class="body" text-anchor="middle">部分和 Y₁ = X₁W₁</text>
+
+    <path d="M208 153 H248 V110 H298" class="flow"/>
+    <path d="M208 153 H248 V198 H298" class="flow"/>
+    <text x="269" y="98" class="small" text-anchor="middle">X₀</text>
+    <text x="269" y="186" class="small" text-anchor="middle">X₁</text>
+
+    <rect x="759" y="112" width="174" height="82" rx="12" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.5"/>
+    <text x="846" y="145" class="label" text-anchor="middle">AllReduce</text>
+    <text x="846" y="177" class="body" text-anchor="middle">Y = Y₀ + Y₁</text>
+    <path d="M644 110 H708 V137 H759" class="flow"/>
+    <path d="M644 198 H708 V169 H759" class="flow"/>
+    <text x="681" y="99" class="small">Y₀</text>
+    <text x="681" y="226" class="small">Y₁</text>
+
+    <rect x="985" y="112" width="145" height="82" rx="12" class="io"/>
+    <text x="1057" y="145" class="label" text-anchor="middle">同一层输出</text>
+    <text x="1057" y="177" class="body" text-anchor="middle">继续后续层</text>
+    <path d="M933 153 H985" class="flow"/>
+    <text x="22" y="261" class="note">看数据：同一批 Token 协作处理；这里画的是行并行线性层，X 按输入通道切分。</text>
+  </g>
+
+  <!-- PP: the same request crosses layer stages in sequence. -->
+  <g transform="translate(24 406)">
+    <rect width="1152" height="280" rx="16" class="panel"/>
+    <rect x="20" y="18" width="65" height="38" rx="10" fill="#ffedd5"/>
+    <text x="52" y="46" class="heading" text-anchor="middle" style="fill:#c2410c">PP</text>
+    <text x="103" y="46" class="heading">流水线并行：同一请求，按模型层逐段接力</text>
+
+    <rect x="22" y="112" width="186" height="82" rx="12" class="io"/>
+    <text x="115" y="145" class="label" text-anchor="middle">请求 A</text>
+    <text x="115" y="177" class="body" text-anchor="middle">输入激活</text>
+    <rect x="276" y="102" width="274" height="102" rx="12" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+    <text x="413" y="135" class="label" text-anchor="middle">GPU 0 · Stage 0</text>
+    <text x="413" y="167" class="body" text-anchor="middle">前半模型层</text>
+    <text x="413" y="192" class="small" text-anchor="middle">本阶段权重与 KV</text>
+    <rect x="683" y="102" width="274" height="102" rx="12" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+    <text x="820" y="135" class="label" text-anchor="middle">GPU 1 · Stage 1</text>
+    <text x="820" y="167" class="body" text-anchor="middle">后半模型层</text>
+    <text x="820" y="192" class="small" text-anchor="middle">本阶段权重与 KV</text>
+    <rect x="1009" y="112" width="121" height="82" rx="12" class="io"/>
+    <text x="1069" y="145" class="label" text-anchor="middle">请求 A</text>
+    <text x="1069" y="177" class="body" text-anchor="middle">本轮输出</text>
+    <path d="M208 153 H276" class="flow"/>
+    <path d="M550 153 H683" class="flow"/>
+    <text x="616" y="127" class="small" text-anchor="middle">边界激活 h</text>
+    <path d="M957 153 H1009" class="flow"/>
+    <text x="22" y="261" class="note">看数据：一条请求依次经过各 Stage；其他独立请求可填流水线，同一序列仍有前后依赖。</text>
+  </g>
+
+  <!-- DP: independent dense replicas return separate request results. -->
+  <g transform="translate(24 704)">
+    <rect width="1152" height="280" rx="16" class="panel"/>
+    <rect x="20" y="18" width="65" height="38" rx="10" fill="#dcfce7"/>
+    <text x="52" y="46" class="heading" text-anchor="middle" style="fill:#15803d">DP</text>
+    <text x="103" y="46" class="heading">数据并行：不同请求，交给不同完整副本</text>
+
+    <rect x="22" y="112" width="186" height="82" rx="12" class="io"/>
+    <text x="115" y="145" class="label" text-anchor="middle">不同请求批次</text>
+    <text x="115" y="177" class="body" text-anchor="middle">A、B → 分流</text>
+    <rect x="298" y="76" width="465" height="68" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+    <text x="530" y="103" class="label" text-anchor="middle">GPU 0 · 完整模型副本 0</text>
+    <text x="530" y="130" class="body" text-anchor="middle">独立处理 A · 自有 KV</text>
+    <rect x="298" y="164" width="465" height="68" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+    <text x="530" y="191" class="label" text-anchor="middle">GPU 1 · 完整模型副本 1</text>
+    <text x="530" y="218" class="body" text-anchor="middle">独立处理 B · 自有 KV</text>
+    <path d="M208 153 H248 V110 H298" class="flow"/>
+    <path d="M208 153 H248 V198 H298" class="flow"/>
+    <text x="269" y="98" class="small" text-anchor="middle">A</text>
+    <text x="269" y="186" class="small" text-anchor="middle">B</text>
+
+    <rect x="985" y="76" width="145" height="68" rx="12" class="io"/>
+    <text x="1057" y="118" class="label" text-anchor="middle">A 的输出</text>
+    <rect x="985" y="164" width="145" height="68" rx="12" class="io"/>
+    <text x="1057" y="206" class="label" text-anchor="middle">B 的输出</text>
+    <path d="M763 110 H985" class="flow"/>
+    <path d="M763 198 H985" class="flow"/>
+    <text x="874" y="145" class="small" text-anchor="middle">分别返回，不求和</text>
+    <text x="22" y="261" class="note">看数据：分的是请求，不是同一层的矩阵；这里画 Dense 独立副本，每个副本使用一张卡。</text>
+  </g>
+
+  <!-- EP: one token selects two experts and its outputs are weighted together. -->
+  <g transform="translate(24 1002)">
+    <rect width="1152" height="280" rx="16" class="panel"/>
+    <rect x="20" y="18" width="65" height="38" rx="10" fill="#ede9fe"/>
+    <text x="52" y="46" class="heading" text-anchor="middle" style="fill:#6d28d9">EP</text>
+    <text x="103" y="46" class="heading">专家并行：Token 按路由选择专家，再按 Token 合成</text>
+
+    <rect x="22" y="112" width="162" height="82" rx="12" class="io"/>
+    <text x="103" y="145" class="label" text-anchor="middle">同一批 Token</text>
+    <text x="103" y="177" class="body" text-anchor="middle">示例：a</text>
+    <rect x="239" y="112" width="160" height="82" rx="12" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="319" y="145" class="label" text-anchor="middle">Router</text>
+    <text x="319" y="177" class="body" text-anchor="middle">Top-2 门控</text>
+    <path d="M184 153 H239" class="flow"/>
+
+    <rect x="521" y="76" width="292" height="68" rx="12" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="667" y="103" class="label" text-anchor="middle">GPU 0 · 专家 E₀</text>
+    <text x="667" y="130" class="body" text-anchor="middle">计算 E₀(a)</text>
+    <rect x="521" y="164" width="292" height="68" rx="12" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5"/>
+    <text x="667" y="191" class="label" text-anchor="middle">GPU 1 · 专家 E₁</text>
+    <text x="667" y="218" class="body" text-anchor="middle">计算 E₁(a)</text>
+    <path d="M399 153 H451 V110 H521" class="flow"/>
+    <path d="M399 153 H451 V198 H521" class="flow"/>
+    <text x="461" y="85" class="small" text-anchor="middle">Dispatch</text>
+
+    <rect x="945" y="112" width="185" height="82" rx="12" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="1037" y="145" class="label" text-anchor="middle">Combine</text>
+    <text x="1037" y="177" class="body" text-anchor="middle">a 的加权输出</text>
+    <path d="M813 110 H881 V137 H945" class="flow"/>
+    <path d="M813 198 H881 V169 H945" class="flow"/>
+    <text x="879" y="85" class="small" text-anchor="middle">回传专家结果</text>
+    <text x="22" y="261" class="note">看数据：一个 Token 可去多个专家，结果按门控权重合成；这里只展开 MoE 专家层。</text>
+  </g>
+
+  <text x="32" y="1321" class="body">TP / PP：多个设备协作一个副本；DP：复制副本分请求；EP：在专家层路由 Token。</text>
+  <text x="32" y="1351" class="small">图为最小结构示意，省略其他算子与控制通信；实际系统可组合 TP、PP、DP 和 EP。</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="825" viewBox="0 0 1200 825" role="img" aria-labelledby="title desc">
+<title id="title">6.3 气泡在哪里：把流水线画成四个时间槽</title>
+<desc id="desc">Stage0依次计算A,B,C并空等一槽；Stage1先空等再计算A,B,C。总40毫秒，第一份20毫秒完成。</desc>
+<defs>
+<marker id="m2563eb" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#2563eb"/>
+</marker>
+<marker id="m087f67" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#087f67"/>
+</marker>
+<marker id="mb45309" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b45309"/>
+</marker>
+<marker id="mb42338" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#b42338"/>
+</marker>
+<marker id="m7048b8" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M0 0 L12 6 L0 12 Z" fill="#7048b8"/>
+</marker>
+</defs>
+<rect width="1200" height="825" rx="24" fill="white"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="48" y="65" font-size="34" fill="#172b4d" font-weight="700" text-anchor="start">6.3 气泡在哪里：把流水线画成四个时间槽</text>
+<text x="48" y="112" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">两阶段、三份独立 Micro-batch；每阶段 10 ms，暂不计通信和调度</text>
+<text x="48" y="266" font-size="28" fill="#172b4d" font-weight="700" text-anchor="start">Stage 0</text>
+<rect x="255" y="220" width="206" height="88" rx="5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="358" y="274" font-size="29" fill="#ffffff" font-weight="700" text-anchor="middle">A</text>
+<rect x="465" y="220" width="206" height="88" rx="5" fill="#087f67" stroke="#ffffff" stroke-width="2"/>
+<text x="568" y="274" font-size="29" fill="#ffffff" font-weight="700" text-anchor="middle">B</text>
+<rect x="675" y="220" width="206" height="88" rx="5" fill="#7048b8" stroke="#ffffff" stroke-width="2"/>
+<text x="778" y="274" font-size="29" fill="#ffffff" font-weight="700" text-anchor="middle">C</text>
+<rect x="885" y="220" width="206" height="88" rx="5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="988" y="274" font-size="29" fill="#b45309" font-weight="700" text-anchor="middle">空等</text>
+<text x="48" y="421" font-size="28" fill="#172b4d" font-weight="700" text-anchor="start">Stage 1</text>
+<rect x="255" y="375" width="206" height="88" rx="5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+<text x="358" y="429" font-size="29" fill="#b45309" font-weight="700" text-anchor="middle">空等</text>
+<rect x="465" y="375" width="206" height="88" rx="5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+<text x="568" y="429" font-size="29" fill="#ffffff" font-weight="700" text-anchor="middle">A</text>
+<rect x="675" y="375" width="206" height="88" rx="5" fill="#087f67" stroke="#ffffff" stroke-width="2"/>
+<text x="778" y="429" font-size="29" fill="#ffffff" font-weight="700" text-anchor="middle">B</text>
+<rect x="885" y="375" width="206" height="88" rx="5" fill="#7048b8" stroke="#ffffff" stroke-width="2"/>
+<text x="988" y="429" font-size="29" fill="#ffffff" font-weight="700" text-anchor="middle">C</text>
+<text x="255" y="532" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">0 ms</text>
+<text x="465" y="532" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">10 ms</text>
+<text x="675" y="532" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">20 ms</text>
+<text x="885" y="532" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">30 ms</text>
+<text x="1095" y="532" font-size="23" fill="#172b4d" font-weight="400" text-anchor="middle">40 ms</text>
+<rect x="48" y="582" width="1104" height="140" rx="14" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+<text x="72" y="628" font-size="28" fill="#b45309" font-weight="700" text-anchor="start">A 在 20 ms 完成；B 在 30 ms 完成；C 在 40 ms 完成。</text>
+<text x="72" y="673" font-size="26" fill="#172b4d" font-weight="400" text-anchor="start">忙时比例 = 6 个计算槽 / 8 个设备时间槽 = 75%。</text>
+<text x="48" y="776" font-size="24" fill="#172b4d" font-weight="400" text-anchor="start">流水线提高这三份工作的整体完成效率，A 自己仍要先后经过两段、共等 20 ms。</text>
+</g>
+</svg>
