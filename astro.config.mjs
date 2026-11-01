@@ -6,6 +6,8 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import rehypeTableWrap from './src/utils/rehype-table-wrap.mjs';
+import rehypeReferences from './src/utils/rehype-references.mjs';
 
 export default defineConfig({
   site: 'https://caomaolufei.github.io',
@@ -29,6 +31,8 @@ export default defineConfig({
       [rehypeAutolinkHeadings, { behavior: 'wrap' }],
       [rehypeExternalLinks, { target: '_blank', rel: ['nofollow', 'noopener'] }],
       rehypeKatex,
+      rehypeTableWrap,
+      rehypeReferences,
     ],
   },
 });

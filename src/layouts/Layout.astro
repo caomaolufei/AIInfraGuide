@@ -393,7 +393,14 @@ const mobileNavLinkClass = (prefix: string) =>
           pre.replaceWith(div);
         });
 
-        mermaid.run();
+        mermaid.run().then(() => {
+          // Let wide diagrams shrink to at most 75% of natural size, then
+          // scroll inside .mermaid instead of shrinking the labels further.
+          document.querySelectorAll('.mermaid svg').forEach((svg) => {
+            const w = svg.viewBox.baseVal?.width;
+            if (w) svg.style.minWidth = `${Math.round(w * 0.75)}px`;
+          });
+        });
       }
 
       // Run on initial load

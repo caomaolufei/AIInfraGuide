@@ -6,5 +6,5 @@ dist/
 .env.*
 *.log
 public/pagefind/
-docs/guides/课程资料
 image-cards/
+docs/interview/面试宝典

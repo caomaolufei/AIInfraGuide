@@ -281,16 +281,247 @@ html.dark .astro-code span {
 }
 
 /* ═══════════════════════════════════════
+   Tables (wrapped by rehype-table-wrap)
+   ═══════════════════════════════════════ */
+
+/* ── Container: rounded card, scrolls horizontally on narrow screens ── */
+.prose .table-wrap {
+  margin: 1.75em 0;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.04);
+  -webkit-overflow-scrolling: touch;
+}
+
+.dark .prose .table-wrap {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.prose .table-wrap:focus-visible {
+  outline: 2px solid #007aff;
+  outline-offset: 2px;
+}
+
+.prose .table-wrap table {
+  margin: 0;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Header ── */
+.prose .table-wrap thead {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.prose .table-wrap thead th {
+  padding: 0.7rem 1rem;
+  background-color: #f6f8fa;
+  color: #111827;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.dark .prose .table-wrap thead {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .prose .table-wrap thead th {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #f3f4f6;
+}
+
+/* ── Body cells ── */
+.prose .table-wrap tbody td {
+  padding: 0.65rem 1rem;
+  min-width: 7.5rem;
+  color: #4b5563;
+  vertical-align: top;
+}
+
+/* First column is usually the row label */
+.prose .table-wrap tbody td:first-child {
+  color: #111827;
+  font-weight: 500;
+}
+
+.dark .prose .table-wrap tbody td {
+  color: #d1d5db;
+}
+
+.dark .prose .table-wrap tbody td:first-child {
+  color: #f3f4f6;
+}
+
+.prose .table-wrap tbody tr {
+  border-bottom: 1px solid #f0f1f3;
+  transition: background-color 0.15s ease;
+}
+
+.prose .table-wrap tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.prose .table-wrap tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.prose .table-wrap tbody tr:hover {
+  background-color: rgba(0, 122, 255, 0.05);
+}
+
+.dark .prose .table-wrap tbody tr {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .prose .table-wrap tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.dark .prose .table-wrap tbody tr:hover {
+  background-color: rgba(10, 132, 255, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose .table-wrap tbody tr {
+    transition: none;
+  }
+}
+
+/* ── Scrollbar ── */
+.prose .table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.prose .table-wrap::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+.dark .prose .table-wrap::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════
+   Heading anchors (rehype-autolink-headings wraps the text in <a>)
+   Keep headings in heading color instead of link blue.
+   ═══════════════════════════════════════ */
+.prose :is(h1, h2, h3, h4, h5, h6) > a[href^="#"] {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+/* ═══════════════════════════════════════
+   In-article TOC (the list right after "## 📑 目录")
+   Prose list spacing is tuned for body text; tighten it for link lists.
+   ═══════════════════════════════════════ */
+.prose h2[id="-目录"] + ul {
+  line-height: 1.6;
+}
+
+.prose h2[id="-目录"] + ul li {
+  margin-top: 0.15em;
+  margin-bottom: 0.15em;
+}
+
+.prose h2[id="-目录"] + ul ul {
+  margin-top: 0.15em;
+  margin-bottom: 0.15em;
+}
+
+/* ═══════════════════════════════════════
+   KaTeX: long display formulas scroll instead of being cut off on mobile
+   ═══════════════════════════════════════ */
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25em 0;
+}
+
+/* ═══════════════════════════════════════
+   References (wrapped by rehype-references)
+   ═══════════════════════════════════════ */
+.prose .references {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+.prose .references :is(ul, ol) {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.prose .references li {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  color: inherit;
+}
+
+.prose .references li::marker {
+  color: #9ca3af;
+}
+
+.prose .references a {
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.prose .references h3 {
+  margin-top: 1.25em;
+  margin-bottom: 0.25em;
+  font-size: 0.9375rem;
+}
+
+.dark .prose .references {
+  color: #9ca3af;
+}
+
+.dark .prose .references li::marker {
+  color: #6b7280;
+}
+
+/* ═══════════════════════════════════════
    Mermaid Diagrams
    ═══════════════════════════════════════ */
+/* Tall diagrams render at natural size; wide ones scroll horizontally once
+   shrinking further would make the labels unreadable (see Layout.astro). */
 .mermaid {
   display: flex;
-  justify-content: center;
-  margin: 1.5em 0;
+  margin: 1.75em 0;
+  padding: 1.25rem 1rem;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dark .mermaid {
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .mermaid svg {
   max-width: 100%;
   height: auto;
-  max-height: 360px;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+.mermaid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.mermaid::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+.dark .mermaid::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
 }

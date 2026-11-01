@@ -9,6 +9,26 @@ tags: ["公告", "更新日志"]
 
 ---
 
+## 2026-11-01
+
+### 调整内容
+
+**模块四 · 推理优化** 第 3 章「nano-vllm 源码解读」6 篇文章修订：源码走读对齐 nano-vllm main 分支 2026-04-26 的提交，新增 3 张示意图，原有 8 张 Mermaid 图全部改为手绘风格 SVG，并修正了部分不准确的表述：
+
+- **文章：** [3.1 项目全景与四层架构](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/31-项目全景与四层架构/) | 项目信息表更新代码行数、版本与依赖、Star 数；四层架构图与请求生命周期图改为 SVG；补充 Prefill 与 Decode 不混批的说明
+
+- **文章：** [3.2 配置、入口与一次 generate 的全流程](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/32-配置入口与推理主循环/) | 补充 `tensor_parallel_size`、`ignore_eos` 等参数的约束；说明 nano-vllm 不支持贪心采样，以及 README 示例不套对话模板的问题；补充 `step` 返回的 `num_tokens` 用正负号区分阶段
+
+- **文章：** [3.3 模型骨架与核心算子](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/33-模型与核心算子/) | 张量并行切分图改为 SVG；新增 Sampler 一节；补充每层 2 次 all_reduce 的来源，以及 KV 头数限制 TP 度的说明
+
+- **文章：** [3.4 KV Cache 与 BlockManager](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/34-kvcache与blockmanager/) | 前缀缓存一节拆成哈希链、登记、匹配三部分；新增前缀命中分配示意图，匹配流程图改为 SVG；补充最后一块不查表、命中在用块与空闲块的区别，以及整块粒度带来的复用截断
+
+- **文章：** [3.5 Scheduler 与连续批处理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/35-scheduler与连续批处理/) | 序列状态图与调度闭环图改为 SVG；逐条解释 prefill 分支的三处 `break`、严格先来先服务带来的队头阻塞；补充抢占走重计算、`while ... else` 的执行条件
+
+- **文章：** [3.6 ModelRunner、CUDA Graph 与性能基准](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/36-modelrunner引擎循环与性能/) | 新增 `slot_mapping` 计算图与 CUDA Graph 档位图，`run` 流程图与全章调用链图改为 SVG；补充 KV Cache 的 6 维布局、档位上限与 `max_num_seqs` 的关系；性能基准补充测试条件和结论的适用范围
+
+---
+
 ## 2026-10-29
 
 ### 调整内容
