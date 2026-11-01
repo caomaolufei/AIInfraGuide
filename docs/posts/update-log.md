@@ -27,6 +27,20 @@ tags: ["公告", "更新日志"]
 
 - **文章：** [3.6 ModelRunner、CUDA Graph 与性能基准](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/36-modelrunner引擎循环与性能/) | 新增 `slot_mapping` 计算图与 CUDA Graph 档位图，`run` 流程图与全章调用链图改为 SVG；补充 KV Cache 的 6 维布局、档位上限与 `max_num_seqs` 的关系；性能基准补充测试条件和结论的适用范围
 
+**模块四 · 推理优化** 第 4 章「量化」6 篇文章修订：新增 7 张示意图，原有 4 张扁平风格插图重画为手绘风格，原有 Mermaid 图全部改为 SVG，并对照 vLLM v0.32.0 源码修正了部分表述：
+
+- **文章：** [4.1 量化基础](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/41-量化基础/) | 新增四种量化粒度图，重画对称/非对称量化数轴；补充 4-bit 对称量化的编码范围；PyTorch 量化参考资料改为 torchao 文档
+
+- **文章：** [4.2 W8A8 与 SmoothQuant](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/42-w8a8与smoothquant/) | 重画配对缩放图，离线量化流程图改为 SVG
+
+- **文章：** [4.3 Weight-only INT4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/43-weight-only-int4/) | 新增 W4A16 打包与片上反量化图、GPTQ/AWQ 对比图，Marlin 流水线图改为 SVG
+
+- **文章：** [4.4 KV Cache 量化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/44-kv-cache量化/) | 重画 KIVI 分组示意图；补充 Value 残留区按滑动窗口逐 Token 量化移出的说明
+
+- **文章：** [4.5 FP8 与 NVFP4/MXFP4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/45-fp8与nvfp4-mxfp4/) | 新增 FP8 与 INT8 刻度分布对比图，重画 FP4 微块缩放图；在线 FP8 方案补充 `fp8_per_channel`
+
+- **文章：** [4.6 量化选型与 vLLM 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/46-量化选型与vllm实战/) | 选型流程图改为 SVG；修正在线 FP8 的加载方式（v0.32.0 先建在 meta 设备上逐层转换，不会整份载入 16-bit 权重）
+
 ---
 
 ## 2026-10-29
