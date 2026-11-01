@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="490" viewBox="0 0 960 490" role="img" aria-labelledby="title desc" font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <filter id="sketch-box" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".014" numOctaves="2" seed="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.4" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="sketch-line" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="8" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <pattern id="hatch-gray" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(24,24,24,0.15)" />
+    </pattern>
+    <pattern id="hatch-red" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(232,86,60,0.40)" />
+    </pattern>
+  </defs>
+  <title id="title">候选树的祖先注意力矩阵</title>
+  <desc id="desc">候选顺序为a,b,c,d,e；c和d的父节点为a，e的父节点为b。所有候选还能读取共同历史。</desc>
+  <rect width="960" height="490" rx="12" fill="#ffffff" />
+  <g font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif" fill="#181818">
+    <text x="32" y="36" font-size="18" fill="#666666" font-weight="400" text-anchor="start">1 表示可见，0 表示屏蔽；公共历史未画入矩阵</text>
+<text x="36" y="86" font-size="20" fill="#181818" font-weight="700" text-anchor="start">查询行</text>
+<text x="223" y="86" font-size="20" fill="#181818" font-weight="700" text-anchor="start">候选键列</text>
+<text x="627" y="86" font-size="20" fill="#181818" font-weight="700" text-anchor="start">相对位置</text>
+<text x="772" y="86" font-size="20" fill="#181818" font-weight="700" text-anchor="start">候选路径</text>
+<text x="251" y="123" font-size="20" fill="#181818" font-weight="700" text-anchor="middle">a</text>
+<text x="313" y="123" font-size="20" fill="#181818" font-weight="700" text-anchor="middle">b</text>
+<text x="375" y="123" font-size="20" fill="#181818" font-weight="700" text-anchor="middle">c</text>
+<text x="437" y="123" font-size="20" fill="#181818" font-weight="700" text-anchor="middle">d</text>
+<text x="499" y="123" font-size="20" fill="#181818" font-weight="700" text-anchor="middle">e</text>
+<text x="66" y="173" font-size="22" fill="#181818" font-weight="700" text-anchor="start">a</text>
+<rect x="227.0" y="144.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="225" y="142" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="251" y="172" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<rect x="289.0" y="144.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="289.0" y="144.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="287" y="142" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="313" y="172" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="351.0" y="144.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="351.0" y="144.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="349" y="142" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="375" y="172" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="413.0" y="144.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="413.0" y="144.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="411" y="142" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="437" y="172" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="475.0" y="144.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="475.0" y="144.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="473" y="142" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="499" y="172" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<text x="673" y="173" font-size="20" fill="#181818" font-weight="400" text-anchor="middle">1</text>
+<text x="773" y="173" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">a</text>
+<text x="66" y="227" font-size="22" fill="#181818" font-weight="700" text-anchor="start">b</text>
+<rect x="227.0" y="198.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="227.0" y="198.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="225" y="196" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="251" y="226" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="289.0" y="198.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="287" y="196" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="313" y="226" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<rect x="351.0" y="198.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="351.0" y="198.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="349" y="196" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="375" y="226" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="413.0" y="198.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="413.0" y="198.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="411" y="196" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="437" y="226" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="475.0" y="198.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="475.0" y="198.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="473" y="196" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="499" y="226" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<text x="673" y="227" font-size="20" fill="#181818" font-weight="400" text-anchor="middle">1</text>
+<text x="773" y="227" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">b</text>
+<text x="66" y="281" font-size="22" fill="#181818" font-weight="700" text-anchor="start">c</text>
+<rect x="227.0" y="252.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="225" y="250" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="251" y="280" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<rect x="289.0" y="252.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="289.0" y="252.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="287" y="250" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="313" y="280" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="351.0" y="252.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="349" y="250" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="375" y="280" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<rect x="413.0" y="252.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="413.0" y="252.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="411" y="250" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="437" y="280" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="475.0" y="252.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="475.0" y="252.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="473" y="250" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="499" y="280" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<text x="673" y="281" font-size="20" fill="#181818" font-weight="400" text-anchor="middle">2</text>
+<text x="773" y="281" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">a → c</text>
+<text x="66" y="335" font-size="22" fill="#181818" font-weight="700" text-anchor="start">d</text>
+<rect x="227.0" y="306.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="225" y="304" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="251" y="334" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<rect x="289.0" y="306.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="289.0" y="306.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="287" y="304" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="313" y="334" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="351.0" y="306.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="351.0" y="306.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="349" y="304" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="375" y="334" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="413.0" y="306.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="411" y="304" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="437" y="334" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<rect x="475.0" y="306.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="475.0" y="306.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="473" y="304" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="499" y="334" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<text x="673" y="335" font-size="20" fill="#181818" font-weight="400" text-anchor="middle">2</text>
+<text x="773" y="335" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">a → d</text>
+<text x="66" y="389" font-size="22" fill="#181818" font-weight="700" text-anchor="start">e</text>
+<rect x="227.0" y="360.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="227.0" y="360.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="225" y="358" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="251" y="388" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="289.0" y="360.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="287" y="358" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="313" y="388" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<rect x="351.0" y="360.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="351.0" y="360.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="349" y="358" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="375" y="388" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="413.0" y="360.0" width="52" height="44" rx="3" fill="#f5f5f3" />
+    <rect x="413.0" y="360.0" width="52" height="44" rx="3" fill="url(#hatch-gray)" />
+    <rect x="411" y="358" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="437" y="388" font-size="20" fill="#666666" font-weight="400" text-anchor="middle">0</text>
+<rect x="475.0" y="360.0" width="52" height="44" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="473" y="358" width="52" height="44" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="499" y="388" font-size="20" fill="#266cda" font-weight="400" text-anchor="middle">1</text>
+<text x="673" y="389" font-size="20" fill="#181818" font-weight="400" text-anchor="middle">2</text>
+<text x="773" y="389" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">b → e</text>
+<text x="32" y="450" font-size="18" fill="#666666" font-weight="400" text-anchor="start">兄弟节点位置相同，但互不可见；展平后的数组顺序不代表真实历史。</text>
+</g>
+</svg>

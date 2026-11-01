@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc" font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <filter id="sketch-box" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".014" numOctaves="2" seed="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.4" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="sketch-line" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="8" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <pattern id="hatch-gray" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(24,24,24,0.15)" />
+    </pattern>
+    <pattern id="hatch-red" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(232,86,60,0.40)" />
+    </pattern>
+  </defs>
+  <title id="title">验证后KV的保留与回退</title>
+  <desc id="desc">四个候选中接受y1和y2，拒绝y3并生成z。保留历史和前两个候选的KV，后缀失效；z的KV尚待计算。</desc>
+  <rect width="960" height="480" rx="12" fill="#ffffff" />
+  <g font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif" fill="#181818">
+    <text x="32" y="36" font-size="19" fill="#666666" font-weight="400" text-anchor="start">示例：y₁、y₂ 被接受，y₃ 被拒绝，并采样得到修正 Token z</text>
+<text x="32" y="86" font-size="21" fill="#181818" font-weight="700" text-anchor="start">验证后的临时 KV</text>
+<rect x="34.0" y="107.0" width="266" height="57" rx="3" fill="rgba(24,24,24,0.12)" />
+    <rect x="32" y="105" width="266" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="165.0" y="141" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">历史 h</text>
+<rect x="318.0" y="107.0" width="124" height="57" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="316" y="105" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="378.0" y="141" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₁</text>
+<rect x="460.0" y="107.0" width="124" height="57" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="458" y="105" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="520.0" y="141" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₂</text>
+<rect x="602.0" y="107.0" width="124" height="57" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="600" y="105" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="662.0" y="141" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₃</text>
+<rect x="744.0" y="107.0" width="124" height="57" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="742" y="105" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="804.0" y="141" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₄</text>
+<text x="32" y="211" font-size="21" fill="#181818" font-weight="700" text-anchor="start">回退后的有效 KV</text>
+<rect x="34.0" y="232.0" width="266" height="57" rx="3" fill="rgba(24,24,24,0.12)" />
+    <rect x="32" y="230" width="266" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="165.0" y="266" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">历史 h</text>
+<rect x="318.0" y="232.0" width="124" height="57" rx="3" fill="rgba(22,158,138,0.40)" />
+    <rect x="316" y="230" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="378.0" y="266" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₁</text>
+<rect x="460.0" y="232.0" width="124" height="57" rx="3" fill="rgba(22,158,138,0.40)" />
+    <rect x="458" y="230" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="520.0" y="266" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₂</text>
+<rect x="602.0" y="232.0" width="124" height="57" rx="3" fill="rgba(232,86,60,0.14)" />
+    <rect x="602.0" y="232.0" width="124" height="57" rx="3" fill="url(#hatch-red)" />
+    <rect x="600" y="230" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-dasharray="6 4" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="662.0" y="266" font-size="21" fill="#c44732" font-weight="700" text-anchor="middle">失效</text>
+<rect x="744.0" y="232.0" width="124" height="57" rx="3" fill="rgba(232,86,60,0.14)" />
+    <rect x="744.0" y="232.0" width="124" height="57" rx="3" fill="url(#hatch-red)" />
+    <rect x="742" y="230" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-dasharray="6 4" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="804.0" y="266" font-size="21" fill="#c44732" font-weight="700" text-anchor="middle">失效</text>
+<text x="32" y="336" font-size="21" fill="#181818" font-weight="700" text-anchor="start">已提交的文本</text>
+<rect x="34.0" y="357.0" width="266" height="57" rx="3" fill="rgba(22,158,138,0.40)" />
+    <rect x="32" y="355" width="266" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="165.0" y="391" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">历史 h</text>
+<rect x="318.0" y="357.0" width="124" height="57" rx="3" fill="rgba(22,158,138,0.40)" />
+    <rect x="316" y="355" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="378.0" y="391" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₁</text>
+<rect x="460.0" y="357.0" width="124" height="57" rx="3" fill="rgba(22,158,138,0.40)" />
+    <rect x="458" y="355" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="520.0" y="391" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">y₂</text>
+<rect x="602.0" y="357.0" width="124" height="57" rx="3" fill="rgba(238,148,22,0.40)" />
+    <rect x="600" y="355" width="124" height="57" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="662.0" y="391" font-size="21" fill="#181818" font-weight="700" text-anchor="middle">z</text>
+<text x="756" y="378" font-size="18" fill="#a65b0d" font-weight="400" text-anchor="start">z 已输出</text>
+<text x="756" y="404" font-size="18" fill="#a65b0d" font-weight="400" text-anchor="start">KV 尚待计算</text>
+<text x="32" y="450" font-size="18" fill="#666666" font-weight="400" text-anchor="start">失效 KV 不得进入后续 Attention；物理空间如何回收由缓存管理器决定。</text>
+</g>
+</svg>

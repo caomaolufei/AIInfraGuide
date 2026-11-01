@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 440" width="860" height="440" font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <style>
+      .math { font-family: 'Times New Roman', Times, 'Cambria Math', Georgia, serif; font-style: italic; }
+      .math-rm { font-family: 'Times New Roman', Times, 'Cambria Math', Georgia, serif; font-style: normal; }
+    </style>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5" fill="none" stroke="#ee801c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5" fill="none" stroke="#ee801c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5" fill="none" stroke="#ee801c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <filter id="sketch-box" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".014" numOctaves="2" seed="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.4" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="sketch-line" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="8" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <pattern id="hatch-gray" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(24,24,24,0.15)" />
+    </pattern>
+    <pattern id="hatch-red" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(232,86,60,0.40)" />
+    </pattern>
+  </defs>
+  <rect width="860" height="440" rx="12" fill="#ffffff" stroke-width="1.5" />
+  <text x="30" y="38" font-size="18" font-weight="700" fill="#266cda" font-family="'Hannotate SC', 'Hanzipen SC', 'Kaiti SC', STKaiti, KaiTi, cursive" transform="rotate(-0.6 30 38)">Medusa：同一隐藏状态并行预测多个偏移</text>
+  <text x="30" y="62" font-size="13" fill="#666666">
+    <tspan class="math" font-weight="600" fill="#181818">q</tspan><tspan class="math" dy="4" font-size="9.5" fill="#181818">t</tspan><tspan class="math-rm" dy="-9" font-size="9.5" fill="#181818">(k)</tspan><tspan dy="5"> = softmax(</tspan><tspan class="math" font-weight="600" fill="#181818">g</tspan><tspan class="math" dy="4" font-size="9.5" fill="#181818">k</tspan><tspan dy="-4">(</tspan><tspan class="math" font-weight="600" fill="#181818">h</tspan><tspan class="math" dy="4" font-size="9.5" fill="#181818">t</tspan><tspan dy="-4">)) — 各预测头并行执行，但远端预测未读取中间尚未确定的 Token</tspan>
+  </text>
+
+  
+  <g>
+    <rect x="32.0" y="132.0" width="150" height="210" rx="3" fill="#ffffff" stroke-width="1.5" />
+    <rect x="30" y="130" width="150" height="210" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <rect x="47.0" y="152.0" width="120" height="65" rx="3" fill="#f5f5f3" stroke-width="1.2" />
+    <rect x="47.0" y="152.0" width="120" height="65" rx="3" fill="url(#hatch-gray)" stroke-width="1.2" />
+    <rect x="45" y="150" width="120" height="65" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="105" y="178" font-size="13" font-weight="600" text-anchor="middle" fill="#181818">Target LLM</text>
+    <text x="105" y="198" font-size="11.5" text-anchor="middle" fill="#666666">骨干网络 (冻结/联合)</text>
+
+    <line x1="105" y1="215" x2="105" y2="245" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-slate)" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="47.0" y="254.0" width="120" height="68" rx="3" fill="rgba(58,110,228,0.16)" stroke-width="2" />
+    <rect x="45" y="252" width="120" height="68" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="105" y="280" font-size="14" font-weight="700" text-anchor="middle" fill="#266cda">
+      隐藏状态 <tspan class="math" font-size="16">h</tspan><tspan class="math" dy="4" font-size="11.5">t</tspan>
+    </text>
+    <text x="105" y="303" font-size="11.5" text-anchor="middle" fill="#266cda">当前步最终高层表示</text>
+  </g>
+  <path d="M 165 286 C 215 286, 215 118, 265 118" fill="none" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-blue)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <path d="M 165 286 C 215 286, 215 202, 265 202" fill="none" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-purple)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <path d="M 165 286 C 215 286, 215 286, 265 286" fill="none" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-purple)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <path d="M 165 286 C 215 286, 215 380, 265 380" fill="none" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-purple)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <g>
+    <rect x="274.0" y="90.0" width="240" height="60" rx="3" fill="rgba(58,110,228,0.16)" stroke-width="1.8" />
+    <rect x="272" y="88" width="240" height="60" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="392" y="114" font-size="13.5" font-weight="700" text-anchor="middle" fill="#266cda">原 LM Head</text>
+    <text x="392" y="134" font-size="11.5" text-anchor="middle" fill="#266cda">标准词表线性投影 + Softmax</text>
+  </g>
+  <g>
+    <rect x="274.0" y="174.0" width="240" height="60" rx="3" fill="rgba(146,118,230,0.22)" stroke-width="1.8" />
+    <rect x="272" y="172" width="240" height="60" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="392" y="198" font-size="13.5" font-weight="700" text-anchor="middle" fill="#7056b6">
+      辅助头 1：<tspan class="math" font-size="15">g</tspan><tspan class="math-rm" dy="4" font-size="10.5">1</tspan><tspan dy="-4">(</tspan><tspan class="math" font-size="15">h</tspan><tspan class="math" dy="4" font-size="10.5">t</tspan><tspan dy="-4">)</tspan>
+    </text>
+    <text x="392" y="219" font-size="11.5" text-anchor="middle" fill="#7056b6">
+      残差块 (SiLU(<tspan class="math">W</tspan><tspan class="math-rm" dy="3" font-size="9">1</tspan><tspan class="math" dy="-3">h</tspan><tspan class="math" dy="3" font-size="9">t</tspan><tspan dy="-3">) + </tspan><tspan class="math">h</tspan><tspan class="math" dy="3" font-size="9">t</tspan><tspan dy="-3">) + 词表投影</tspan>
+    </text>
+  </g>
+  <g>
+    <rect x="274.0" y="258.0" width="240" height="60" rx="3" fill="rgba(146,118,230,0.22)" stroke-width="1.8" />
+    <rect x="272" y="256" width="240" height="60" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="392" y="282" font-size="13.5" font-weight="700" text-anchor="middle" fill="#7056b6">
+      辅助头 2：<tspan class="math" font-size="15">g</tspan><tspan class="math-rm" dy="4" font-size="10.5">2</tspan><tspan dy="-4">(</tspan><tspan class="math" font-size="15">h</tspan><tspan class="math" dy="4" font-size="10.5">t</tspan><tspan dy="-4">)</tspan>
+    </text>
+    <text x="392" y="303" font-size="11.5" text-anchor="middle" fill="#7056b6">
+      残差块 (SiLU(<tspan class="math">W</tspan><tspan class="math-rm" dy="3" font-size="9">2</tspan><tspan class="math" dy="-3">h</tspan><tspan class="math" dy="3" font-size="9">t</tspan><tspan dy="-3">) + </tspan><tspan class="math">h</tspan><tspan class="math" dy="3" font-size="9">t</tspan><tspan dy="-3">) + 词表投影</tspan>
+    </text>
+  </g>
+  <circle cx="392" cy="330" r="2.2" fill="#8b5cf6" />
+  <circle cx="392" cy="338" r="2.2" fill="#8b5cf6" />
+  <circle cx="392" cy="346" r="2.2" fill="#8b5cf6" />
+  <g>
+    <rect x="274.0" y="354.0" width="240" height="60" rx="3" fill="rgba(146,118,230,0.22)" stroke-width="1.8" />
+    <rect x="272" y="352" width="240" height="60" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="392" y="378" font-size="13.5" font-weight="700" text-anchor="middle" fill="#7056b6">
+      辅助头 K：<tspan class="math" font-size="15">g</tspan><tspan class="math" dy="4" font-size="10.5">K</tspan><tspan dy="-4">(</tspan><tspan class="math" font-size="15">h</tspan><tspan class="math" dy="4" font-size="10.5">t</tspan><tspan dy="-4">)</tspan>
+    </text>
+    <text x="392" y="399" font-size="11.5" text-anchor="middle" fill="#7056b6">
+      残差块 (SiLU(<tspan class="math">W</tspan><tspan class="math" dy="3" font-size="9">K</tspan><tspan class="math" dy="-3">h</tspan><tspan class="math" dy="3" font-size="9">t</tspan><tspan dy="-3">) + </tspan><tspan class="math">h</tspan><tspan class="math" dy="3" font-size="9">t</tspan><tspan dy="-3">) + 词表投影</tspan>
+    </text>
+  </g>
+  <line x1="512" y1="118" x2="572" y2="118" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-blue)" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="512" y1="202" x2="572" y2="202" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-purple)" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="512" y1="286" x2="572" y2="286" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-purple)" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="512" y1="380" x2="572" y2="380" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arrow-purple)" stroke-linecap="round" stroke-linejoin="round" />
+  <g>
+    <rect x="582.0" y="94.0" width="165" height="52" rx="3" fill="rgba(58,110,228,0.42)" stroke-width="1.5" />
+    <rect x="580" y="92" width="165" height="52" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="662" y="114" font-size="13" font-weight="700" text-anchor="middle" fill="#266cda">
+      预测 <tspan class="math" font-size="15">x</tspan><tspan class="math" dy="4" font-size="10.5">t</tspan><tspan class="math-rm" font-size="10.5">+1</tspan>
+    </text>
+    <text x="662" y="134" font-size="11.5" text-anchor="middle" fill="#266cda">
+      基准分布 <tspan class="math" font-size="13.5" font-weight="600">p</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+1</tspan>
+    </text>
+
+    <rect x="582.0" y="178.0" width="165" height="52" rx="3" fill="rgba(146,118,230,0.40)" stroke-width="1.5" />
+    <rect x="580" y="176" width="165" height="52" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="662" y="198" font-size="13" font-weight="700" text-anchor="middle" fill="#7056b6">
+      预测 <tspan class="math" font-size="15">x</tspan><tspan class="math" dy="4" font-size="10.5">t</tspan><tspan class="math-rm" font-size="10.5">+2</tspan>
+    </text>
+    <text x="662" y="218" font-size="11.5" text-anchor="middle" fill="#7056b6">
+      草稿分布 <tspan class="math" font-size="13.5" font-weight="600">q</tspan><tspan class="math" dy="4" font-size="9.5">t</tspan><tspan class="math-rm" dy="-8" font-size="9">(1)</tspan>
+    </text>
+
+    <rect x="582.0" y="262.0" width="165" height="52" rx="3" fill="rgba(146,118,230,0.40)" stroke-width="1.5" />
+    <rect x="580" y="260" width="165" height="52" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="662" y="282" font-size="13" font-weight="700" text-anchor="middle" fill="#7056b6">
+      预测 <tspan class="math" font-size="15">x</tspan><tspan class="math" dy="4" font-size="10.5">t</tspan><tspan class="math-rm" font-size="10.5">+3</tspan>
+    </text>
+    <text x="662" y="302" font-size="11.5" text-anchor="middle" fill="#7056b6">
+      草稿分布 <tspan class="math" font-size="13.5" font-weight="600">q</tspan><tspan class="math" dy="4" font-size="9.5">t</tspan><tspan class="math-rm" dy="-8" font-size="9">(2)</tspan>
+    </text>
+
+    <rect x="582.0" y="356.0" width="165" height="52" rx="3" fill="rgba(146,118,230,0.40)" stroke-width="1.5" />
+    <rect x="580" y="354" width="165" height="52" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="662" y="376" font-size="13" font-weight="700" text-anchor="middle" fill="#7056b6">
+      预测 <tspan class="math" font-size="15">x</tspan><tspan class="math" dy="4" font-size="10.5">t+K</tspan><tspan class="math-rm" font-size="10.5">+1</tspan>
+    </text>
+    <text x="662" y="396" font-size="11.5" text-anchor="middle" fill="#7056b6">
+      草稿分布 <tspan class="math" font-size="13.5" font-weight="600">q</tspan><tspan class="math" dy="4" font-size="9.5">t</tspan><tspan class="math-rm" dy="-8" font-size="9">(</tspan><tspan class="math" font-size="9">K</tspan><tspan class="math-rm" font-size="9">)</tspan>
+    </text>
+  </g>
+  <path d="M 745 118 C 780 118, 780 202, 748 202" fill="none" stroke="#ee801c" stroke-width="2.4" stroke-dasharray="4,3" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <path d="M 745 202 C 780 202, 780 286, 748 286" fill="none" stroke="#ee801c" stroke-width="2.4" stroke-dasharray="4,3" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <text x="768" y="164" font-size="13" font-weight="700" fill="#c44732">✗</text>
+  <text x="768" y="248" font-size="13" font-weight="700" fill="#c44732">✗</text>
+
+  <rect x="760.0" y="297.0" width="88" height="90" rx="3" fill="rgba(232,86,60,0.14)" stroke-width="1" />
+  <rect x="760.0" y="297.0" width="88" height="90" rx="3" fill="url(#hatch-red)" stroke-width="1" />
+  <rect x="758" y="295" width="88" height="90" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+  <text x="802" y="318" font-size="11" font-weight="700" text-anchor="middle" fill="#c44732">无直接依赖</text>
+  <text x="802" y="336" font-size="10.5" text-anchor="middle" fill="#c44732">未知中间选了</text>
+  <text x="802" y="352" font-size="10.5" text-anchor="middle" fill="#c44732">哪个 Token</text>
+  <text x="802" y="370" font-size="10.5" text-anchor="middle" fill="#c44732">越远越难对齐</text>
+</svg>

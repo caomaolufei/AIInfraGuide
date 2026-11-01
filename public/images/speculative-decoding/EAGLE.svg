@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" width="880" height="480" font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <style>
+      .math { font-family: 'Times New Roman', Times, 'Cambria Math', Georgia, serif; font-style: italic; }
+      .math-rm { font-family: 'Times New Roman', Times, 'Cambria Math', Georgia, serif; font-style: normal; }
+    </style>
+    <marker id="arr-teal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5" fill="none" stroke="#ee801c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5" fill="none" stroke="#ee801c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arr-indigo" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5" fill="none" stroke="#ee801c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <marker id="arr-gray" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5" fill="none" stroke="#ee801c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+    <filter id="sketch-box" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".014" numOctaves="2" seed="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.4" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="sketch-line" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="8" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <pattern id="hatch-gray" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(24,24,24,0.15)" />
+    </pattern>
+    <pattern id="hatch-red" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(232,86,60,0.40)" />
+    </pattern>
+  </defs>
+  <rect width="880" height="480" rx="12" fill="#ffffff" stroke-width="1.5" />
+  <text x="30" y="36" font-size="18" font-weight="700" fill="#266cda" font-family="'Hannotate SC', 'Hanzipen SC', 'Kaiti SC', STKaiti, KaiTi, cursive" transform="rotate(-0.6 30 36)">EAGLE：特征序列 + 向前错开一步 Token 的自回归草稿</text>
+  <text x="30" y="60" font-size="13" fill="#666666">
+    <tspan class="math" font-weight="600" fill="#181818">f̂</tspan><tspan class="math" dy="4" font-size="9.5" fill="#181818">t</tspan><tspan class="math-rm" font-size="9.5" fill="#181818">+1</tspan><tspan dy="-4"> = </tspan><tspan class="math" font-weight="600" fill="#181818">D</tspan><tspan>(</tspan><tspan class="math" font-weight="600" fill="#181818">f</tspan><tspan class="math-rm" dy="4" font-size="9.5" fill="#181818">1:</tspan><tspan class="math" font-size="9.5" fill="#181818">t</tspan><tspan dy="-4">, </tspan><tspan class="math" font-weight="600" fill="#181818">e</tspan><tspan>(</tspan><tspan class="math" font-weight="600" fill="#181818">x</tspan><tspan class="math-rm" dy="4" font-size="9.5" fill="#181818">2:</tspan><tspan class="math" font-size="9.5" fill="#181818">t</tspan><tspan class="math-rm" font-size="9.5" fill="#181818">+1</tspan><tspan dy="-4">)),  </tspan><tspan class="math" font-weight="600" fill="#181818">q</tspan><tspan class="math" dy="4" font-size="9.5" fill="#181818">t</tspan><tspan class="math-rm" font-size="9.5" fill="#181818">+2</tspan><tspan dy="-4"> = softmax(LMHead(</tspan><tspan class="math" font-weight="600" fill="#181818">f̂</tspan><tspan class="math" dy="4" font-size="9.5" fill="#181818">t</tspan><tspan class="math-rm" font-size="9.5" fill="#181818">+1</tspan><tspan dy="-4">)) — 显式传入已选 Token 消除分支歧义</tspan>
+  </text>
+
+  
+  
+  <g>
+    <rect x="32.0" y="92.0" width="215" height="78" rx="3" fill="rgba(22,158,138,0.22)" stroke-width="1.8" />
+    <rect x="30" y="90" width="215" height="78" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="137" y="116" font-size="13.5" font-weight="700" text-anchor="middle" fill="#137c6c">
+      高层特征序列 <tspan class="math" font-size="15.5">f</tspan><tspan class="math-rm" dy="4" font-size="10.5">1:</tspan><tspan class="math" font-size="10.5">t</tspan>
+    </text>
+    <text x="137" y="137" font-size="11.5" text-anchor="middle" fill="#137c6c">接近 LM Head 的高层表示</text>
+    <text x="137" y="155" font-size="11" text-anchor="middle" fill="#666666">(提供丰富的前文上下文特征)</text>
+  </g>
+  <g>
+    <rect x="32.0" y="198.0" width="215" height="92" rx="3" fill="rgba(238,148,22,0.22)" stroke-width="1.8" />
+    <rect x="30" y="196" width="215" height="92" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="137" y="222" font-size="13.5" font-weight="700" text-anchor="middle" fill="#a65b0d">
+      错位 Token 嵌入 <tspan class="math" font-size="15">e</tspan><tspan class="math-rm" font-size="14">(</tspan><tspan class="math" font-size="15">x</tspan><tspan class="math-rm" dy="4" font-size="10.5">2:</tspan><tspan class="math" font-size="10.5">t</tspan><tspan class="math-rm" font-size="10.5">+1</tspan><tspan class="math-rm" dy="-4" font-size="14">)</tspan>
+    </text>
+    <text x="137" y="243" font-size="11.5" text-anchor="middle" fill="#a65b0d">
+      含当前刚采样的确定 Token <tspan class="math" font-size="13" font-weight="600">x</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+1</tspan>
+    </text>
+    <rect x="46.0" y="255.0" width="187" height="24" rx="3" fill="rgba(238,148,22,0.40)" stroke-width="1" />
+    <rect x="44" y="253" width="187" height="24" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="137" y="269" font-size="10" font-weight="600" text-anchor="middle" fill="#a65b0d">锁定分支：如选定 'return' 而非 'raise'</text>
+  </g>
+  <path d="M 245 129 C 275 129, 275 178, 298 178" fill="none" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arr-teal)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <path d="M 245 242 C 275 242, 275 192, 298 192" fill="none" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arr-amber)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <g>
+    <rect x="308.0" y="142.0" width="155" height="90" rx="3" fill="rgba(146,118,230,0.22)" stroke-width="2" />
+    <rect x="306" y="140" width="155" height="90" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="383" y="170" font-size="14" font-weight="700" text-anchor="middle" fill="#7056b6">
+      轻量草稿网络 <tspan class="math" font-size="15.5">D</tspan>
+    </text>
+    <text x="383" y="190" font-size="11.5" text-anchor="middle" fill="#7056b6">Draft Model (Step 1)</text>
+    <text x="383" y="210" font-size="10.5" text-anchor="middle" fill="#7056b6">内部维护独立草稿计算状态</text>
+  </g>
+  <line x1="461" y1="185" x2="505" y2="185" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arr-indigo)" stroke-linecap="round" stroke-linejoin="round" />
+  <g>
+    <rect x="515.0" y="152.0" width="135" height="70" rx="3" fill="rgba(146,118,230,0.22)" stroke-width="1.8" />
+    <rect x="513" y="150" width="135" height="70" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="580" y="180" font-size="14" font-weight="700" text-anchor="middle" fill="#7056b6">
+      预测特征 <tspan class="math" font-size="15.5">f̂</tspan><tspan class="math" dy="4" font-size="10.5">t</tspan><tspan class="math-rm" font-size="10.5">+1</tspan>
+    </text>
+    <text x="580" y="201" font-size="11" text-anchor="middle" fill="#7056b6">估计的下一步高层表示</text>
+  </g>
+  <line x1="648" y1="185" x2="690" y2="185" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arr-gray)" stroke-linecap="round" stroke-linejoin="round" />
+  <g>
+    <rect x="700.0" y="144.0" width="152" height="86" rx="3" fill="rgba(58,110,228,0.16)" stroke-width="1.8" />
+    <rect x="698" y="142" width="152" height="86" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="774" y="165" font-size="13" font-weight="700" text-anchor="middle" fill="#266cda">复用 LM Head</text>
+    <text x="774" y="185" font-size="12" font-weight="600" text-anchor="middle" fill="#266cda">
+      输出分布 <tspan class="math" font-size="14">q</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+2</tspan>
+    </text>
+    <rect x="712.0" y="197.0" width="128" height="23" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="710" y="195" width="128" height="23" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="774" y="210" font-size="11" font-weight="700" text-anchor="middle" fill="#266cda">
+      采样草稿 Token <tspan class="math" font-size="13">x̂</tspan><tspan class="math" dy="3.5" font-size="9">t</tspan><tspan class="math-rm" font-size="9">+2</tspan>
+    </text>
+  </g>
+  <rect x="297.0" y="277.0" width="555" height="115" rx="3" fill="#f5f5f3" stroke-width="1.5" />
+  <rect x="295" y="275" width="555" height="115" rx="4" fill="none" stroke="#181818" stroke-width="1.8" stroke-dasharray="6,4" filter="url(#sketch-box)" />
+  <text x="312" y="298" font-size="12.5" font-weight="700" fill="#181818">↻ 自回归递进 (Draft Step 2)：继续把预测特征与新选出的草稿 Token 作为下一步输入</text>
+
+  
+  <path d="M 580 220 L 580 252 C 580 265, 360 255, 360 312" fill="none" stroke="#ee801c" stroke-width="2.4" stroke-dasharray="4,3" marker-end="url(#arr-indigo)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <text x="455" y="253" font-size="11" font-weight="600" fill="#7056b6">
+    1. 拼入预测特征 <tspan class="math" font-size="13">f̂</tspan><tspan class="math" dy="3.5" font-size="9">t</tspan><tspan class="math-rm" font-size="9">+1</tspan>
+  </text>
+
+  
+  <path d="M 774 228 L 774 260 C 774 270, 620 265, 520 312" fill="none" stroke="#ee801c" stroke-width="2.4" stroke-dasharray="4,3" marker-end="url(#arr-amber)" stroke-linecap="round" stroke-linejoin="round" filter="url(#sketch-line)" />
+  <text x="685" y="253" font-size="11" font-weight="600" fill="#a65b0d">
+    2. 嵌入 <tspan class="math" font-size="13">e</tspan>(<tspan class="math" font-size="13">x̂</tspan><tspan class="math" dy="3.5" font-size="9">t</tspan><tspan class="math-rm" font-size="9">+2</tspan><tspan dy="-3.5">)</tspan>
+  </text>
+
+  
+  <rect x="317.0" y="320.0" width="250" height="54" rx="3" fill="#ffffff" stroke-width="1.5" />
+  <rect x="315" y="318" width="250" height="54" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+  <text x="440" y="341" font-size="12.5" font-weight="700" text-anchor="middle" fill="#7056b6">
+    <tspan class="math" font-size="14">D</tspan>(<tspan class="math" font-size="14">f</tspan><tspan class="math-rm" dy="3.5" font-size="9.5">1:</tspan><tspan class="math" font-size="9.5">t</tspan><tspan dy="-3.5">, </tspan><tspan class="math" font-size="14">f̂</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+1</tspan><tspan dy="-3.5">, </tspan><tspan class="math" font-size="14">e</tspan>(<tspan class="math" font-size="14">x</tspan><tspan class="math-rm" dy="3.5" font-size="9.5">2:</tspan><tspan class="math" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+1</tspan><tspan dy="-3.5">, </tspan><tspan class="math" font-size="14">x̂</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+2</tspan><tspan dy="-3.5">))</tspan>
+  </text>
+  <text x="440" y="361" font-size="11" text-anchor="middle" fill="#666666">
+    自回归计算下一步草稿特征 <tspan class="math" font-size="13" font-weight="600">f̂</tspan><tspan class="math" dy="3.5" font-size="9">t</tspan><tspan class="math-rm" font-size="9">+2</tspan>
+  </text>
+
+  <line x1="565" y1="345" x2="615" y2="345" stroke="#ee801c" stroke-width="2.4" marker-end="url(#arr-indigo)" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="624.0" y="320.0" width="205" height="54" rx="3" fill="#ffffff" stroke-width="1.5" />
+  <rect x="622" y="318" width="205" height="54" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+  <text x="724" y="341" font-size="12.5" font-weight="700" text-anchor="middle" fill="#266cda">
+    LMHead(<tspan class="math" font-size="14">f̂</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+2</tspan><tspan dy="-3.5">) → </tspan><tspan class="math" font-size="14">q</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+3</tspan>
+  </text>
+  <text x="724" y="361" font-size="11" text-anchor="middle" fill="#266cda">
+    生成更远一步草稿候选 <tspan class="math" font-size="13" font-weight="600">x̂</tspan><tspan class="math" dy="3.5" font-size="9">t</tspan><tspan class="math-rm" font-size="9">+3</tspan>
+  </text>
+
+  
+  <rect x="32.0" y="410.0" width="820" height="50" rx="3" fill="rgba(232,86,60,0.14)" stroke-width="1.5" />
+  <rect x="30" y="408" width="820" height="50" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+  <text x="48" y="430" font-size="12.5" font-weight="700" fill="#c44732">⚠️ 复用表示 ≠ 共享缓存（3.2 节关键区分）：</text>
+  <text x="48" y="448" font-size="11.5" fill="#c44732">
+    草稿网络预测的 <tspan class="math" font-size="13.5" font-weight="700">f̂</tspan><tspan class="math" dy="3.5" font-size="9.5">t</tspan><tspan class="math-rm" font-size="9.5">+1</tspan><tspan dy="-3.5"> 仅用于推进草稿，不能直接冒充 Target 已验证的隐藏状态或 KV Cache；验证接受后须保留对应实现的有效状态。</tspan>
+  </text>
+</svg>

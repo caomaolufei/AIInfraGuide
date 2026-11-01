@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="465" viewBox="0 0 960 465" role="img" aria-labelledby="title desc" font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <filter id="sketch-box" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".014" numOctaves="2" seed="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.4" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="sketch-line" x="-10%" y="-20%" width="120%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="8" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <pattern id="hatch-gray" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(24,24,24,0.15)" />
+    </pattern>
+    <pattern id="hatch-red" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-45)">
+      <rect width="1.5" height="7" fill="rgba(232,86,60,0.40)" />
+    </pattern>
+  </defs>
+  <title id="title">候选位置与验证分布</title>
+  <desc id="desc">因果可见矩阵：输入位置只能读取自身及更早输入；当前位置输出预测下一位置。</desc>
+  <rect width="960" height="465" rx="12" fill="#ffffff" />
+  <g font-family="'Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif" fill="#181818">
+    <text x="32" y="36" font-size="18" fill="#666666" font-weight="400" text-anchor="start">公共的更早历史对所有行可见；下表只展开最后一个历史位置与三个候选</text>
+<text x="32" y="88" font-size="20" fill="#181818" font-weight="700" text-anchor="start">输入位置</text>
+<text x="258" y="88" font-size="20" fill="#181818" font-weight="700" text-anchor="start">可读取的输入列</text>
+<text x="650" y="88" font-size="20" fill="#181818" font-weight="700" text-anchor="start">该行输出的分布</text>
+<text x="292" y="126" font-size="17" fill="#181818" font-weight="400" text-anchor="middle">h 的末尾</text>
+<text x="364" y="126" font-size="17" fill="#181818" font-weight="400" text-anchor="middle">y₁</text>
+<text x="436" y="126" font-size="17" fill="#181818" font-weight="400" text-anchor="middle">y₂</text>
+<text x="508" y="126" font-size="17" fill="#181818" font-weight="400" text-anchor="middle">y₃</text>
+<text x="42" y="180" font-size="20" fill="#181818" font-weight="700" text-anchor="start">h 的末尾</text>
+<rect x="262.0" y="148.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="260" y="146" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="292" y="178" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="334.0" y="148.0" width="64" height="49" rx="3" fill="#f5f5f3" />
+    <rect x="334.0" y="148.0" width="64" height="49" rx="3" fill="url(#hatch-gray)" />
+    <rect x="332" y="146" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="364" y="178" font-size="17" fill="#666666" font-weight="400" text-anchor="middle">—</text>
+<rect x="406.0" y="148.0" width="64" height="49" rx="3" fill="#f5f5f3" />
+    <rect x="406.0" y="148.0" width="64" height="49" rx="3" fill="url(#hatch-gray)" />
+    <rect x="404" y="146" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="436" y="178" font-size="17" fill="#666666" font-weight="400" text-anchor="middle">—</text>
+<rect x="478.0" y="148.0" width="64" height="49" rx="3" fill="#f5f5f3" />
+    <rect x="478.0" y="148.0" width="64" height="49" rx="3" fill="url(#hatch-gray)" />
+    <rect x="476" y="146" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="508" y="178" font-size="17" fill="#666666" font-weight="400" text-anchor="middle">—</text>
+<text x="576" y="179" font-size="24" fill="#666666" font-weight="400" text-anchor="start">→</text>
+<text x="650" y="179" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">p₁：验证 y₁</text>
+<text x="42" y="241" font-size="20" fill="#181818" font-weight="700" text-anchor="start">y₁</text>
+<rect x="262.0" y="209.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="260" y="207" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="292" y="239" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="334.0" y="209.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="332" y="207" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="364" y="239" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="406.0" y="209.0" width="64" height="49" rx="3" fill="#f5f5f3" />
+    <rect x="406.0" y="209.0" width="64" height="49" rx="3" fill="url(#hatch-gray)" />
+    <rect x="404" y="207" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="436" y="239" font-size="17" fill="#666666" font-weight="400" text-anchor="middle">—</text>
+<rect x="478.0" y="209.0" width="64" height="49" rx="3" fill="#f5f5f3" />
+    <rect x="478.0" y="209.0" width="64" height="49" rx="3" fill="url(#hatch-gray)" />
+    <rect x="476" y="207" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="508" y="239" font-size="17" fill="#666666" font-weight="400" text-anchor="middle">—</text>
+<text x="576" y="240" font-size="24" fill="#666666" font-weight="400" text-anchor="start">→</text>
+<text x="650" y="240" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">p₂：验证 y₂</text>
+<text x="42" y="302" font-size="20" fill="#181818" font-weight="700" text-anchor="start">y₂</text>
+<rect x="262.0" y="270.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="260" y="268" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="292" y="300" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="334.0" y="270.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="332" y="268" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="364" y="300" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="406.0" y="270.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="404" y="268" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="436" y="300" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="478.0" y="270.0" width="64" height="49" rx="3" fill="#f5f5f3" />
+    <rect x="478.0" y="270.0" width="64" height="49" rx="3" fill="url(#hatch-gray)" />
+    <rect x="476" y="268" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="508" y="300" font-size="17" fill="#666666" font-weight="400" text-anchor="middle">—</text>
+<text x="576" y="301" font-size="24" fill="#666666" font-weight="400" text-anchor="start">→</text>
+<text x="650" y="301" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">p₃：验证 y₃</text>
+<text x="42" y="363" font-size="20" fill="#181818" font-weight="700" text-anchor="start">y₃</text>
+<rect x="262.0" y="331.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="260" y="329" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="292" y="361" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="334.0" y="331.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="332" y="329" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="364" y="361" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="406.0" y="331.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="404" y="329" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="436" y="361" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<rect x="478.0" y="331.0" width="64" height="49" rx="3" fill="rgba(58,110,228,0.42)" />
+    <rect x="476" y="329" width="64" height="49" rx="4" fill="none" stroke="#181818" stroke-width="1.8" filter="url(#sketch-box)" />
+    <text x="508" y="361" font-size="17" fill="#266cda" font-weight="400" text-anchor="middle">可见</text>
+<text x="576" y="362" font-size="24" fill="#666666" font-weight="400" text-anchor="start">→</text>
+<text x="650" y="362" font-size="20" fill="#137c6c" font-weight="700" text-anchor="start">p₄：全部接受后采样</text>
+<text x="32" y="432" font-size="18" fill="#666666" font-weight="400" text-anchor="start">同一层的多行并行计算；每行保留各自的因果前缀。</text>
+</g>
+</svg>
