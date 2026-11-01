@@ -41,6 +41,18 @@ tags: ["公告", "更新日志"]
 
 - **文章：** [4.6 量化选型与 vLLM 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/46-量化选型与vllm实战/) | 选型流程图改为 SVG；修正在线 FP8 的加载方式（v0.32.0 先建在 meta 设备上逐层转换，不会整份载入 16-bit 权重）
 
+**模块四 · 推理优化** 第 5 章「Speculative Decoding」修订：新增 1 张示意图，原有 4 张 Mermaid 图全部改为手绘风格 SVG，并对照 vLLM v0.32.0 源码修正了部分表述：
+
+- **文章：** [5.1 投机解码核心原理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) | Draft + Verify 一轮流程图改为 SVG，按 γ = 4 标出接受、修正与作废的位置；新增残差采样保分布示意图，用第 7 节的数值演示两条路径相加等于 p
+
+- **文章：** [5.2 Draft 模型与无模型方案](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) | N-gram 查找流程图改为 SVG，标出 vLLM 取最长、最早匹配的规则；修正 `ngram_gpu` 的适用范围（V1、V2 Model Runner 都可用）；补充 Suffix 不设候选上限时的默认值
+
+- **文章：** [5.3 Medusa、EAGLE 与 MTP](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) | Draft Tree 图改为 SVG，与第 8 节实验同一棵树，画出树形 Mask 与按深度编号的 Position ID；补充 Block 验收只在 V2 Model Runner 中实现；修正 MTP 免版本错配的适用条件
+
+- **文章：** [5.4 收益边界与限制](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) | 调度循环图改为 SVG，补充同一 Batch 内不同请求步长不同的示例；修正 Adaptive Verification 的支持范围（不只 DSpark），以及 N-gram/Suffix 在高 QPS 下的收益描述
+
+- **文章：** [5.5 vLLM 投机解码实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/) | 逐位置接受指标改用实际暴露的 `..._per_pos_total` 名称并说明计数含义；补充 `--speculative-config` 的简写 `-sc`
+
 ---
 
 ## 2026-10-29

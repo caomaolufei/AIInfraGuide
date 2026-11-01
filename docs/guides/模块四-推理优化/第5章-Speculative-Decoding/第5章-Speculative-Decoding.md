@@ -2,7 +2,7 @@
 title: "第5章：Speculative Decoding"
 description: "理解 Draft + Verify 与保分布采样，比较独立 Draft、N-gram/Suffix、Medusa/EAGLE/MTP，并掌握收益边界与 vLLM 对照实验"
 pubDate: 2026-04-16
-updatedDate: 2026-10-26
+updatedDate: 2026-11-01
 category: "inference-optimization"
 order: 34
 tags: ["Speculative Decoding", "投机解码", "Medusa", "EAGLE", "MTP", "N-gram"]
