@@ -1,15 +1,16 @@
 ---
-title: "AI Infra学习路线"
-description: "系统梳理 AI Infra 的完整学习路线"
+title: "AI Infra 学习路线"
+description: "从前置知识、CUDA 算子优化、分布式训练到推理部署，按层梳理 AI Infra 的知识点、推荐资料与可量化的检验标准"
 pubDate: 2026-03-26 10:00:00
+updatedDate: 2026-11-01
 category: "learning-path"
 order: 1
 tags: [AI Infra, 学习路线, CUDA, 分布式训练, 推理优化]
 ---
 
-AI Infra（人工智能基础设施）是大模型时代壁垒最高、最核心的技术高地。本文从前置基础到推理部署，系统梳理 AI Infra 的完整学习路线，为每个模块列出需要掌握的知识点、推荐学习资料以及可量化的检验标准，帮助从业者建立体系化的知识树。
+AI Infra（人工智能基础设施）负责让大模型在 GPU 集群上训得动、跑得快、用得起。本文从前置基础到推理部署，按层梳理 AI Infra 的学习路线，为每一层列出需要掌握的知识点、推荐学习资料以及可量化的检验标准。
 
-**作者将根据该路线编写系列文章，帮助大家系统掌握 AI Infra 技术。**
+本站的系列文章按这条路线编写。每一层的「推荐资料」里都列出了**本站文章**，可以直接跳转阅读。
 
 <!-- more -->
 
@@ -29,12 +30,12 @@ AI Infra（人工智能基础设施）是大模型时代壁垒最高、最核心
 
 AI Infra 的本质是 **"用系统工程释放硬件算力"** 。我们可以将其自底向上分为三个核心层级，加上一个前置知识层：
 
-| 层级 | 名称 | 核心关注点 |
-|------|------|-----------|
-| 第零层 | 前置知识 | 编程语言、数学基础、Transformer 架构、PyTorch、通信拓扑 |
-| 第一层 | CUDA编程与算子优化 | GPU架构、存储层次、Kernel编写、FlashAttention、AI编译器 |
-| 第二层 | 分布式训练 | 数据并行、3D并行、ZeRO、混合精度 |
-| 第三层 | 推理与部署 | KV Cache、PagedAttention、量化、Speculative Decoding |
+| 层级 | 名称 | 核心关注点 | 本站对应模块 |
+|------|------|-----------|-------------|
+| 第零层 | 前置知识 | 编程语言、数学基础、Transformer 架构、PyTorch、GPU 硬件、通信拓扑 | [模块一：前置知识](https://caomaolufei.github.io/AIInfraGuide/prerequisites/) |
+| 第一层 | CUDA 编程与算子优化 | GPU 架构、存储层次、Kernel 编写、FlashAttention、AI 编译器 | [模块二：CUDA 编程与算子优化](https://caomaolufei.github.io/AIInfraGuide/cuda/) |
+| 第二层 | 分布式训练 | 数据并行、ZeRO、3D 并行、上下文并行、MoE 并行、混合精度 | [模块三：分布式训练](https://caomaolufei.github.io/AIInfraGuide/distributed/) |
+| 第三层 | 推理与部署 | KV Cache、PagedAttention、量化、Speculative Decoding、PD 解耦、分布式推理 | [模块四：推理优化](https://caomaolufei.github.io/AIInfraGuide/inference/) |
 
 所有的优化都是在 **"计算、通信、显存"** 这个不可能三角中做取舍：ZeRO 是用通信换显存；重计算（Activation Checkpointing）是用计算换显存；量化是用精度换显存和带宽。学习时始终问自己：**这个技术牺牲了什么，换取了什么？**
 
@@ -42,7 +43,7 @@ AI Infra 的本质是 **"用系统工程释放硬件算力"** 。我们可以将
 
 ## 📖 第零层：前置知识
 
-AI Infra 不是从零开始学的领域——它建立在编程能力、数学直觉和模型理解之上。如果把后面四层比作盖楼，这一层就是地基：地基不牢，楼层越高越晃。好消息是，你不需要成为每个方向的专家，只需要达到"够用"的水平就能继续往上走。
+AI Infra 不是从零开始学的领域——它建立在编程能力、数学直觉和模型理解之上。如果把后面三层比作盖楼，这一层就是地基：地基不牢，楼层越高越晃。好消息是，你不需要成为每个方向的专家，只需要达到"够用"的水平就能继续往上走。
 
 ### 0.1 知识点
 
@@ -63,10 +64,10 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 这是大模型时代的"通用底座"，后续每一层都在围绕它做优化——CUDA 层优化它的算子、分布式层切分它的参数、推理层加速它的生成。必须理解：
 
 - **Self-Attention 机制**：Q、K、V 的含义与计算过程（QK^T → scale → softmax → PV），理解为什么 Attention 的计算复杂度是 O(N^2)，这是后续理解 FlashAttention 优化的前提
-- **前馈网络（FFN）**：两层线性变换 + 激活函数，模型参数的大头所在
+- **前馈网络（FFN）**：原始 Transformer 是两层线性变换 + 激活函数，LLaMA 等主流模型改用 SwiGLU（三个权重矩阵）。FFN 是模型参数的大头所在
 - **位置编码**：Sinusoidal、RoPE 等，理解为什么 Transformer 需要额外的位置信息
-- **LayerNorm**：Pre-Norm vs Post-Norm 的区别，为什么大模型普遍用 Pre-Norm
-- **完整前向过程**：能从 token embedding 开始，逐步跟踪数据在一个 Transformer Block 中的流转（Attention → Add & Norm → FFN → Add & Norm），说清每一步的输入输出维度
+- **归一化**：LayerNorm 与 RMSNorm，Pre-Norm vs Post-Norm 的区别，为什么大模型普遍用 Pre-Norm
+- **完整前向过程**：能从 token embedding 开始，逐步跟踪数据在一个 Transformer Block 中的流转，说清每一步的输入输出维度。原始论文是 Post-Norm（Attention → Add & Norm → FFN → Add & Norm），主流 LLM 是 Pre-Norm（Norm → Attention → Add → Norm → FFN → Add）
 
 **PyTorch 框架**
 
@@ -86,15 +87,17 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 ### 0.2 推荐资料
 
+**本站文章：** [编程语言基础](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/第1章-编程语言基础/) · [数学基础](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/第2章-数学基础/) · [Transformer 架构快速入门](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/transformer/transformer架构快速入门/)（及 [第 3 章系列文章](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/第3章-transformer架构详解/)） · [PyTorch 框架快速入门](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/pyroch/pytorch框架入门/) · [GPU 基础知识](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/gpu/gpu-basics/) · [集群通信网络与 NCCL](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/communication/collective-communication-primer/)
+
 | 类型 | 资料 | 说明 |
 |------|------|------|
 | 论文 | Attention Is All You Need | Transformer 原始论文，必读 |
 | 教程 | The Illustrated Transformer (Jay Alammar) | 图文并茂的 Transformer 入门，适合建立直觉 |
 | 解读 | 琳琅阿木：图文详解LLM inference | LLM 模型架构详解，推荐配合论文阅读 |
 | 教程 | PyTorch 官方教程（60 Minute Blitz） | PyTorch 快速入门 |
-| 书籍 | 3Blue1Brown：线性代数的本质（视频系列） | 建立线性代数几何直觉，比教科书高效 |
-| 教程 | MIT 6.S081 / Linux 命令行基础 | Linux 和系统编程基础 |
-| 工具 | Andrej Karpathy：Let's build GPT from scratch | 从零手写 GPT，把 Transformer 每个模块都过一遍 |
+| 视频 | 3Blue1Brown：线性代数的本质 | 建立线性代数几何直觉，比教科书高效 |
+| 课程 | MIT The Missing Semester | Shell、Vim、Git、调试与性能分析等命令行基本功 |
+| 视频 | Andrej Karpathy：Let's build GPT from scratch | 从零手写 GPT，把 Transformer 每个模块都过一遍 |
 | 官方文档 | NVIDIA NCCL 文档 | 集合通信原语与多卡编程 |
 | 教程 | NVIDIA Deep Learning Performance Guide | 硬件性能瓶颈分析方法论 |
 
@@ -102,8 +105,8 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 这一层不需要深入钻研，但必须达到以下"够用"门槛：
 
-- **Transformer 白板默写**：不看资料，能画出一个 Transformer Decoder Block 的完整结构（Masked Self-Attention → Add & Norm → FFN → Add & Norm），标注每一步的输入输出维度（如 (B, S, D) → (B, S, D)），并解释 Attention 中 Q、K、V 矩阵是怎么从输入通过线性投影得到的
-- **维度推导**：给定一个 7B 模型的配置（hidden_dim=4096, num_heads=32, num_layers=32, vocab_size=32000），能手算出总参数量的近似值（Attention 权重 + FFN 权重 + Embedding），误差不超过 20%
+- **Transformer 白板默写**：不看资料，能画出一个 Pre-Norm Transformer Decoder Block 的完整结构（RMSNorm → Masked Self-Attention → 残差相加 → RMSNorm → FFN → 残差相加），标注每一步的输入输出维度（如 (B, S, D) → (B, S, D)），并解释 Attention 中 Q、K、V 矩阵是怎么从输入通过线性投影得到的
+- **维度推导**：给定一个 7B 模型的配置（hidden_dim=4096, num_heads=32, num_layers=32, FFN 中间维度 11008 且使用 SwiGLU, vocab_size=32000），能手算出总参数量的近似值（Attention 权重 + FFN 权重 + Embedding），误差不超过 20%（参考答案约 6.7B）
 - **PyTorch 训练脚本**：能独立写出一个完整的 PyTorch 训练循环（不借助 Trainer 类），包含 DataLoader、forward、loss 计算、backward、optimizer step、学习率调度、checkpoint 保存，并在 GPU 上跑通
 - **C++ 基础读写**：能读懂一个简单的 CUDA kernel 的 host 端代码（malloc、memcpy、kernel launch、free），理解 CPU 和 GPU 之间的数据搬运流程
 - **Linux 日常**：能在服务器上独立完成：SSH 登录、tmux 管理会话、conda/pip 管理环境、查看 GPU 状态（nvidia-smi）、用 git 管理代码、写简单的 bash 脚本批量提交任务
@@ -123,7 +126,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 理解 GPU 硬件是写好 CUDA kernel 的前提。你可以把一块 GPU 想象成一座**拥有数千个简单工人的超级工厂**——每个工人（CUDA Core）只会做最基本的加减乘除，但胜在人多力量大，成千上万人同时开工，吞吐量远超只有几个高级工程师（CPU 核心）的小作坊。
 
 - **GPU 核心架构**：SM（流多处理器）、Tensor Core、CUDA Core 的区别与协作
-- **主流 GPU 规格对比**：A100 / H100 / H200 的算力、显存带宽、HBM 容量
+- **主流 GPU 规格对比**：A100 / H100 / H200 / B200 的算力、显存带宽、HBM 容量，以及各代新增的低精度格式（Hopper 的 FP8、Blackwell 的 FP4）
 - **Memory Wall**：为什么显存带宽瓶颈往往比算力瓶颈更致命——好比一个超级快的厨师，刀工和火候都没问题，但食材传送带太慢，厨师大部分时间都在等菜上桌
 - **存储层次结构**：寄存器 > 共享内存 > L1/L2 Cache > HBM > 主机内存。写 kernel 的核心就是在这个层次结构中最大化数据复用，减少对慢速存储的访问
 
@@ -147,7 +150,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 - FlashAttention-3：在 Hopper 架构上进一步拉高利用率
 - Flash-Decoding / FlashDecoding++：面向 Decode 阶段的 Attention 加速
 - FlashInfer：可定制 Attention 引擎，面向 Serving 的可组合格式与异构 KV 存储
-- PagedAttention CUDA Kernel：vLLM 中 PagedAttention 的底层实现
+- 分页 KV 的 Attention Kernel：vLLM 早期的 `paged_attention` CUDA Kernel，以及 vLLM V1 通过 FlashAttention / FlashInfer 等后端直接读取分页 KV Cache 的方式
 
 **AI 编译器**
 
@@ -157,16 +160,18 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 ### 1.2 推荐资料
 
+**本站文章：** [CUDA 编程快速入门指南](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/cuda编程入门指南/) · [CUDA 编程入门（第 1 章）](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第1章-cuda编程入门/) · [CUDA 性能优化基础（第 2 章）](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第2章-cuda性能优化基础/) · [Reduce 算子优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/31-cuda-reduce算子优化/) · [GEMM 算子性能优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/41-cuda-gemm算子性能优化/) · [Softmax 朴素实现优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/51-cuda-softmax朴素实现优化/) · [Online Softmax](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/52-cuda-online-softmax实现/) · [FlashAttention V1](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/61-flashattention-v1详解/) · [FlashAttention V2](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/62-flashattention-v2详解/) · [Triton 编程模型](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/71-triton编程框架/)
+
 | 类型 | 资料 | 说明 |
 |------|------|------|
-| 官方文档 | NVIDIA GPU 架构白皮书（Ampere / Hopper） | 理解 SM、Tensor Core、HBM 设计 |
+| 官方文档 | NVIDIA GPU 架构白皮书（Ampere / Hopper / Blackwell） | 理解 SM、Tensor Core、HBM 设计 |
 | 入门教程 | 小小将：CUDA编程入门极简教程 | CUDA 零基础入门 |
 | 官方文档 | NVIDIA CUDA Programming Guide | CUDA 编程权威参考 |
 | Reduce | PeakCrosser：CUDA Reduce 算子优化 | Reduce 实现与优化的详尽总结 |
 | 练习平台 | [CUDA 手撕算子 · 面试练习](https://kkcocoa.github.io/cuda-operator-interview/) | 覆盖访存、Reduce、Softmax、Attention、GEMM 等算子的分级手写练习，附提示、自检清单与浏览器内代码编辑器 |
 | GEMM | 猛猿：从啥也不会到CUDA GEMM优化 | 从基础分块到极致优化的 GEMM 教程 |
 | GEMM | MegEngine Bot：CUDA 矩阵乘法终极优化指南 | 系统性的 GEMM 优化参考 |
-| Softmax | Online normalizer calculation for softmax | NVIDIA 员工的 Softmax 实现论文 |
+| Softmax | Online normalizer calculation for softmax | Online Softmax 的原始论文（NVIDIA），FlashAttention 的算法基础 |
 | Softmax | OneFlow：如何实现一个高效的Softmax CUDA kernel | Softmax kernel 工程实践 |
 | 算子融合 | 成诚：OneFlow是如何做到世界最快深度学习框架的 | 算子融合思路与方法 |
 | Attention | FlashAttention V1 Paper | Memory-aware Attention 的里程碑论文 |
@@ -187,7 +192,6 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 - **硬件参数直觉**：拿到一块 H100，不查资料能说出 HBM 容量（80GB）、HBM 带宽（~3.35TB/s）、L2 大小（50MB）、共享内存上限（228KB/SM）的量级，并解释为什么"显存带宽"往往比"算力"先成为瓶颈
 - **带宽估算**：给定一个 AllReduce 操作的数据量（比如 2GB 梯度），能估算在 NVLink 4.0（单向 450GB/s per GPU，双向 900GB/s）vs PCIe Gen5 x16（单向 64GB/s）下的理论耗时差异
-
 - **Reduce 三连**：从最朴素的全局内存原子加开始，写一个 Reduce Sum kernel；然后用共享内存 + 树形归约消除原子操作；最后用 Warp Shuffle 干掉共享内存，三个版本跑 Nsight Compute 对比 throughput，能说清每一步优化到底省在哪里
 - **Bank Conflict 直觉**：手动构造一个 32x32 矩阵转置 kernel，先写一个有 32-way bank conflict 的版本，再加一列 padding 消除冲突，用 Nsight Compute 的 Shared Memory 面板验证 conflict 数从几十降到 0
 - **GEMM 分块**：实现一个基于 Shared Memory Tiling 的 GEMM kernel，在 1024x1024 矩阵上与 cuBLAS 对比，达到其 50% 以上的性能即为合格——这个过程中你会真正理解"为什么访存模式决定一切"
@@ -199,7 +203,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 ## 🏋️ 第二层：分布式训练
 
-当模型参数量超越单卡显存极限时，分布式训练就是必经之路。这是 AI Infra 目前最活跃、最核心的区域。打个比方，训练一个千亿参数的大模型就像**抄写一本数万页的百科全书**——一个人抄到天荒地老也抄不完。数据并行是把同一本书复印多份、每人抄不同章节的内容然后汇总；张量并行是把每一页拆成几列、每人只抄自己那几列；流水线并行则是第一个人抄完第一章就传给第二个人继续，自己接着抄下一批。怎么拆、怎么传、怎么汇总，就是分布式训练要解决的核心问题。
+当模型参数量超越单卡显存极限时，分布式训练就是必经之路，也是大模型训练团队的核心工作。打个比方，训练一个千亿参数的大模型就像**抄写一本数万页的百科全书**——一个人抄到天荒地老也抄不完。数据并行是把同一本书复印多份、每人抄不同章节的内容然后汇总；张量并行是把每一页拆成几列、每人只抄自己那几列；流水线并行则是第一个人抄完第一章就传给第二个人继续，自己接着抄下一批。怎么拆、怎么传、怎么汇总，就是分布式训练要解决的核心问题。
 
 ### 2.1 知识点
 
@@ -229,8 +233,13 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 **模型并行（3D 并行）**
 
 - 张量并行（TP）：将矩阵乘法沿特定维度切分到多卡，通信密集，通常限于单机
-- 流水线并行（PP）：将模型不同层切分到不同机器，像流水线一样传递数据
+- 流水线并行（PP）：将模型不同层切分到不同 GPU，像流水线一样传递数据。核心问题是流水线气泡（Bubble），GPipe、1F1B、Interleaved 1F1B 等调度方式都在压缩气泡
 - 序列并行（SP）：沿序列维度切分，与 TP 配合减少激活显存
+
+**长序列与 MoE 并行**
+
+- 上下文并行（CP）：Attention 的计算与激活显存随序列长度平方增长，Ring Attention、DeepSpeed-Ulysses、Megatron Context Parallel 把一条长序列切到多张卡上计算
+- 专家并行（EP）：MoE 模型把不同专家放到不同 GPU，Token 按 Router 结果通过 All-to-All 发往对应专家，负载均衡是主要难点。实际训练中常把 EP 与 DP、TP、PP 组合使用
 
 **显存优化**
 
@@ -250,6 +259,8 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 ### 2.2 推荐资料
 
+**本站文章：** [分布式训练总论](https://caomaolufei.github.io/AIInfraGuide/distributed/模块三-分布式训练/11-分布式训练总论/) · [环境搭建与分布式启动](https://caomaolufei.github.io/AIInfraGuide/distributed/模块三-分布式训练/12-环境搭建与分布式启动/) · [集合通信原语详解](https://caomaolufei.github.io/AIInfraGuide/distributed/模块三-分布式训练/21-集合通信原语详解/) · [优化器与显存开销分析](https://caomaolufei.github.io/AIInfraGuide/distributed/模块三-分布式训练/31-优化器原理与显存开销分析/) · [数据并行详解](https://caomaolufei.github.io/AIInfraGuide/distributed/模块三-分布式训练/41-数据并行详解/) · [PyTorch 数据并行从原理到实战](https://caomaolufei.github.io/AIInfraGuide/distributed/模块三-分布式训练/42-pytorch-数据并行从原理到实战/)
+
 | 类型 | 资料 | 说明 |
 |------|------|------|
 | 论文 | DeepSeek V2 技术报告 | MLA 注意力机制 |
@@ -258,6 +269,8 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 | 解读 | 苏剑林：从MHA、MQA、GQA到MLA | Attention 变种演进 |
 | 论文 | Megatron-LM Paper | TP 与 PP 原理的里程碑论文 |
 | 论文 | ZeRO Paper（DeepSpeed） | 显存优化的核心方法 |
+| 论文 | Ring Attention Paper | 环形传递 KV 块的上下文并行 |
+| 论文 | DeepSpeed-Ulysses Paper | 用 All-to-All 在序列维与头维之间转换的上下文并行 |
 | 文档 | DeepSpeed 官方文档 | ZeRO 配置与使用 |
 | 文档 | PyTorch DDP / FSDP 教程 | 原生分布式训练入门 |
 
@@ -286,6 +299,8 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 - 关键性能指标：TTFT（首 token 延迟）、TPOT（每 token 延迟）、吞吐量（token/s）、P50/P95 尾延迟
 
 **推荐资料**
+
+**本站文章：** [LLM 推理基础](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第1章-llm推理基础/11-llm推理基础/) · [vLLM 快速入门](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第1章-llm推理基础/12-vllm快速入门/) · [从 Transformer 到 LLM 自回归生成](https://caomaolufei.github.io/AIInfraGuide/prerequisites/模块一-前置知识/transformer/38-从transformer到llm自回归生成深入理解/)
 
 | 类型 | 资料 | 说明 |
 |------|------|------|
@@ -319,6 +334,8 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 **推荐资料**
 
+**本站文章：** [PagedAttention](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/21-pagedattention/) · [Continuous Batching](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/22-continuous-batching/) · [Prefix Cache 与 RadixAttention](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/23-prefix-cache-与-radixattention/) · [Chunked Prefill 与统一调度](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/24-chunked-prefill-与统一调度/) · [Attention 后端与图优化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第2章-推理引擎核心技术/25-attention-后端与图优化/) · [nano-vllm 源码解读（第 3 章）](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/第3章-nano-vllm源码解读/)
+
 | 类型 | 资料 | 说明 |
 |------|------|------|
 | 论文 | vLLM Paper（PagedAttention） | 推理引擎里程碑论文 |
@@ -346,19 +363,22 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 **知识点**
 
 - W8A8（SmoothQuant）：将 activation 的 outlier 难题转移到 weights，工程友好。量化的本质好比把高清照片压缩成缩略图——用更少的比特位表示权重，省下显存和带宽，代价是细节（精度）会有一定损失
-- Weight-only INT4（GPTQ / AWQ）：只量化权重到 3/4-bit，减少显存和带宽占用
-- KV Cache 量化（KIVI / Kitty）：对 KV Cache 进行 2-bit 量化，长上下文场景效果显著
-- FP8 量化：Hopper 架构原生支持，精度与性能的平衡点
+- Weight-only INT4（GPTQ / AWQ）：只量化权重到 3/4-bit，减少显存和带宽占用；推理时靠 Marlin 这类融合 Kernel 在片上反量化
+- KV Cache 量化（KIVI / FP8 KV Cache）：KIVI 对 Key 按通道、Value 按 Token 分组做 2-bit 量化；FP8 KV Cache 是 vLLM 等引擎里更常用的工程方案，长上下文场景收益明显
+- FP8 量化：Hopper 与 Ada 架构的 Tensor Core 原生支持，精度与性能的平衡点
+- NVFP4 / MXFP4：Blackwell 架构原生支持的 4-bit 浮点格式，用微块缩放（每 16 或 32 个元素共享一个 Scale）控制误差
 - 量化选择决策树：
 
 ```
 目标：省显存？省带宽？提吞吐？
-├─ 通用、工程友好 → W8A8 (SmoothQuant)
-├─ 更省显存/带宽 → INT4 weight-only (AWQ/GPTQ)
-└─ 长上下文/大并发 → KV Cache 量化 (KIVI)
+├─ 通用、工程友好 → W8A8 (SmoothQuant)，Hopper 及以上优先 FP8
+├─ 更省显存/带宽 → INT4 weight-only (AWQ/GPTQ)，Blackwell 上可选 NVFP4
+└─ 长上下文/大并发 → KV Cache 量化 (FP8 KV / KIVI)
 ```
 
 **推荐资料**
+
+**本站文章：** [量化基础](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/41-量化基础/) · [W8A8 与 SmoothQuant](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/42-w8a8与smoothquant/) · [Weight-only INT4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/43-weight-only-int4/) · [KV Cache 量化](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/44-kv-cache量化/) · [FP8 与 NVFP4/MXFP4](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/45-fp8与nvfp4-mxfp4/) · [量化选型与 vLLM 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第4章-量化/46-量化选型与vllm实战/)
 
 | 类型 | 资料 | 说明 |
 |------|------|------|
@@ -374,9 +394,9 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 量化是"看起来简单、调起来玄学"的领域，检验重点在于理解 trade-off 而非死记方案：
 
-- **方案选择**：团队要上线一个 70B 模型但只有 2 张 A100 80GB，你能快速判断：FP16 参数就要 140GB 放不下，必须量化；W8A8 可以压到 ~70GB 但两卡还是紧张；INT4 weight-only 可以压到 ~35GB 单卡就能放下，但要评估精度损失和 kernel 效率
+- **方案选择**：团队要上线一个 70B 模型但只有 2 张 A100 80GB，你能快速判断：FP16 权重约 140GB，两卡共 160GB，放下权重后只剩约 20GB 给 KV Cache 和临时 buffer，并发上不去；W8A8 把权重压到约 70GB，两卡 TP 部署能留出充足的 KV Cache 空间；INT4 weight-only 压到约 35GB，单卡就能放下，但要评估精度损失和 kernel 效率。另外 A100 的 Tensor Core 不支持 FP8，FP8 方案在这台机器上用不了
 - **动手验证**：用 vLLM 或 TensorRT-LLM 分别加载同一模型的 FP16 和 AWQ-INT4 版本，跑同一组 benchmark prompt，输出 throughput 对比 + 几组生成结果的人工比对，能写成一个可复用的评测报告
-- **反直觉理解**：别人说"量化位数越低越快"，你能解释为什么某些场景下 INT4 反而比 INT8 慢——INT4 kernel 需要额外的 unpack/dequant 计算，在小 batch size 下这个开销可能超过带宽节省；或者 INT4 的 Tensor Core 利用率不如 INT8 的 native 支持
+- **反直觉理解**：别人说"量化位数越低越快"，你能解释为什么某些场景下 INT4 反而比 INT8 慢——小 batch 的 Decode 是 memory bound，W4A16 少搬一半权重，通常更快；batch 变大进入 compute bound 后，W4A16 要先把权重反量化回 FP16 再用 FP16 Tensor Core 计算，而 W8A8 直接走 INT8 Tensor Core（算力约为 FP16 的 2 倍），此时 INT8 反而更快
 - **故障排查**：量化后模型输出质量明显下降，你能列出排查清单——某些层的 activation outlier 特别大（需要 per-channel 或 SmoothQuant 处理）、量化校准数据不具代表性、某些特殊结构（如 MoE 的 gate）不适合低 bit 量化
 
 ### 3.4 Speculative Decoding
@@ -385,19 +405,23 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 - Speculative Sampling：经典框架——用小模型（Draft）批量"猜测"多个 token，大模型（Target）一次性验证，保证分布无偏。好比让实习生先快速起草一段文字，再让资深主编一次性审阅：猜对的直接用，猜错的当场改，比主编逐字逐句从头写快得多
 - Medusa：不用外部 Draft 模型，通过多个 Decoding Heads 预测多 token 再并行验证
-- EAGLE-2：动态 Draft Tree，靠校准置信度更激进地产生可接受 token
+- EAGLE-2 / EAGLE-3：在 Target 模型的隐藏状态上训练轻量 Draft 头。EAGLE-2 用 Draft 置信度动态构建候选树，EAGLE-3 改为融合多层特征并在训练时模拟推理过程，接受率进一步提高
+- MTP（Multi-Token Prediction）：DeepSeek-V3 训练时附带的多 Token 预测模块，推理时可以直接当 Draft 使用
+- N-gram / Suffix：不需要任何 Draft 模型，从 prompt 或已生成文本中匹配候选，适合代码编辑、RAG 等重复内容多的场景
 - Block Verification：将 token 级验证升级为 block 级联合验证，进一步提速
 
 **推荐资料**
 
+**本站文章：** [投机解码核心原理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/51-投机解码核心原理/) · [Draft 模型与无模型方案](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/52-draft模型与无模型方案/) · [Medusa、EAGLE 与 MTP](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) · [收益边界与限制](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) · [vLLM 投机解码实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/)
+
 | 类型 | 资料 | 说明 |
 |------|------|------|
-| 论文 | Speculative Sampling Paper | 经典 Speculative Decoding |
+| 论文 | Speculative Decoding（Leviathan et al.）/ Speculative Sampling（Chen et al.） | 两篇独立提出 Draft + Verify 框架的经典论文 |
 | 论文 | Medusa Paper + Repo | 多头解码，免 Draft 模型 |
 | 论文 | EAGLE-2 Paper | 动态 Draft Tree |
+| 论文 | EAGLE-3 Paper | 多层特征融合与训练时测试 |
 | 论文 | Block Verification Paper | Block 级联合验证 |
 | 代码 | vLLM / TensorRT-LLM 的 Speculative 支持 | 工程落地参考 |
-| 教程 | SGLang 结构化输出加速（cFSM） | 结构化生成场景加速 |
 
 **检验标准**
 
@@ -414,7 +438,7 @@ Speculative Decoding 的精髓在于"用空间换时间、用并行换串行"，
 
 - 核心问题：Prefill 与 Decode 混合 batching 造成资源耦合与互扰，导致尾延迟爆炸。这就像餐厅里让同一个厨师既负责快速出小炒（Decode 低延迟）又负责慢炖大菜（Prefill 重计算），互相拖累；解耦就是把快餐区和慢炖区分开，各配专属厨师
 - DistServe（OSDI'24）：系统化论证并实现 Prefill/Decode 解耦，围绕 goodput 调度
-- Splitwise（ISCA）：将 Prefill 和 Decode 分配到不同 GPU 池，优化吞吐与成本
+- Splitwise（ISCA'24）：将 Prefill 和 Decode 分配到不同 GPU 池，优化吞吐与成本
 - TaiChi（2025）：将聚合与解耦统一，面向不同 SLO 组合做最优 goodput
 - Goodput：满足 SLO 的有效吞吐，区别于裸 QPS
 
@@ -423,7 +447,7 @@ Speculative Decoding 的精髓在于"用空间换时间、用并行换串行"，
 | 类型 | 资料 | 说明 |
 |------|------|------|
 | 论文 | DistServe（OSDI'24） | Prefill/Decode 解耦的系统化论证 |
-| 论文 | Splitwise（ISCA） | Phase Splitting 设计 |
+| 论文 | Splitwise（ISCA'24） | Phase Splitting 设计 |
 | 论文 | TaiChi（2025） | 聚合与解耦统一框架 |
 | 教程 | Disaggregated Inference: 18 Months Later | 解耦为何成为默认配置 |
 | 教程 | MLC microserving | 跨引擎编排的可编程 API |
@@ -446,7 +470,7 @@ Prefill/Decode 解耦是系统架构层面的优化，检验重点在于理解"�
   - `torch.profiler`：PyTorch 官方 profiler，定位算子与 shape
   - Nsight Systems：CPU-GPU 交互全链路分析
   - Nsight Compute：Kernel 级性能下钻
-- 压测工具：GenAI-Perf（LLM 指标一站式输出）、Triton Perf Analyzer
+- 压测工具：`vllm bench serve`（vLLM 自带的在线服务压测）、GenAI-Perf / AIPerf（NVIDIA 的 LLM 压测工具，AIPerf 提供了从 GenAI-Perf 迁移的指南）、Triton Perf Analyzer
 - 权威基准：MLPerf Inference（Datacenter），统一口径与规则
 - 回归门禁：每次改动输出同一张指标对比表，退化则阻止合并
 
@@ -455,7 +479,7 @@ Prefill/Decode 解耦是系统架构层面的优化，检验重点在于理解"�
 | 类型 | 资料 | 说明 |
 |------|------|------|
 | 工具 | torch.profiler 文档 | PyTorch 性能分析起点 |
-| 工具 | GenAI-Perf | TTFT/TPOT/token throughput 一站式压测 |
+| 工具 | GenAI-Perf / AIPerf | TTFT/TPOT/token throughput 一站式压测 |
 | 工具 | Triton Inference Server Quickstart | 在线推理容器化基线 |
 | 基准 | MLPerf Inference（Datacenter） | 权威 benchmark 入口 |
 | 解读 | MLPerf Inference v5.0 LLM 任务解读 | 理解低延迟 LLM benchmark 趋势 |
@@ -469,14 +493,35 @@ Prefill/Decode 解耦是系统架构层面的优化，检验重点在于理解"�
 - **回归定位**：某次代码提交后 TPOT P95 退化了 15%，你能用 `git bisect` 缩小到具体 commit，再用 Nsight Systems 对比退化前后的 trace 差异——是某个 kernel 变慢了、新增了一次不必要的 sync、还是 batch 调度策略变了
 - **上线门禁**：能给团队制定一套简单可执行的性能门禁规则——比如"TPOT P95 退化超过 5% 则 block merge"、"显存占用增长超过 10% 需要附上分析报告"，并集成到 CI 流程中自动执行
 
+### 3.7 分布式推理与生产部署
 
-### 3.7 优化选型决策树
+**知识点**
+
+- 分布式推理：单卡放不下或吞吐不够时，用 TP、PP、DP 和 EP 把模型铺到多卡多机。MoE 大模型常用"Attention 走 DP、专家走 EP"的组合，多节点部署可借助 Ray 等编排工具
+- 生产部署：容器化与 Kubernetes 部署、Prometheus 指标与可观测性、按队列长度或 KV Cache 占用做自动扩缩容、Prefix Cache 感知的负载均衡、容量规划
+- 端侧推理：模型导出、端侧运行时（如 ExecuTorch、llama.cpp）、CPU/GPU/NPU 异构执行，以及量化和内存优化
+
+**推荐资料**
+
+**本站文章：** [端侧推理基础：从模型导出到异构硬件执行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第10章-端侧推理/101-端侧推理基础/)
+
+| 类型 | 资料 | 说明 |
+|------|------|------|
+| 文档 | vLLM 官方文档（Parallelism and Scaling） | TP/PP/DP/EP 配置与多节点部署 |
+| 文档 | ExecuTorch 官方文档 | PyTorch 官方的端侧推理运行时 |
+
+**检验标准**
+
+- **并行度选择**：给定一个 70B Dense 模型和一台 8 卡 H100 机器，能说清 TP=8 与 TP=4 + DP=2 两种部署方式在单请求延迟、总吞吐和 KV Cache 容量上的差别
+- **扩缩容指标**：能解释为什么 LLM 服务不适合只按 GPU 利用率扩缩容，而要结合排队请求数、KV Cache 使用率和 TTFT 等指标
+
+### 3.8 优化选型决策树
 
 推理优化不是"把所有技术都堆上去"就完事了，而是**先定位瓶颈，再对症下药**。好比去医院看病，医生不会上来就开药，而是先问"哪里不舒服"，再做检查确认病因，最后才开处方。下面这棵决策树就是推理优化的"问诊流程"——从症状出发，逐步缩小到具体方案。
 
 **第一步：确认主要症状**
 
-拿到推理性能问题后，先用压测工具（GenAI-Perf 或自定义脚本）跑出基线数据，看哪个指标最不达标，然后对号入座：
+拿到推理性能问题后，先用压测工具（`vllm bench serve`、GenAI-Perf / AIPerf 或自定义脚本）跑出基线数据，看哪个指标最不达标，然后对号入座：
 
 ```
 症状是什么？
@@ -504,7 +549,7 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 | 子症状 | 诊断方法 | 推荐方案 |
 |--------|---------|---------|
 | KV Cache 搬运成为带宽瓶颈 | Nsight Compute 查看 Attention kernel 的 memory throughput 是否接近 HBM 带宽上限 | 使用 FlashAttention / FlashInfer 减少无效显存访问；优化 KV Cache 布局 |
-| 逐 token 串行生成的本质限制 | 单请求 TPOT 已逼近理论下限，但用户仍嫌慢 | Speculative Decoding（Medusa / EAGLE-2），用"猜测+验证"打破串行瓶颈 |
+| 逐 token 串行生成的本质限制 | 单请求 TPOT 已逼近理论下限，但用户仍嫌慢 | Speculative Decoding（EAGLE-3 / MTP / N-gram），用"猜测+验证"打破串行瓶颈 |
 | 并发不足，GPU 算力没喂饱 | GPU 利用率低于 60%，每个 batch 只有少量请求 | 开启 Continuous Batching + 提高并发请求数，把 batch 做大以提升计算密度 |
 
 **[C] 显存不够——OOM 或并发上不去**
@@ -513,8 +558,8 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 
 | 显存大户 | 诊断方法 | 推荐方案 |
 |---------|---------|---------|
-| KV Cache（长上下文或高并发场景） | 对比模型参数显存和 KV Cache 显存的比例（参考 3.1 的计算方法） | PagedAttention 解决碎片问题；KV Cache 量化（KIVI 2-bit）压缩存储 |
-| 模型权重本身 | FP16 权重已经超出单卡容量 | INT4 weight-only 量化（AWQ/GPTQ）可将权重压缩到 1/4；W8A8（SmoothQuant）压缩到 1/2 且 kernel 效率更高 |
+| KV Cache（长上下文或高并发场景） | 对比模型参数显存和 KV Cache 显存的比例（参考 3.1 的计算方法） | PagedAttention 解决碎片问题；KV Cache 量化（FP8 KV、KIVI 2-bit）压缩存储 |
+| 模型权重本身 | FP16 权重已经超出单卡容量 | INT4 weight-only 量化（AWQ/GPTQ）可将权重压缩到 1/4；W8A8（SmoothQuant 或 FP8）压缩到 1/2，大 batch 下计算效率更高 |
 
 **[D] 尾延迟 P95/P99 失控——均值还行但毛刺严重**
 
@@ -540,7 +585,7 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 
 ### 推荐学习路径
 
-面对这么庞大的技术栈，建议采取**需求驱动**而非自底向上的学习路径：
+面对这么庞大的技术栈，建议**先用最短时间把各层的基础打通，再按目标岗位选一个方向深入**，不必等到每一层都学透才往上走：
 
 **基础阶段（0-3个月）**
 
@@ -555,15 +600,18 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
    - ZeRO（DeepSpeed 核心）
    - FlashAttention（Memory-aware 算法）
    - vLLM（PagedAttention、KV Cache）
-2. 参与开源项目（vLLM、DeepSpeed、SGLang），贡献算子优化或功能模块
-3. 掌握量化、Speculative Decoding 等推理优化技术
+2. 通读一个小型推理引擎（如 nano-vllm，见本站[源码解读](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第3章-nano-vllm源码解读/第3章-nano-vllm源码解读/)），把调度、KV Cache 管理和模型执行串起来
+3. 参与开源项目（vLLM、DeepSpeed、SGLang），贡献算子优化或功能模块
+4. 掌握量化、Speculative Decoding 等推理优化技术
 
 **工程实践（6个月以上）**
 
 1. 在 GPU 集群上部署百亿 / 千亿参数模型，优化端到端性能
 2. 建立完整的性能分析与回归体系
 3. 研究 Prefill/Decode 解耦等前沿系统架构
-4. 跟踪最新技术迭代（FP8、RDMA 网络优化、新架构适配等）
+4. 跟踪最新技术迭代（FP8/FP4 低精度、RDMA 网络优化、新架构适配等）
+
+**方向选择提示**：大规模预训练岗位集中在少数拥有万卡集群的团队，名额有限；推理优化、算子开发和训练/推理框架岗位的需求面更广。如果以求职为目标，可以优先在这几个方向上做出可展示的项目。
 
 ### 核心思维模型
 
@@ -574,7 +622,7 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 | ZeRO | 通信带宽 | 显存空间 |
 | Activation Checkpointing | 计算时间 | 显存空间 |
 | 量化 | 精度 | 显存 + 带宽 + 吞吐 |
-| Speculative Decoding | Prefill 开销 | Decode 速度 |
+| Speculative Decoding | 额外计算（Draft 前向 + 被拒 token 的验证） | Decode 延迟 |
 | Prefill/Decode 解耦 | 系统复杂度 + KV 迁移开销 | 尾延迟 + goodput |
 | FlashAttention | 实现复杂度 | 显存 + 速度 |
 
@@ -601,12 +649,18 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 - **GPTQ** (Frantar et al., 2022)：[https://arxiv.org/abs/2210.17323](https://arxiv.org/abs/2210.17323)
 - **AWQ** (Lin et al., 2023)：[https://arxiv.org/abs/2306.00978](https://arxiv.org/abs/2306.00978)
 - **KIVI** (Liu et al., 2024)：[https://arxiv.org/abs/2402.02750](https://arxiv.org/abs/2402.02750)
-- **Speculative Sampling** (Leviathan et al., 2022 / Chen et al., 2023)：[https://arxiv.org/abs/2302.01318](https://arxiv.org/abs/2302.01318)
+- **Fast Inference from Transformers via Speculative Decoding** (Leviathan et al., 2022)：[https://arxiv.org/abs/2211.17192](https://arxiv.org/abs/2211.17192)
+- **Accelerating LLM Decoding with Speculative Sampling** (Chen et al., 2023)：[https://arxiv.org/abs/2302.01318](https://arxiv.org/abs/2302.01318)
 - **Medusa** (Cai et al., 2024)：[https://arxiv.org/abs/2401.10774](https://arxiv.org/abs/2401.10774)
 - **EAGLE-2** (Li et al., 2024)：[https://arxiv.org/abs/2406.16858](https://arxiv.org/abs/2406.16858)
+- **EAGLE-3** (Li et al., 2025)：[https://arxiv.org/abs/2503.01840](https://arxiv.org/abs/2503.01840)
+- **Block Verification Accelerates Speculative Decoding** (Sun et al., 2024)：[https://arxiv.org/abs/2403.10444](https://arxiv.org/abs/2403.10444)
+- **Ring Attention** (Liu et al., 2023)：[https://arxiv.org/abs/2310.01889](https://arxiv.org/abs/2310.01889)
+- **DeepSpeed Ulysses** (Jacobs et al., 2023)：[https://arxiv.org/abs/2309.14509](https://arxiv.org/abs/2309.14509)
 - **Online normalizer calculation for softmax** (Milakov & Gimelshein, 2018)：[https://arxiv.org/abs/1805.02867](https://arxiv.org/abs/1805.02867)
 - **DeepSeek V2 技术报告**：[https://arxiv.org/abs/2405.04434](https://arxiv.org/abs/2405.04434)
 - **DeepSeekMoE**：[https://arxiv.org/abs/2401.06066](https://arxiv.org/abs/2401.06066)
+- **DeepSeek V3 技术报告**（含 MTP、FP8 训练）：[https://arxiv.org/abs/2412.19437](https://arxiv.org/abs/2412.19437)
 - **Towards Efficient Generative LLM Serving: A Survey** (CMU)：[https://arxiv.org/abs/2312.15234](https://arxiv.org/abs/2312.15234)
 
 ### 教程与视频
@@ -614,6 +668,7 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 - **The Illustrated Transformer** (Jay Alammar)：[https://jalammar.github.io/illustrated-transformer/](https://jalammar.github.io/illustrated-transformer/)
 - **3Blue1Brown：线性代数的本质**：[https://www.3blue1brown.com/topics/linear-algebra](https://www.3blue1brown.com/topics/linear-algebra)
 - **Andrej Karpathy：Let's build GPT from scratch**：[https://www.youtube.com/watch?v=kCc8FmEb1nY](https://www.youtube.com/watch?v=kCc8FmEb1nY)
+- **MIT The Missing Semester**：[https://missing.csail.mit.edu/](https://missing.csail.mit.edu/)
 
 ### 开源项目与工具
 
@@ -625,6 +680,7 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 - **FlashInfer** GitHub：[https://github.com/flashinfer-ai/flashinfer](https://github.com/flashinfer-ai/flashinfer)
 - **TensorRT-LLM** GitHub：[https://github.com/NVIDIA/TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM)
 - **Triton** GitHub：[https://github.com/triton-lang/triton](https://github.com/triton-lang/triton)
+- **AIPerf** GitHub：[https://github.com/ai-dynamo/aiperf](https://github.com/ai-dynamo/aiperf)
 
 ### 官方文档
 

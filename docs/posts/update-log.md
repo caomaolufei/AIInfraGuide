@@ -9,6 +9,30 @@ tags: ["公告", "更新日志"]
 
 ---
 
+## 2026-11-07
+
+### 新增内容
+
+**模块四 · 推理优化** 第 6 章「分布式推理与大模型部署」上线，从推理场景下的四种并行切法讲到 vLLM 的单机、多节点部署与对照实验，配置基于 vLLM v0.32.0，新增 10 张手绘风格示意图：
+
+- **文章：** [6.1 推理并行策略总览：模型装不下和服务不够快是两回事](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/61-推理并行策略总览/) | 用显存账本区分"装不下"和"不够快"，对比 TP、PP、DP、EP 切的是什么、要同步什么，给出选择并行度的顺序和可运行的估算脚本
+
+- **文章：** [6.2 张量并行推理：一层切成几份，每层同步两次](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/62-张量并行推理/) | 推导每层两次 AllReduce 的数据量与延迟，分析 GQA 下的 KV 头复制、NVLink 与跨节点带宽差距、TP 度对延迟和吞吐的影响，以及 vLLM 的 Custom AllReduce
+
+- **文章：** [6.3 流水线并行推理：按层切开，用多个 Batch 填满流水线](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/63-流水线并行推理/) | 讲清段间传递的内容与通信量、Decode 为什么需要多个 Batch 同时在飞、层划分不均的处理，并用成本模型比较 TP×PP 组合
+
+- **文章：** [6.4 数据并行与专家并行：多开副本，以及让 Token 去找专家](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/64-数据并行与专家并行/) | 从 Dense 模型的多副本讲到 MoE 的注意力 DP + 专家 EP，覆盖两次 All-to-All、空跑同步、负载不均模拟与 EPLB、DeepEP 与 DeepSeek-V3 的部署方案
+
+- **文章：** [6.5 多节点部署：用 Ray 或多进程把一个服务铺到多台机器上](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/65-多节点部署/) | Ray 集群搭建与 rank 布局、多进程 `--nnodes` 写法、MoE 的多节点 DP + EP 启动、InfiniBand 与 GPUDirect RDMA 配置，以及通信自检脚本和排错表
+
+- **文章：** [6.6 vLLM 分布式部署实战：同样 8 张卡，三种切法一起测](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/66-vllm分布式部署实战/) | 在一台 8 卡机上对比 Llama-3.1-70B 的 TP8、TP4×PP2、TP4×DP2：启动前估算 KV 容量，启动后核对日志与指标，用 `vllm bench serve` 扫并发；并介绍用 DCP 消除长上下文的 KV 复制
+
+### 调整内容
+
+- **文章：** [第 6 章 分布式推理与大模型部署](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/第6章-分布式推理/) | 章节导读按实际内容重写，补充信息时效说明和各小节链接
+
+---
+
 ## 2026-11-01
 
 ### 调整内容

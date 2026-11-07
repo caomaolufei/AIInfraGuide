@@ -192,7 +192,7 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 | 第 3 章 nano-vllm 源码解读 | 以约 1200 行极简引擎 nano-vllm 为主线，逐模块读懂连续批处理、PagedAttention、FlashAttention、张量并行与 CUDA Graph |
 | 第 4 章 量化 | 量化基础、SmoothQuant、GPTQ/AWQ、FP8、NVFP4/MXFP4、KV Cache 量化 |
 | 第 5 章 Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE/MTP、vLLM 投机解码实战 |
-| 第 6 章 分布式推理与大模型部署 | 张量并行、流水线并行、数据/专家并行、Ray 多节点、vLLM 分布式部署 |
+| 第 6 章 分布式推理与大模型部署 | 张量并行、流水线并行、数据/专家并行、Ray 与多进程多节点部署、DCP、vLLM 分布式部署实战 |
 | 第 7 章 PD 解耦架构 | 混合 Batching 干扰、DistServe/Splitwise、KV Cache 传输、Goodput 与 SLO 调度 |
 | 第 8 章 性能分析与 Benchmark | 推理指标体系、vllm bench/GenAI-Perf、Nsight、性能回归门禁 |
 | 第 9 章 生产部署与运维 | 容器化与 K8s 部署、可观测性、自动扩缩容、负载均衡、容量规划 |
@@ -231,6 +231,13 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 | 5.3 | [Medusa、EAGLE 与 MTP](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/53-medusa与eagle/) | 多头预测、Tree Attention、EAGLE-2/3、DeepSeek-V3 MTP、Block Verification |
 | 5.4 | [收益边界与限制](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/54-收益边界与限制/) | 提交长度与轮耗时账本、投机长度递减、Dynamic SD、并发、量化与流式延迟 |
 | 5.5 | [vLLM 投机解码实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第5章-speculative-decoding/55-vllm投机解码实战/) | 基于 v0.32.0 的基线/N-gram/Draft/EAGLE-3 对照、逐请求接受指标与 Benchmark |
+| 第 6 章 | [分布式推理与大模型部署](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/第6章-分布式推理/) | 张量并行、流水线并行、数据/专家并行、Ray 与多进程多节点部署、DCP、vLLM 分布式部署实战 |
+| 6.1 | [推理并行策略总览](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/61-推理并行策略总览/) | 显存账本、TP/PP/DP/EP 的存储与通信对比、并行度选择顺序与估算脚本 |
+| 6.2 | [张量并行推理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/62-张量并行推理/) | 列切与行切、每层两次 AllReduce 的延迟模型、GQA 的 KV 头复制、NVLink 依赖与 Custom AllReduce |
+| 6.3 | [流水线并行推理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/63-流水线并行推理/) | 段间通信量、Decode 的多 Batch 队列、层划分不均、单请求延迟与 TP×PP 组合 |
+| 6.4 | [数据并行与专家并行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/64-数据并行与专家并行/) | Dense DP、MoE 的 Dispatch/Combine、注意力 DP + 专家 EP、EPLB、DeepEP 与 DeepSeek-V3 部署 |
+| 6.5 | [多节点部署](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/65-多节点部署/) | Ray 集群与 Placement Group、多进程 --nnodes、多节点 DP + EP、InfiniBand/GPUDirect RDMA 与排错 |
+| 6.6 | [vLLM 分布式部署实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/66-vllm分布式部署实战/) | 基于 v0.32.0 的 TP8/TP4×PP2/TP4×DP2 显存估算、日志核对与 Benchmark，以及 DCP |
 | 第 10 章 | [端侧推理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第10章-端侧推理/第10章-端侧推理/) | 端侧软硬件栈、异构执行、运行时选型、量化、内存优化与 Benchmark |
 | 10.1 | [端侧推理基础：从模型导出到异构硬件执行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第10章-端侧推理/101-端侧推理基础/) | 端侧约束、软硬件栈、运行时选型、量化与内存优化、Benchmark，以及 ExecuTorch/XNNPACK 最小实例 |
 
