@@ -30,7 +30,7 @@ const firstGuide = sorted[0];
 const startHref = firstGuide ? getPath(`${urlPrefix}/${firstGuide.id}`) : '#';
 ---
 
-<div class="max-w-[1500px] mx-auto px-6 py-12 flex gap-10">
+<div class="max-w-[1800px] mx-auto px-6 lg:pl-3 py-12 flex gap-8 xl:gap-10">
   <!-- Left Sidebar -->
   <aside class="hidden lg:block">
     <GuideSidebar categories={[category]} urlPrefix={urlPrefix} />

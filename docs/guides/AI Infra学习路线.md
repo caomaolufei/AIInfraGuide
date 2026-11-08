@@ -503,7 +503,7 @@ Prefill/Decode 解耦是系统架构层面的优化，检验重点在于理解"�
 
 **推荐资料**
 
-**本站文章：** [端侧推理基础：从模型导出到异构硬件执行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第10章-端侧推理/101-端侧推理基础/)
+**本站文章：** [端侧推理基础：从模型导出到异构硬件执行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第9章-端侧推理/91-端侧推理基础/)
 
 | 类型 | 资料 | 说明 |
 |------|------|------|
