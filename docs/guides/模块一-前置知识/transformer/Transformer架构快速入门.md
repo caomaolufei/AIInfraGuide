@@ -421,7 +421,7 @@ $$
 这样做的关键性质是：**旋转后的 Q 和 K 做内积时，结果只依赖于两个 token 的相对位置差**，而不是绝对位置。数学上可以证明：
 
 $$
-\langle \text{RoPE}(q\, m)\;  \text{RoPE}(k\, n) \rangle = f(q\, k\, m - n)
+\langle \text{RoPE}(q, m), \text{RoPE}(k, n) \rangle = f(q, k, m - n)
 $$
 
 这意味着 Attention 天然编码了相对位置信息，非常符合语言理解的需求（"第 3 个词和第 5 个词之间的关系"比"第 3 个词和第 5 个词各自的绝对位置"更重要）。
