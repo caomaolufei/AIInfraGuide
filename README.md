@@ -48,7 +48,7 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 | **模块一：前置知识** | 编程语言基础、数学基础、Transformer 架构、PyTorch 框架、GPU 硬件概论、集合通信基础 |
 | **模块二：CUDA 编程与算子优化** | CUDA 编程入门、性能优化基础、Reduce/GEMM/Softmax/Attention 经典算子实现、AI 编译器、性能分析工具链 |
 | **模块三：分布式训练** | 分布式训练总论、集合通信原语、优化器、数据并行(DP/DDP/FSDP)、ZeRO 系列、张量/序列/流水线并行、混合精度、上下文并行、MoE 并行、3D 并行 |
-| **模块四：推理优化** | LLM 推理基础、推理引擎核心技术、nano-vllm 源码解读、量化、Speculative Decoding、分布式推理、PD 解耦架构、性能分析与 Benchmark、生产部署、端侧推理 |
+| **模块四：推理优化** | LLM 推理基础、推理引擎核心技术、nano-vllm 源码解读、量化、Speculative Decoding、分布式推理、PD 解耦架构、生产部署、端侧推理 |
 | **性能分析**（规划中） | Nsight Systems/Compute、Roofline 模型、Profiling 实战 |
 | **面试宝典** | 收录 180+ 场面试真题，覆盖 60+ 家公司，按公司梯队分类 |
 
@@ -183,7 +183,7 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 
 ## 🚀 模块四：推理优化
 
-以 **vLLM** 为贯穿主线，覆盖 LLM 推理基础、推理引擎核心技术、nano-vllm 源码解读、量化、Speculative Decoding、分布式推理、PD 解耦架构、生产级服务特性、性能分析、生产部署运维，以及端到端选型实战。
+以 **vLLM** 为贯穿主线，覆盖 LLM 推理基础、推理引擎核心技术、nano-vllm 源码解读、量化、Speculative Decoding、分布式推理、PD 解耦架构、生产级服务特性、生产部署运维，以及端到端选型实战。
 
 | 章节 | 主要内容 |
 |------|----------|
@@ -194,7 +194,6 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 | 第 5 章 Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE/MTP、vLLM 投机解码实战 |
 | 第 6 章 分布式推理与大模型部署 | 张量并行、流水线并行、数据/专家并行、Ray 与多进程多节点部署、DCP、vLLM 分布式部署实战 |
 | 第 7 章 PD 解耦架构 | 混合 Batching 干扰、DistServe/Splitwise、KV Cache 传输、Goodput 与 SLO 调度 |
-| 第 8 章 性能分析与 Benchmark | 推理指标体系、vllm bench/GenAI-Perf、Nsight、性能回归门禁 |
 | 第 9 章 生产部署与运维 | 容器化与 K8s 部署、可观测性、自动扩缩容、负载均衡、容量规划 |
 | 第 10 章 端侧推理 | 端侧软硬件栈、异构执行、运行时选型、量化、内存优化与 Benchmark |
 
