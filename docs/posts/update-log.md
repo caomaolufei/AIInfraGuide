@@ -9,6 +9,20 @@ tags: ["公告", "更新日志"]
 
 ---
 
+## 2026-11-12
+
+### 新增内容
+
+**模块二 · CUDA 编程与算子优化** 补齐第 6 章缺失的 FlashAttention-3 小节，第 6 章的「V1/V2/V3 三代演进」至此完整：
+
+- **文章：** [6.3 FlashAttention V3 详解](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/63-flashattention-v3详解/) | 讲清 V2 在 H100 上只有 35% 的三处结构性缺口，以及 V3 的三个改进：producer/consumer warp specialization 配 `setmaxnreg` 与环形 SMEM、pingpong 调度与 warpgroup 内 2-stage 流水（含为什么 3-stage 反而更差）、FP8 的 k-major 与累加器布局约束，以及 block quantization 与 incoherent processing 两条精度补救；附论文的消融数据与数值误差结论，并配上仓库已有的三张流水线示意图（pingpong 调度、2-stage 与 3-stage 流水）
+
+### 调整内容
+
+- 同步更新 README 的模块二文章目录，以及「AI Infra 学习路线」中的 FlashAttention 系列引用与论文链接（原 FlashAttention-3 论文链接误写为 2407.08691）
+
+---
+
 ## 2026-11-07
 
 ### 新增内容

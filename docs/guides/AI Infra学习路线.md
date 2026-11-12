@@ -147,7 +147,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 **Attention 算子**
 
 - FlashAttention V1/V2：Memory-aware 的精确 Attention 实现，通过 tiling 减少 HBM 访问——好比把一张大桌子上的拼图分成小块，每次只搬一小块到手边拼好再搬下一块，而不是把所有碎片一股脑倒出来占满桌面
-- FlashAttention-3：在 Hopper 架构上进一步拉高利用率
+- FlashAttention-3：在 Hopper 架构上利用 TMA、WGMMA 的异步性与 FP8，把矩阵乘、softmax、搬运重叠起来，H100 上 FP16 前向可达理论峰值的 75%
 - Flash-Decoding / FlashDecoding++：面向 Decode 阶段的 Attention 加速
 - FlashInfer：可定制 Attention 引擎，面向 Serving 的可组合格式与异构 KV 存储
 - 分页 KV 的 Attention Kernel：vLLM 早期的 `paged_attention` CUDA Kernel，以及 vLLM V1 通过 FlashAttention / FlashInfer 等后端直接读取分页 KV Cache 的方式
@@ -160,7 +160,7 @@ AI Infra 不是从零开始学的领域——它建立在编程能力、数学�
 
 ### 1.2 推荐资料
 
-**本站文章：** [CUDA 编程快速入门指南](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/cuda编程入门指南/) · [CUDA 编程入门（第 1 章）](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第1章-cuda编程入门/) · [CUDA 性能优化基础（第 2 章）](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第2章-cuda性能优化基础/) · [Reduce 算子优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/31-cuda-reduce算子优化/) · [GEMM 算子性能优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/41-cuda-gemm算子性能优化/) · [Softmax 朴素实现优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/51-cuda-softmax朴素实现优化/) · [Online Softmax](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/52-cuda-online-softmax实现/) · [FlashAttention V1](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/61-flashattention-v1详解/) · [FlashAttention V2](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/62-flashattention-v2详解/) · [Triton 编程模型](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/71-triton编程框架/)
+**本站文章：** [CUDA 编程快速入门指南](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/cuda编程入门指南/) · [CUDA 编程入门（第 1 章）](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第1章-cuda编程入门/) · [CUDA 性能优化基础（第 2 章）](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第2章-cuda性能优化基础/) · [Reduce 算子优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/31-cuda-reduce算子优化/) · [GEMM 算子性能优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/41-cuda-gemm算子性能优化/) · [Softmax 朴素实现优化](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/51-cuda-softmax朴素实现优化/) · [Online Softmax](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/52-cuda-online-softmax实现/) · [FlashAttention V1](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/61-flashattention-v1详解/) · [FlashAttention V2](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/62-flashattention-v2详解/) · [FlashAttention V3](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/63-flashattention-v3详解/) · [Triton 编程模型](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/71-triton编程框架/)
 
 | 类型 | 资料 | 说明 |
 |------|------|------|
@@ -637,7 +637,7 @@ Decode 阶段每步只生成一个 token，矩阵退化成向量运算，是典�
 - **ZeRO: Memory Optimizations Toward Training Trillion Parameter Models** (Rajbhandari et al., 2019)：[https://arxiv.org/abs/1910.02054](https://arxiv.org/abs/1910.02054)
 - **FlashAttention V1** (Dao et al., 2022)：[https://arxiv.org/abs/2205.14135](https://arxiv.org/abs/2205.14135)
 - **FlashAttention V2** (Dao, 2023)：[https://arxiv.org/abs/2307.08691](https://arxiv.org/abs/2307.08691)
-- **FlashAttention-3** (Shah et al., 2024)：[https://arxiv.org/abs/2407.08691](https://arxiv.org/abs/2407.08691)
+- **FlashAttention-3** (Shah et al., 2024)：[https://arxiv.org/abs/2407.08608](https://arxiv.org/abs/2407.08608)
 - **Flash-Decoding** (Stanford CRFM, 2023)：[https://crfm.stanford.edu/2023/10/12/flashdecoding.html](https://crfm.stanford.edu/2023/10/12/flashdecoding.html)
 - **FlashInfer** (Ye et al., 2025)：[https://arxiv.org/abs/2501.01005](https://arxiv.org/abs/2501.01005)
 - **vLLM / PagedAttention** (Kwon et al., 2023)：[https://arxiv.org/abs/2309.06180](https://arxiv.org/abs/2309.06180)
