@@ -315,7 +315,7 @@ B200 的核心由**两块 die 通过 10 TB/s 的片间互联**封装在同一块
 
 #### 第五代 Tensor Core
 
-FP8 Dense 算力相比 H100 提升约 14%（双 die 加持），含稀疏性加速后可达 4,500 TFLOPS。**FP4 精度首次获得硬件级支持**，Dense 算力 4,500 TOPS，开启稀疏性后可达 9,000 TOPS。FP4 的引入为推理场景提供了更极致的算力密度。
+FP8 Dense 算力达到 4,500 TFLOPS，约为 H100（1,979 TFLOPS）的 2.3 倍（双 die 加持），开启 2:4 稀疏后可达 9,000 TFLOPS。**FP4 精度首次获得硬件级支持**，Dense 算力 9,000 TFLOPS，开启稀疏性后可达 18,000 TFLOPS。FP4 的引入为推理场景提供了更极致的算力密度。
 
 #### NVLink 5.0
 
@@ -336,8 +336,8 @@ FP8 Dense 算力相比 H100 提升约 14%（双 die 加持），含稀疏性加�
 
 | 参数 | B200 | GB200（Grace-Blackwell） |
 |------|------|--------------------------|
-| FP8 Tensor 算力 | 2,250 TFLOPS（Dense）/ 4,500 TFLOPS（稀疏） | 同左（GPU 部分） |
-| FP4 Tensor 算力 | 4,500 TOPS（Dense）/ 9,000 TOPS（稀疏） | 同左（GPU 部分） |
+| FP8 Tensor 算力 | 4,500 TFLOPS（Dense）/ 9,000 TFLOPS（稀疏） | 同左（GPU 部分） |
+| FP4 Tensor 算力 | 9,000 TFLOPS（Dense）/ 18,000 TFLOPS（稀疏） | 同左（GPU 部分） |
 | 显存 | 192 GB HBM3e | 192 GB HBM3e + 480 GB LPDDR5x（CPU） |
 | 显存带宽 | 8 TB/s | 8 TB/s（GPU 部分） |
 | NVLink | NVLink 5.0，1,800 GB/s | NVLink 5.0，1,800 GB/s |
@@ -353,11 +353,11 @@ FP8 Dense 算力相比 H100 提升约 14%（双 die 加持），含稀疏性加�
 
 | 精度 | V100 | T4 | A100 | H100 | B200 |
 |------|------|----|------|------|------|
-| FP16 / BF16 | 125 TFLOPS | 65 TFLOPS | 312 TFLOPS | 989 TFLOPS | ~1,125 TFLOPS |
-| TF32 | — | — | 156 TFLOPS | 495 TFLOPS | ~563 TFLOPS |
-| FP8 | — | — | — | 1,979 TFLOPS | ~2,250 TFLOPS |
-| INT8 | — | 130 TOPS | 624 TOPS | 1,979 TOPS | ~2,250 TOPS |
-| FP4 | — | — | — | — | ~4,500 TOPS |
+| FP16 / BF16 | 125 TFLOPS | 65 TFLOPS | 312 TFLOPS | 989 TFLOPS | 2,250 TFLOPS |
+| TF32 | — | — | 156 TFLOPS | 495 TFLOPS | 1,100 TFLOPS |
+| FP8 | — | — | — | 1,979 TFLOPS | 4,500 TFLOPS |
+| INT8 | — | 130 TOPS | 624 TOPS | 1,979 TOPS | 4,500 TOPS |
+| FP4 | — | — | — | — | 9,000 TFLOPS |
 
 ### 8.2 显存与带宽演进
 
