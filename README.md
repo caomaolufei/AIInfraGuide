@@ -140,6 +140,7 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 | 第 6 章 | [Attention 算子](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第6章-attention算子/) | FlashAttention V1/V2/V3、Decode 阶段加速、PagedAttention CUDA 实现 |
 | 6.1 | [FlashAttention V1 详解](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/61-flashattention-v1详解/) | Tiling + Online Softmax 把额外显存从 $O(N^2)$ 降到 $O(N)$，IO 复杂度分析与反向重计算 |
 | 6.2 | [FlashAttention V2 详解](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/62-flashattention-v2详解/) | 调换内外循环、减少非矩阵乘运算、Warp 级工作分配、Causal Mask 优化 |
+| 6.3 | [FlashAttention V3 详解](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/63-flashattention-v3详解/) | Hopper 的 TMA/WGMMA 异步流水、warp specialization 与 pingpong 调度、FP8 的布局约束与精度补救 |
 | 第 7 章 | [AI 编译器](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/第7章-ai编译器/) | Triton、torch.compile、TVM/XLA 概述 |
 | 7.1 | [Triton 编程模型](https://caomaolufei.github.io/AIInfraGuide/cuda/模块二-cuda编程与算子优化/71-triton编程框架/) | Triton 编程模型与基础语法，以 Softmax 为例与 PyTorch 实现对比性能 |
 
