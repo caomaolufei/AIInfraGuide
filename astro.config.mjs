@@ -18,6 +18,7 @@ export default defineConfig({
   },
   markdown: {
     shikiConfig: {
+      langAlias: { cuda: 'cpp' },
       themes: {
         light: 'github-light',
         dark: 'github-dark',
