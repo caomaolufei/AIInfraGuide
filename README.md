@@ -193,7 +193,7 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 | 第 4 章 量化 | 量化基础、SmoothQuant、GPTQ/AWQ、FP8、NVFP4/MXFP4、KV Cache 量化 |
 | 第 5 章 Speculative Decoding | Draft+Verify 原理、N-gram/Suffix、Medusa/EAGLE/MTP、vLLM 投机解码实战 |
 | 第 6 章 分布式推理与大模型部署 | 张量并行、流水线并行、数据/专家并行、Ray 与多进程多节点部署、DCP、vLLM 分布式部署实战 |
-| 第 7 章 PD 解耦架构 | 混合 Batching 干扰、DistServe/Splitwise、KV Cache 传输、Goodput 与 SLO 调度 |
+| 第 7 章 PD 解耦架构 | 混合 Batching 干扰、DistServe/Splitwise/TaiChi/Microserving、KV Cache 传输与 Connector、Goodput 与 SLO 感知调度、P/D 配比、vLLM Disaggregated Prefill 实战 |
 | 第 8 章 生产部署与运维 | 容器化与 K8s 部署、可观测性、自动扩缩容、负载均衡、容量规划 |
 | 第 9 章 端侧推理 | 端侧软硬件栈、异构执行、运行时选型、量化、内存优化与 Benchmark |
 
@@ -237,6 +237,13 @@ AIInfraGuide 是一个**开源、系统、面向实践**的 AI Infra 知识库�
 | 6.4 | [数据并行与专家并行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/64-数据并行与专家并行/) | Dense DP、MoE 的 Dispatch/Combine、注意力 DP + 专家 EP、EPLB、DeepEP 与 DeepSeek-V3 部署 |
 | 6.5 | [多节点部署](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/65-多节点部署/) | Ray 集群与 Placement Group、多进程 --nnodes、多节点 DP + EP、InfiniBand/GPUDirect RDMA 与排错 |
 | 6.6 | [vLLM 分布式部署实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第6章-分布式推理/66-vllm分布式部署实战/) | 基于 v0.32.0 的 TP8/TP4×PP2/TP4×DP2 显存估算、日志核对与 Benchmark，以及 DCP |
+| 第 7 章 | [Prefill/Decode 解耦架构](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/第7章-pd解耦架构/) | 混合 Batching 干扰、DistServe/Splitwise/TaiChi/Microserving、KV Cache 传输与 Connector、Goodput 与 SLO 感知调度、P/D 配比、vLLM Disaggregated Prefill 实战 |
+| 7.1 | [混合 Batching 的问题](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/71-混合batching的问题/) | 算术强度与屋脊点、DistServe 的干扰测量、成本模型、尾延迟、Chunked Prefill 的局限与资源耦合 |
+| 7.2 | [解耦架构设计](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/72-解耦架构设计/) | DistServe 的 M/D/1 分析与放置算法、Splitwise 的机器池、TaiChi 的延迟转移、Microserving 的三个 API |
+| 7.3 | [KV Cache 传输与 Connector](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/73-kv-cache传输与connector/) | KV 数据量与带宽、逐层与串行、推送与拉取、vLLM KV Connector 接口、NixlConnector 与其他 Connector |
+| 7.4 | [Goodput 与 SLO 感知调度](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/74-goodput与slo感知调度/) | 每卡 Goodput 定义、`vllm bench --goodput`、SLO 的设定、SLO 感知调度、Goodput 的测量流程 |
+| 7.5 | [解耦架构的挑战与配比](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/75-解耦架构的挑战与配比/) | 新增的系统问题、xPyD 配比公式、从单实例容量估算配比、动态调整与适用场景 |
+| 7.6 | [vLLM Disaggregated Prefill 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/76-vllm-disaggregated-prefill实战/) | 基于 v0.32.0 与 NixlConnector 的 1P1D 部署、传输路径检查、双客户端干扰实验、Goodput 对比与配比推导 |
 | 第 9 章 | [端侧推理](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第9章-端侧推理/第9章-端侧推理/) | 端侧软硬件栈、异构执行、运行时选型、量化、内存优化与 Benchmark |
 | 9.1 | [端侧推理基础：从模型导出到异构硬件执行](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第9章-端侧推理/91-端侧推理基础/) | 端侧约束、软硬件栈、运行时选型、量化与内存优化、Benchmark，以及 ExecuTorch/XNNPACK 最小实例 |
 

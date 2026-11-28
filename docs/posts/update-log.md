@@ -9,6 +9,30 @@ tags: ["公告", "更新日志"]
 
 ---
 
+## 2026-11-28
+
+### 新增内容
+
+**模块四 · 推理优化** 第 7 章「Prefill/Decode 解耦架构」上线，从混合 Batching 的干扰讲到解耦方案、KV Cache 传输、Goodput 与配比，最后在 vLLM 上做 1P1D 对照实验，配置基于 vLLM v0.32.0 与 `nixl==1.5.0`，新增 7 张手绘风格示意图，并收录 5 张论文与官方文档原图：
+
+- **文章：** [7.1 混合 Batching 的问题](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/71-混合batching的问题/) | 用算术强度说明 Prefill 受算力限制、Decode 受显存带宽限制，结合 DistServe 的测量和成本模型量化两者的干扰，分析尾延迟、Chunked Prefill 留下的问题，以及两阶段共用资源带来的耦合
+
+- **文章：** [7.2 解耦架构设计](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/72-解耦架构设计/) | 对比四条设计路线：DistServe 按每卡 Goodput 搜索并行与放置，Splitwise 按阶段划分机器池并混用不同代 GPU，TaiChi 在聚合与解耦之间连续调节，MLC Microserving 用可编程路由器组合三个细粒度 API
+
+- **文章：** [7.3 KV Cache 传输与 Connector](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/73-kv-cache传输与connector/) | 估算 KV 数据量与所需带宽，比较逐层与串行、推送与拉取，拆解 vLLM KV Connector 的调度侧与 Worker 侧接口，以及 NixlConnector 的握手、租约与异构 TP 支持
+
+- **文章：** [7.4 Goodput 与 SLO 感知调度](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/74-goodput与slo感知调度/) | 给出每卡 Goodput 的定义和 `vllm bench serve --goodput` 的计算方式，讨论 TTFT、TPOT、ITL 的 SLO 怎么定，梳理路由、条件解耦、实例内排序、准入与扩缩容等调度手段，并给出测量流程
+
+- **文章：** [7.5 解耦架构的挑战与配比](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/75-解耦架构的挑战与配比/) | 列出解耦在路由、状态管理、故障、显存与运维上的新问题，推导 xPyD 配比与每卡 Goodput 的关系，用成本模型从单实例容量估算配比，并给出何时该用、何时不该用解耦的判断依据
+
+- **文章：** [7.6 vLLM Disaggregated Prefill 实战](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/76-vllm-disaggregated-prefill实战/) | 用同样 2 张 GPU 部署 Qwen3-8B 的合并部署与 1P1D 解耦两组对照，先检查 KV 传输路径，再用双客户端压测单独量化干扰、扫请求速率比较每卡 Goodput，最后用 Little 定律从实测数据推导配比
+
+### 调整内容
+
+- **文章：** [第 7 章 Prefill/Decode 解耦架构](https://caomaolufei.github.io/AIInfraGuide/inference/模块四-推理优化/第7章-pd解耦架构/第7章-pd解耦架构/) | 章节导读按实际内容重写，补充关键数据、信息时效说明和各小节链接
+
+---
+
 ## 2026-11-07
 
 ### 新增内容
